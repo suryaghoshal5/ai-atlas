@@ -1,0 +1,4 @@
+filename,source_url,sha256,size_bytes,http_status,retrieved_at
+release-2026-06-26/README.md,https://www.anthropic.com/research/economic-index-june-2026-report (manual download by author; CC-BY),1a01eeb7d34250b192aa9c906098bea1db971644e6bdb04497d87b7a4ed141a5,7397,n/a,2026-08-07T06:03:49.312622+00:00
+release-2026-06-26/aei_1p_api_2026-06-26.csv,https://www.anthropic.com/research/economic-index-june-2026-report (manual download by author; CC-BY),62197f003e001945ad130c2f26f5e07f3fda45ff41644df91444b04fd524a19f,77282477,n/a,2026-08-07T06:03:49.664290+00:00
+release-2026-06-26/aei_claude_ai_2026-06-26.csv,https://www.anthropic.com/research/economic-index-june-2026-report (manual download by author; CC-BY),f974b358bce0e5a8417510c61da4342234cd0de9d9d0b62acf4c6dbcf8ec7b68,219174671,n/a,2026-08-07T06:03:50.382108+00:00

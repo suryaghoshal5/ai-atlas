@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-07-24T09:00:10.001451+00:00",
+  "finished_at": "2026-07-24T09:10:53.343264+00:00",
+  "model": "claude-sonnet-4-6",
+  "rubric_version": "0.2-draft",
+  "n_tasks": 392,
+  "n_scored": 392,
+  "n_failures": 0,
+  "failure_rate": 0.0,
+  "n_ties_escalated": 1,
+  "score_distribution": {
+    "E0": 320,
+    "E1": 41,
+    "E2": 30,
+    "TIE": 1
+  },
+  "tokens": {
+    "input": 4530596,
+    "output": 280578
+  },
+  "approx_cost_usd": 17.8
+}

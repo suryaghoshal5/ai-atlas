@@ -1,0 +1,36 @@
+# Personal project folder that shares this Dropbox dir — not part of the Atlas repo
+M.Sc. Thesis/
+
+# Data: raw is read-only source material, processed is regenerable — contents are
+# never committed, but directory markers, provenance manifests, and notes are.
+data/raw/**
+!data/raw/*/
+!data/raw/**/.gitkeep
+!data/raw/**/NOTES.md
+!data/raw/**/manifest.csv
+data/processed/**
+!data/processed/.gitkeep
+!data/processed/*.meta.json
+outputs/**
+!outputs/*/
+!outputs/**/.gitkeep
+!outputs/full_batch_scoring/
+!outputs/full_batch_scoring/**
+!outputs/pilot/
+!outputs/pilot/**
+logs/**
+!logs/.gitkeep
+
+# Secrets
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# macOS
+.DS_Store

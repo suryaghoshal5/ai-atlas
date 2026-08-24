@@ -1,0 +1,22 @@
+{
+  "finished_at": "2026-08-19T10:38:58.857709+00:00",
+  "protocol": "1 sample/task, temperature 0, Batch API \u2014 PRELIMINARY per D6",
+  "n_tasks": 18622,
+  "n_scored": 18457,
+  "n_from_pilot_cache": 15970,
+  "n_batch_ok": 2652,
+  "n_batch_errors": 0,
+  "tokens": {
+    "in": 82607,
+    "out": 269977,
+    "cw": 103350,
+    "cr": 5378334
+  },
+  "batch_cost_usd": 3.15,
+  "cumulative_spend_usd": 39.79,
+  "score_distribution": {
+    "E0": 15433,
+    "E1": 1914,
+    "E2": 1110
+  }
+}

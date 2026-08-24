@@ -1,0 +1,25 @@
+{
+  "computed_at": "2026-08-10T08:34:47.420255+00:00",
+  "round": 2,
+  "rubric_version": "0.2-draft",
+  "n_usable_pairs": 383,
+  "n_rescored_rows_used": 55,
+  "n_llm_ties_excluded": 1,
+  "n_blank_rescores": 7,
+  "percent_agreement": 0.8564,
+  "cohens_kappa_unweighted": 0.5412,
+  "expected_agreement_pe": 0.687,
+  "n_disagreements": 55,
+  "gate": "FAIL (STOP: revise again)",
+  "human_distribution": {
+    "E0": 310,
+    "E1": 53,
+    "E2": 20
+  },
+  "llm_distribution": {
+    "E0": 317,
+    "E1": 36,
+    "E2": 30
+  },
+  "note": "human vector = v0.1 labels for uncontested tasks + v0.2 re-scores for 62 contested; paper-grade validation is the fresh 200-task subsample under the frozen rubric (Golden Rule 4)"
+}

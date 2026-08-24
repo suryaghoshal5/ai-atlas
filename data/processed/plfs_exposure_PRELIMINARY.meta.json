@@ -1,0 +1,18 @@
+{
+  "built_at": "2026-08-20T05:44:51.776440+00:00",
+  "status": "PRELIMINARY per D6 \u2014 not for paper/abstract",
+  "n_workers": 164523,
+  "employment_weight_coverage": 0.9937,
+  "unmatched_groups": {
+    "633": 0.00251,
+    "632": 0.00205,
+    "634": 0.00083,
+    "523": 0.00083,
+    "323": 8e-05
+  },
+  "notes": [
+    "weight = mult/no_qtr; principal usual status employed only",
+    "formality is a social-security-benefits PROXY (b5pt1q13), not the full PLFS formality definition",
+    "monthly_earnings excludes casual daily wages (block 6 activity-level) for now"
+  ]
+}

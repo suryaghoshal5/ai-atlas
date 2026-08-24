@@ -1,0 +1,22 @@
+{
+  "built_at": "2026-07-17T17:41:23.196724+00:00",
+  "n_occupations": 50,
+  "n_tasks": 392,
+  "slots_by_division": {
+    "1": 3,
+    "2": 4,
+    "3": 3,
+    "4": 3,
+    "5": 8,
+    "6": 6,
+    "7": 7,
+    "8": 5,
+    "9": 11
+  },
+  "employment_share_covered": 0.9065,
+  "selection_rule": "deterministic; see module docstring",
+  "inputs": [
+    "data/processed/nco_entries_vol2.parquet",
+    "data/raw/plfs/plfs_2023-24_jul-jun/csv/perv1.csv"
+  ]
+}

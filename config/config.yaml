@@ -1,0 +1,22 @@
+# Central pipeline configuration. Model pin per CLAUDE.md D3 — changing it is a STOP gate.
+llm:
+  model: claude-sonnet-4-6
+  temperature: 0
+  samples_per_task: 3          # majority vote; ties escalate to human
+  max_retries: 1               # retry once with stricter system prompt, then log failure
+  batch_fail_threshold: 0.02   # batch fails if >2% of tasks unresolved
+  budget_usd: 200              # cumulative scoring spend cap; pause and confirm beyond this
+  rubric_version: "0.2-draft"  # frozen to v1 only after pilot kappa gate
+
+validation:
+  min_kappa: 0.7               # STOP below this; no index build
+  min_human_subsample: 200     # per classification task
+
+index:
+  variants: [alpha, beta, zeta]   # E1 only; E1 + 0.5*E2; E1 + E2 (Eloundou convention)
+
+merge:
+  min_plfs_weight_coverage: 0.90  # STOP with unmatched-code list below this
+
+run:
+  seed: 42                     # overridden by ATLAS_RUN_SEED

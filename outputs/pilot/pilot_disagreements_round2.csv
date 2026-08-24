@@ -1,0 +1,56 @@
+task_id,human,human_v02,rescored,llm,tie_escalated,occupation_title,task_text
+1120.0100-t01,E1,,false,E0,false,"Working Proprietor, Electricity","Working Proprietor, Elect ricity plans, organizes and controls in broad outline, within authority delegated, activities of private or public organization s or establishments or one or more of its branches, departments, etc. engaged in generation, transmission and distribution of ele ctricity to domestic and industrial consumers."
+1213.0100-t04,E1,,false,E0,false,"Manager, Automotive Service","Directs procurement of all types of company-owned-and-operated automotive equipment, materials, supplies, and parts required to maintain automotive equipment, garages, and storage facilities."
+1213.0100-t05,E2,E2,true,E0,false,"Manager, Automotive Service",Co-ordinates automotive repair and maintenance services to obtain maximum utilisation of automotive equipment and prevent operational delays in other departments.
+1221.0100-t01,E1,E1,true,E0,false,Sales Manager (Wholesale Trade),"Organizes and manages wholesale trade organizations, or one or more if its branches or departments engaged in buying goods and selling them for profits to retailers or industrial and commercial consumers."
+2330.0100-t02,E0,,false,E1,false,"Senior Secondary and Secondary School Teacher, Arts","Teaches students of various standards, allots and corrects home work ."
+2330.0100-t04,E0,E0,true,E2,false,"Senior Secondary and Secondary School Teacher, Arts",Maintains school registers and re cords.
+2330.0100-t06,E1,E1,true,E0,false,"Senior Secondary and Secondary School Teacher, Arts","May be in charge of stores and equipment, hostel, transport, canteen, library, etc."
+2412.0100-t01,E2,,false,E0,false,Financial Examiner,Enforces or ensures compliance with laws and regulations governing fina ncial and securities institutions and financial and real estate transactions.
+2412.0100-t03,E1,E1,true,E0,false,Financial Examiner,"Direct and participate in formal and informal meetings with bank directors, trustees, senior management, counsels, outside accountants and consultants in order to gather information and discuss findings."
+2512.0100-t04,E1,,false,E0,false,Computer Programmer/Software Engineer,"Confers with Supervisor and represent atives of departments concerned with program ming to resolve questions of program intent, data input, output requirements, and inclusion of internal checks and controls."
+2512.0100-t09,E2,E2,true,E1,false,Computer Programmer/Software Engineer,"Corrects program errors, using methods , such as modifying the program or altering sequence of the program steps."
+2512.0100-t11,E2,E2,true,E1,false,Computer Programmer/Software Engineer,"Analyses, reviews, and rewrites program s to increase operating efficiency or to adapt the program to new requirements."
+2512.0100-t12,E2,E2,true,E1,false,Computer Programmer/Software Engineer,Compiles and writes documentation of program development and subsequent revisions.
+2512.0100-t13,E1,E1,true,E0,false,Computer Programmer/Software Engineer,May train workers to use the program.
+2512.0100-t16,E1,,false,E0,false,Computer Programmer/Software Engineer,"May direct and co-ordinate work of others to write, test, and modify computer programs."
+3122.0100-t05,E1,E1,true,E2,false,"Supervisors and Foremen, Metal Making, Converting and Refining Supervisor and Foreman, Metal Making",Maintains records and registers an d submits prescribed returns.
+3322.0101-t02,E0,E0,true,E1,false,"Sales Representative, Technical",Plans daily visits to prospective clients in allot ted area.
+4110.0100-t01,E1,E1,true,E2,false,"Clerk, General","Performs variety of clerical duties such as maintenance of records, receipt and dispatch of dak , routine correspondence, tabulating data, preparing production schedules, wage bills, and insurance and provident fund accounts, keeping record of issue and receipt of library books, maintaining record of incoming and outgoing railway waggons and carriage s, booking and delivering of goods, maintaining auction accounts, calculating and releasing octroi, attending to clerical duties of court, allocating and supervising work of process serving staff, receiving applications for granting arms licences, doing clerical work for legal practi tioner, copying and comparison work, etc."
+4110.0100-t02,E1,E1,true,E0,false,"Clerk, General",May do his own typing.
+4110.0100-t03,E1,E1,true,E0,false,"Clerk, General",May operate office computing and accounting machine.
+4110.0100-t04,E1,E1,true,E2,false,"Clerk, General","Is designated according to nature of duties performed such as: Record Clerk/Record Keeper/Record Supplier if e ngaged on receipt, issue and maintenance of record."
+4110.0100-t05,E1,E1,true,E0,false,"Clerk, General",Diarist/Receipt Clerk/Dispatch Clerk if engaged on receipt and dispatch of dak.
+4110.0100-t07,E1,,false,E2,false,"Clerk, General","Personnel Clerk if attends to clerical work regarding recruitment, employment and service condition of personnel employed."
+4110.0100-t08,E0,E0,true,E1,false,"Clerk, General",Production Clerk/Progress Clerk if engaged on preparation of production schedule based on time and operations involved in various stages of production.
+4110.0100-t09,E2,,false,E1,false,"Clerk, General","Wages Clerk if engaged on calculation, preparation of pay bills or wage sheets based on workers' attendance and terms of employment."
+4110.0100-t14,E0,E0,true,E2,false,"Clerk, General",Trains Clerk (Railway) if engaged in keeping records waggons or carriages (their number and capacity) coming in and going out of railway station.
+4110.0100-t20,E0,E0,true,E2,false,"Clerk, General","Arms Clerk if engaged in receiving applications for granting arms' licences, their renewals etc."
+4110.0100-t21,E1,E1,true,E0,false,"Clerk, General",Copyist if engaged in preparing copies of document by hand or by typewriter.
+4132.0401-t01,E1,E1,true,E2,false,Data Entry Machine Operator,"Data Entry Operator operates keyboard or other data entry device to enter data into computer or onto magnetic tape or disk for subs equent entry: Enters alphabetic, numeric, or symbolic data from source documents into computer, using data entry device, such as keyboard or optical scanner, and following format displayed on screen."
+4132.0401-t02,E1,E1,true,E2,false,Data Entry Machine Operator,"Compares data entered with source documents, or re-enters data in verification format on screen to detect errors."
+4132.0401-t03,E1,E1,true,E2,false,Data Entry Machine Operator,"Deletes incorrectly entered data, and re-enters correct data."
+4132.0401-t04,E1,E1,true,E2,false,Data Entry Machine Operator,"May compile, sort, and verify accuracy of data to be entered."
+4132.0401-t05,E1,E1,true,E2,false,Data Entry Machine Operator,May keep record of work completed.
+4419.0100-t01,E1,,false,E0,false,Publicity Assistant,"Prepares publicity materials for Government, business or other institutions and conducts visitors in information centre to popularise their products or achievements."
+4419.0100-t02,E1,,false,E2,false,Publicity Assistant,Scrutinises newspapers and magazines and collects news and views relating to his employers ’ institution.
+4419.0100-t04,E1,E1,true,E0,false,Publicity Assistant,Sends pre-pared materials to Publicity Officer for approval.
+4419.0100-t07,E0,E0,true,E1,false,Publicity Assistant,May attend to clerical work.
+5211.0100-t06,E0,E0,true,E1,false,Advertising Sales Agent/Advertising Executive,Explains to customers how specific types of advertising will help promote their products or services in the most effective way possible.
+5211.0100-t09,E1,,false,E0,false,Advertising Sales Agent/Advertising Executive,Maintains assigned account bases while developing new accounts.
+5211.0100-t11,E1,E1,true,E0,false,Advertising Sales Agent/Advertising Executive,"Prepares and delivers sales presentations to new and existing customers in order to sell new advertising programmes, and to protect and increase existing advertising."
+5223.0100-t05,E2,E2,true,E1,false,Shop Assistant; Counterhand,Informs Salesman or Dealer items of goods which are in short supply and w hich need to be replenished.
+5223.0100-t08,E2,,false,E0,false,Shop Assistant; Counterhand,"May prepare bills, receive payme nt, check stock and maintain stock register."
+5244.0100-t03,E1,E1,true,E2,false,"Operator, Call Centre",May also be called Call Centre Information Clerk.
+5414.0101-t02,E1,E1,true,E0,false,Security Officer,"Plans, controls and supervises security arrangements of industrial plants, establishments, buildings, men , material and other moveable and immovable property against fire, thefts; pilferage, unauthorized entry and personal hazards."
+5414.0101-t03,E1,,false,E0,false,Security Officer,"Allots duties to security personnel at the gates of workshops, stores, ware-houses, water works and administrative buildings to c heck unauthorized entry of men and passage of material."
+5414.0101-t04,E2,E2,true,E0,false,Security Officer,Issues gate passes to visitors desiring entry into restricted premises and checks security personnel on duty.
+6111.0100-t02,E0,E0,true,E1,false,"Cultivators, General; Farmer, General","Determines crops to be grown depending on nature of soil, climate, irrigation and marketing facilities."
+6121.0100-t03,E0,,false,E1,false,"Farmer, Livestock",Determines amount of basic feed required to feed animals and stock fodder and other feeding material through purchases.
+6121.0100-t15,E0,E0,true,E2,false,"Farmer, Livestock","Keeps records of feed consumed, milk and other items produced and stock sold or purchased."
+6121.0100-t16,E0,E0,true,E2,false,"Farmer, Livestock","Attends to all correspondence, accounts and administration of farm."
+6210.0100-t06,E0,E0,true,E2,false,Forester; Forest Range Assistant,Maintains records of timber felled for sale.
+7115.0100-t14,E0,E0,true,E1,false,"Carpenter, General",May calculate cost of furniture.
+7126.0101-t03,E1,E1,true,E2,false,"Plumber, General",Examines drawings or o ther specifications regarding size and dimensions of area where sanitary fittings or pipe are to be fitted or laid.
+7233.0100-t02,E1,E1,true,E2,false,"Fitter, General Fitter Genera","Studies drawings to understand specification of different parts, fittings or assembles to be made and their functions."
+7233.0100-t09,E0,E0,true,E1,false,"Fitter, General Fitter Genera",May suggest alterations.

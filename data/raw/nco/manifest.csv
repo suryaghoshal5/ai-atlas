@@ -1,0 +1,4 @@
+filename,source_url,sha256,size_bytes,http_status,retrieved_at
+NCO-2015_Vol_I.pdf,https://dge.gov.in/sites/default/files/2024-05/National_Classification_of_Occupations_Vol_I-2015.pdf,4543dede4ac9a8e6d7c5ea82914382c00e39755c778472e69f3186da4546d839,7115143,200,2026-07-17T10:55:30Z
+NCO-2015_Vol_II-A.pdf,https://dge.gov.in/sites/default/files/2024-05/National_Classification_of_Occupations_Vol_II-A-2015.pdf,7e90fa42f4a55d35c3031a0d29ca998aa369040410b7dd555571313800173c51,7024082,200,2026-07-17T10:55:30Z
+NCO-2015_Vol_II-B.pdf,https://dge.gov.in/sites/default/files/2024-05/National_Classification_of_Occupations_Vol_II-B-2015.pdf,d9147732f98c48c5353658f22580e495895e20f4682368035c6a7cfd252ae7f4,6624287,200,2026-07-17T10:55:30Z

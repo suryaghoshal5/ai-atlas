@@ -1,0 +1,22 @@
+{
+  "computed_at": "2026-07-24T08:26:12.598502+00:00",
+  "n_tasks_joined": 392,
+  "n_usable_pairs": 383,
+  "n_llm_ties_excluded": 1,
+  "n_invalid_human_labels": 7,
+  "percent_agreement": 0.8564,
+  "cohens_kappa_unweighted": 0.5912,
+  "expected_agreement_pe": 0.6487,
+  "n_disagreements": 55,
+  "gate": "FAIL (STOP: revise rubric)",
+  "human_distribution": {
+    "E0": 309,
+    "E1": 54,
+    "E2": 20
+  },
+  "llm_distribution": {
+    "E0": 297,
+    "E1": 49,
+    "E2": 37
+  }
+}

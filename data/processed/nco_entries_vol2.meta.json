@@ -1,0 +1,10 @@
+{
+  "built_at": "2026-07-17T17:41:20.654723+00:00",
+  "n_entries": 3442,
+  "n_families": 373,
+  "n_groups3": 122,
+  "inputs": [
+    "data/raw/nco/NCO-2015_Vol_II-A.pdf",
+    "data/raw/nco/NCO-2015_Vol_II-B.pdf"
+  ]
+}

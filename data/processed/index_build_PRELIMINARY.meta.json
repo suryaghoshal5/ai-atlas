@@ -1,0 +1,12 @@
+{
+  "built_at": "2026-08-19T10:55:53.379335+00:00",
+  "status": "PRELIMINARY per D6 \u2014 LLM-only scores, 1 sample/task; NOT for paper/abstract",
+  "scores_input": "/Users/suryadip/Dropbox/Interest - Non Work/AI Exposure Atlas/outputs/full_batch_scoring/task_scores_full_PRELIMINARY.parquet",
+  "n_tasks_scored": 18594,
+  "task_coverage": 0.9985,
+  "n_occupations": 3442,
+  "n_groups3": 122,
+  "groups_with_lt5_tasks": 1,
+  "rubric_version": "0.2-draft",
+  "aggregation": "tasks weighted equally (ANALYSIS_PLAN \u00a72.3 baseline)"
+}
