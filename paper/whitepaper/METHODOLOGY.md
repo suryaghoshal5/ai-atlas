@@ -164,6 +164,42 @@ statistically indistinguishable from zero — reported as power-limited, not as
 evidence of no effect. Known power constraints: 16 clusters, net-only flows,
 and measurement error from the industry crosswalk (which biases toward zero).
 
+## Step 6 — The occupation typology (cluster analysis)
+
+To check that our hand-drawn categories (white collar, high-exposure, sectors)
+aren't doing the storytelling for us, we also let the data draw its own map.
+
+**Features.** Each of the 122 occupation groups is described by seven numbers,
+all computed employment-weighted from the merged PLFS data: α (chat-only
+exposure), E2 share (ζ − α, the tooling-dependent slice), graduate share,
+female share, urban share, young share (18–29), and log median monthly
+earnings.
+
+**Method.** Features are standardised (z-scores, so no single scale
+dominates), then clustered with k-means (50 restarts, fixed seed 42). The
+number of clusters is not chosen by us: we fit k = 3 through 7 and keep the k
+with the best silhouette score — a standard measure of how cleanly points sit
+inside their own cluster versus the nearest other one. k = 5 wins
+(silhouette 0.274; k = 4 scores 0.265, k = 6 drops to 0.240). Each occupation
+group is one unweighted point in the fit; employment weights enter the
+*interpretation* (cluster sizes in workers), not the distance calculation —
+so crop farmers' 107M workers don't drag every centroid toward agriculture.
+
+**Output.** Five clusters with employment-weighted profiles (table in the
+white paper §8b): frontier professionals; a tooling-exposed paperwork layer;
+managers & teachers; the rural agrarian mass; urban manual & retail. The
+validation-relevant point: the algorithm reproduced the E1-vs-E2 channel
+distinction without being told those were separate features of interest, and
+split the insulated mass on geography/gender rather than exposure.
+
+**Caveats.** k-means assumes roughly spherical clusters in feature space and
+a silhouette of 0.27 is moderate, not crisp — boundaries between the
+managerial middle and the paperwork layer are soft, and a handful of groups
+sit near them. The typology is a descriptive lens, not a measurement claim;
+cluster labels are ours, membership is the algorithm's. Reproduce with
+`python -m analysis.typology` (assignments in
+`occupation_typology_PRELIMINARY.parquet`).
+
 ## What can go wrong (and what we do about it)
 
 1. **The scorer is an LLM judging LLM capability.** Mitigations: fixed public

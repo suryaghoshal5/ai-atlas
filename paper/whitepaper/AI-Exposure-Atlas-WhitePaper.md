@@ -188,14 +188,41 @@ differentiator from every doom-thread.)
 *Zoom into white-collar India: teachers and proprietors are the mass at
 moderate exposure; coders, finance and records work are the frontier.*
 
+## 8b. Five AI worlds — letting the data name its own categories  *(~350 words)*
+
+So far every cut used categories WE chose (thresholds, divisions, sectors).
+This section asks what happens when no categories are imposed: cluster the 122
+occupation groups on seven features — chat-exposure (α), tooling-exposure
+(E2 share), graduate share, female share, urban share, young share, and median
+earnings — and let the algorithm draw the map. It draws five worlds
+(k-means; k = 5 chosen by silhouette; details in [[METHODOLOGY]]):
+
 ![[insight_typology.png]]
-*Or let the data name its own worlds: k-means clustering on seven features
-(exposure mix, education, earnings, gender, age, location) sorts the 122
-occupation groups into five clusters — Frontier professionals (11M, chat-exposed,
-96% graduate, highest-paid), the Paperwork layer (10M, exposed mainly through
-tooling), Managers & teachers (40M, presence-bound), the Rural agrarian mass
-(232M) and Urban manual & retail (170M), both largely insulated. Five worlds,
-five different AI conversations.*
+
+| World | Workers | Signature |
+|---|---|---|
+| **Frontier professionals** | 11M | chat-exposed (α 0.52), 96% graduate, 84% urban, highest-paid — software, finance, engineering |
+| **The paperwork layer** | 10M | modest α but E2 = 0.38: exposed through software, not chatbots — clerks, data entry, tellers |
+| **Managers & teachers** | 40M | authority- and presence-bound middle — proprietors, teachers, supervisors |
+| **Rural agrarian mass** | 232M | α 0.045, 11% urban — insulated |
+| **Urban manual & retail** | 170M | α 0.05, 90% male — insulated |
+
+Two things the thresholds could not see, and the write-up should land:
+
+1. **The algorithm separated the two exposure channels on its own.** Nobody
+   told it E1 and E2 were different things — yet it split a chat-exposed
+   professional elite from a tooling-exposed clerical layer. The α/ζ
+   distinction from §9 isn't a modelling choice; it's in the data's own
+   structure. (The paperwork layer is also where the *speed* of impact is
+   most adoption-dependent — one software procurement cycle away.)
+2. **The insulated 400M splits by geography and gender, not exposure.**
+   Rural-female-agrarian and urban-male-manual are different worlds that
+   happen to share an exposure level — which is why "insulated" policy
+   (skilling, transitions) still needs two different designs.
+
+Writing hook: "five worlds, five different AI conversations" — each cluster
+needs a different policy sentence, and most public debate only ever talks
+about the first world (11M people) as if it were all five (463M).
 
 ## 9. What this does NOT say  *(~300 words, no chart)*
 
