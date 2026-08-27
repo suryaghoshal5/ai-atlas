@@ -164,10 +164,50 @@ def main() -> None:
     chart_sectors(df)
     chart_jobtypes(df)
     chart_wagebill_sectors(df)
+    chart_top_functions(df)
     prov = OUT / "provenance.md"
     existing = prov.read_text() if prov.exists() else "# Substack chart provenance\n\n"
     prov.write_text(existing + "\n".join(PROV))
-    print("3 charts written")
+    print("4 charts written")
+
+
+
+
+def chart_top_functions(df: pl.DataFrame) -> None:
+    """Top-10 by exposure score with NO employment floor - the league table
+    from the results brief (statisticians & actuaries on top), with worker
+    counts labelled so tiny elite functions read as tiny."""
+    extra_names = {"264": "Authors, journalists & linguists", "412": "Secretaries",
+                   "252": "Database & network professionals"}
+    names_map = {**GROUP_NAMES, **extra_names}
+    idx = pl.read_parquet(processed_dir() / "group3_index_PRELIMINARY.parquet")
+    emp = (df.group_by("group3").agg((pl.col("weight").sum() / 1e6).alias("workers_m")))
+    g = (idx.filter(pl.col("n_tasks") >= 5)
+         .join(emp, on="group3", how="inner")
+         .select("group3", pl.col("beta").alias("E"), "workers_m")
+         .sort("E", descending=True).head(10).sort("E"))
+    names = [names_map.get(c, f"NCO {c}") for c in g["group3"].to_list()]
+    E, wm = g["E"].to_list(), g["workers_m"].to_list()
+
+    def wlab(w):
+        return f"{w:.1f}M" if w >= 0.95 else f"{w*1000:.0f}k"
+
+    fig, ax = plt.subplots(figsize=(7, 5.2))
+    ypos = range(len(names))
+    ax.barh(list(ypos), E, color=SB_RED, height=0.62)
+    for y, e, w in zip(ypos, E, wm):
+        ax.text(e + 0.01, y, f"{e:.2f}  ({wlab(w)} workers)", va="center",
+                fontsize=8.5, color=SB_RED, fontweight="bold")
+    ax.set_yticks(list(ypos))
+    ax.set_yticklabels(names, fontsize=9)
+    ax.set_xlim(0, 1.32)
+    head_sub(ax, "Statisticians and actuaries top India's AI exposure league\n"
+                 "Ten most exposed occupation groups, any size; labels: exposure score\n"
+                 "and workers employed. Some frontline functions are tiny. PLFS 2023-24.")
+    ax.set_xlabel("Mean exposure score (0-1)")
+    add_source(fig, DATASET)
+    _save(fig, "insight_top_functions",
+          "; ".join(f"{n}: E={e:.3f}, {w:.3f}M" for n, e, w in zip(names, E, wm)))
 
 
 if __name__ == "__main__":
