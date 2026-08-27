@@ -210,8 +210,13 @@ earnings — and let the algorithm draw the map. It draws five worlds
 
 ![[insight_typology.png]]
 
-**How the five worlds differ** *(employment-weighted cluster profiles; all
-PRELIMINARY):*
+**How the five worlds differ**
+
+<!-- BEGIN generated: analysis.typology cluster profiles - do not edit by hand -->
+> **Stale — not yet regenerated.** The rows below are the pre-fix build: the
+> earnings row is the old employment-weighted geometric mean of *unweighted*
+> group medians, not a survey-weighted worker-level median. Run `make typology`
+> on a machine with the PLFS extract to overwrite this whole block.
 
 | | Frontier professionals | Paperwork layer | Managers & teachers | Rural agrarian mass | Urban manual & retail |
 |---|---|---|---|---|---|
@@ -227,6 +232,7 @@ PRELIMINARY):*
 | Median monthly earnings | **₹33,700** | ₹23,000 | ₹25,800 | ₹8,400 | ₹13,600 |
 | Share of national wage bill | 8.9% | 4.8% | 24.2% | 29.2% | 32.6% |
 | Exemplar occupations | software, finance, engineers | clerks, data entry, tellers | proprietors, teachers, supervisors | farmers, farm labour | helpers, shop sales, drivers |
+<!-- END generated: analysis.typology cluster profiles -->
 
 Table-reading notes for the prose: the frontier holds 2.4% of workers but
 8.9% of the wage bill (≈3.7× its headcount weight) and is the youngest,

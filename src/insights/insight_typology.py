@@ -13,18 +13,19 @@ import matplotlib.pyplot as plt
 import polars as pl
 
 from atlas_common import outputs_dir, processed_dir
-from insights._style import add_source, apply_style, head_sub
+from insights._style import SB_GREY, add_source, apply_style, head_sub
 
 OUT = outputs_dir() / "substack"
 DATASET = "PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring)"
 
-# cluster id -> (name, colour) — ids from analysis.typology (seed 42)
-CLUSTERS = {
-    2: ("Frontier professionals", "#C8102E"),      # alpha .52, 96% grads, 84% urban
-    0: ("The paperwork layer",    "#eda100"),      # E2-heavy clerical/records
-    1: ("Managers & teachers",    "#0072B2"),      # authority/presence-bound middle
-    3: ("Rural agrarian mass",    "#3D8B37"),      # 232M, insulated
-    4: ("Urban manual & retail",  "#7C5CB0"),      # 170M, insulated
+# Colours are keyed by cluster NAME, never by k-means id: ids are arbitrary and
+# permute whenever the features or the data move (see analysis.typology.name_clusters).
+COLOURS = {
+    "Frontier professionals": "#C8102E",   # alpha-led, graduate, urban
+    "The paperwork layer":    "#eda100",   # E2-heavy clerical/records
+    "Managers & teachers":    "#0072B2",   # authority/presence-bound middle
+    "Rural agrarian mass":    "#3D8B37",   # insulated, rural
+    "Urban manual & retail":  "#7C5CB0",   # insulated, urban
 }
 
 
@@ -32,14 +33,19 @@ def main() -> None:
     apply_style()
     OUT.mkdir(parents=True, exist_ok=True)
     typ = pl.read_parquet(processed_dir() / "occupation_typology_PRELIMINARY.parquet")
+    if "name" not in typ.columns:
+        raise SystemExit("typology parquet predates named clusters — rerun `make typology`")
     idx = pl.read_parquet(processed_dir() / "group3_index_PRELIMINARY.parquet")
     g = typ.join(idx.select("group3", pl.col("beta").alias("E")), on="group3")
 
+    present = set(g["name"].to_list())
+    names = [n for n in COLOURS if n in present] + sorted(present - set(COLOURS))
+
     fig, ax = plt.subplots(figsize=(7.2, 5.4))
-    for cid, (name, color) in CLUSTERS.items():
-        s = g.filter(pl.col("cluster") == cid)
+    for name in names:
+        s = g.filter(pl.col("name") == name)
         ax.scatter(s["E"], s["workers_m"], s=[max(14, w * 26) for w in s["workers_m"]],
-                   c=color, alpha=0.6, edgecolors="white", linewidths=0.6,
+                   c=COLOURS.get(name, SB_GREY), alpha=0.6, edgecolors="white", linewidths=0.6,
                    label=f"{name} ({float(s['workers_m'].sum()):.0f}M)")
     ax.set_yscale("log")
     ax.set_ylim(0.01, 400)
@@ -58,9 +64,10 @@ def main() -> None:
                         fontsize=7.3, color="#52514e", ha="right" if dx < 0 else "left")
     from matplotlib.lines import Line2D
     handles = [Line2D([], [], marker="o", linestyle="", markersize=7,
-                      markerfacecolor=color, markeredgecolor="white", alpha=0.85,
-                      label=f"{name} ({float(g.filter(pl.col('cluster') == cid)['workers_m'].sum()):.0f}M)")
-               for cid, (name, color) in CLUSTERS.items()]
+                      markerfacecolor=COLOURS.get(name, SB_GREY), markeredgecolor="white",
+                      alpha=0.85,
+                      label=f"{name} ({float(g.filter(pl.col('name') == name)['workers_m'].sum()):.0f}M)")
+               for name in names]
     ax.legend(handles=handles, frameon=False, fontsize=7.8, loc="lower left",
               borderpad=0.6, labelspacing=0.9,
               title="five clusters (k-means on 7 features)", title_fontsize=7.6)
@@ -78,7 +85,7 @@ def main() -> None:
     existing = prov.read_text() if prov.exists() else "# Substack chart provenance\n\n"
     prof = pl.read_csv(outputs_dir() / "tables" / "typology_profiles_PRELIMINARY.csv")
     existing += (f"### insight_typology ({date.today()})\n"
-                 f"k=5 (silhouette .274); profiles: {prof.to_dicts()}\nSource: {DATASET}.\n")
+                 f"k={prof.height}; profiles: {prof.to_dicts()}\nSource: {DATASET}.\n")
     prov.write_text(existing)
     print("typology chart written")
 

@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import polars as pl
 
 from atlas_common import outputs_dir, processed_dir
+from atlas_common.nco_labels import GROUP_NAMES
 from insights._style import (SB_GOLD, SB_GREY, SB_RED, add_source, apply_style,
                              head_sub)
 
@@ -32,18 +33,6 @@ SECTIONS = [
     ("Other services", range(90, 100)),
 ]
 
-GROUP_NAMES = {
-    "251": "Software developers", "241": "Finance professionals",
-    "431": "Numerical clerks", "263": "Social/religious professionals",
-    "243": "Sales & PR professionals", "235": "Other teaching professionals",
-    "242": "Administration professionals", "264": "Authors & journalists",
-    "411": "General office clerks", "331": "Financial associate professionals",
-    "334": "Secretaries (admin)", "341": "Legal/social associates",
-    "233": "Secondary teachers", "234": "Primary teachers",
-    "522": "Shop salespersons", "351": "ICT technicians",
-    "252": "Database professionals", "212": "Statisticians & actuaries", "216": "Architects & designers",
-    "122": "Sales & marketing managers",
-}
 
 
 def _df() -> pl.DataFrame:

@@ -27,6 +27,10 @@ def outputs_dir() -> Path:
     return REPO_ROOT / "outputs"
 
 
+def paper_dir() -> Path:
+    return REPO_ROOT / "paper"
+
+
 def logs_dir() -> Path:
     return REPO_ROOT / "logs"
 
