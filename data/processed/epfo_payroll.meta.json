@@ -1,0 +1,99 @@
+{
+  "built_at": "2026-08-24T08:13:20.349711+00:00",
+  "n_rows": 24432,
+  "sources": [
+    {
+      "file": "data/raw/epfo/epfo_May-2021-1.pdf",
+      "source_release": "epfo_2021-05",
+      "months": "2020-04..2021-03"
+    },
+    {
+      "file": "data/raw/epfo/epfo_May-2022.pdf",
+      "source_release": "epfo_2022-05",
+      "months": "2021-04..2022-03"
+    },
+    {
+      "file": "data/raw/epfo/epfo_May-2023.pdf",
+      "source_release": "epfo_2023-05",
+      "months": "2022-04..2023-03"
+    },
+    {
+      "file": "data/raw/epfo/epfo_February-2024.pdf",
+      "source_release": "epfo_2024-02",
+      "months": "2023-04..2023-12"
+    },
+    {
+      "file": "data/raw/epfo/epfo_March-2024.pdf",
+      "source_release": "epfo_2024-03",
+      "months": "2024-01..2024-01"
+    },
+    {
+      "file": "data/raw/epfo/epfo_April-2024.pdf",
+      "source_release": "epfo_2024-04",
+      "months": "2024-02..2024-02"
+    },
+    {
+      "file": "data/raw/epfo/epfo_May-2024.pdf",
+      "source_release": "epfo_2024-05",
+      "months": "2024-03..2024-03"
+    },
+    {
+      "file": "data/raw/epfo/epfo_May-2025.pdf",
+      "source_release": "epfo_2025-05",
+      "months": "2024-04..2025-03"
+    },
+    {
+      "file": "data/raw/epfo/epfo_September-2025.pdf",
+      "source_release": "epfo_2025-09",
+      "months": "2025-04..2025-07"
+    },
+    {
+      "file": "data/raw/epfo/mospi_Payroll_Reporting_in_India_-_An_Employment_Perspective_-_January_2019_250319_Release_.pdf",
+      "source_release": "mospi_2019-03",
+      "months": "2017-09..2019-01"
+    },
+    {
+      "file": "data/raw/epfo/mospi_Rev-Press_Release_Payroll_Reporting_in_India_-_for_24_December'19.pdf",
+      "source_release": "mospi_2019-12",
+      "months": "2019-04..2019-10"
+    }
+  ],
+  "coverage": {
+    "months_first": "2017-09",
+    "months_last": "2025-07",
+    "n_months": 88,
+    "gap_months": [
+      "2019-02",
+      "2019-03",
+      "2019-11",
+      "2019-12",
+      "2020-01",
+      "2020-02",
+      "2020-03"
+    ],
+    "net_last12_mean": 1284240,
+    "young_share_last12": 0.464,
+    "covid_negative_cells": 9,
+    "over35_negative_months": 3,
+    "months_by_dimension": {
+      "national": 88,
+      "gender": 88,
+      "state": 64,
+      "industry": 64
+    },
+    "n_states": 32,
+    "n_industries": 17
+  },
+  "known_unrecoverable_months": [
+    "2019-02",
+    "2019-03",
+    "2019-11",
+    "2019-12",
+    "2020-01",
+    "2020-02",
+    "2020-03"
+  ],
+  "page1_vs_flow_mismatches": 0,
+  "n_parse_issues": 13,
+  "notes": "see data/raw/epfo/NOTES.md for series breaks and vintage caveats"
+}

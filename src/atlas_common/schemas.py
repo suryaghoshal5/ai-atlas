@@ -86,15 +86,34 @@ plfs_workers = pa.DataFrameSchema(
     strict=True,
 )
 
-# EPFO monthly new-subscriber counts by age band (and industry class where available).
+# EPFO monthly payroll panel: one row per (data_month, measure, age_band,
+# gender, industry, state), NULL for undefined dimensions. Tightened to the real
+# release structure (see src/ingest/epfo.py): national tables carry all four
+# measures; gender tables carry the three gross flows; state/industry tables
+# carry net payroll only. Values are net of exits, so negatives are legitimate
+# for net_payroll (gross measures are checked >= 0 at ingest).
 epfo_payroll = pa.DataFrameSchema(
     {
-        "month": Column(str, pa.Check.str_matches(r"^\d{4}-\d{2}$")),
-        "age_band": Column(str),
-        "industry_class": Column(str, nullable=True),
-        "new_subscribers": Column(int, pa.Check.ge(0)),
-        "female_new_subscribers": Column(int, pa.Check.ge(0), nullable=True),
-        "series_break_flag": Column(bool),  # documented in data/raw/epfo/NOTES.md, dummied out
+        "data_month": Column(str, pa.Check.str_matches(r"^\d{4}-\d{2}$")),
+        "source_release": Column(str, pa.Check.str_matches(r"^(epfo|mospi)_\d{4}-\d{2}$")),
+        "measure": Column(
+            str,
+            pa.Check.isin(["net_payroll", "new_subscribers", "ceased", "rejoined"]),
+        ),
+        "age_band": Column(
+            str, pa.Check.isin(["<18", "18-21", "22-25", "26-28", "29-35", ">35"])
+        ),
+        "gender": Column(
+            str,
+            pa.Check.isin(["male", "female", "transgender", "not_available"]),
+            nullable=True,
+        ),
+        "industry": Column(str, nullable=True),  # EPFO industry heads, as printed
+        "state": Column(str, nullable=True),
+        "value": Column(int),
+        # True for pre-Apr-2020 (MoSPI-vintage) months; the Feb-Mar 2019 and
+        # Nov 2019 - Mar 2020 holes are documented in data/raw/epfo/NOTES.md
+        "series_break_flag": Column(bool),
     },
     strict=True,
 )

@@ -19,9 +19,9 @@ class FakeClient:
     def create(self, **kwargs):
         self.calls += 1
         text = self._responses.pop(0)
-        Block = namedtuple("Block", "text")
+        Block = namedtuple("Block", "type text")
         Msg = namedtuple("Msg", "content")
-        return Msg(content=[Block(text=text)])
+        return Msg(content=[Block(type="text", text=text)])
 
 
 def test_parse_score_extracts_last_score_line():

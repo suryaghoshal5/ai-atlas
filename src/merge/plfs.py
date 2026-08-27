@@ -43,6 +43,8 @@ COLS = {
     "b6q10_perv1": "earnings_self",
     "mult_perv1": "mult",
     "no_qtr_perv1": "no_qtr",
+    "NSS_perv1": "nss",
+    "NSC_perv1": "nsc",
 }
 
 
@@ -55,7 +57,11 @@ def load_workers(year_dir: str = "plfs_2023-24_jul-jun") -> pl.DataFrame:
         .filter(pl.col("status_code").is_in(EMPLOYED_PAS))
         .with_columns(
             pl.col("nco3_raw").cast(pl.Utf8).str.zfill(3).alias("group3"),
-            (pl.col("mult") / pl.col("no_qtr")).alias("weight"),
+            # README (annual combined estimate): MULT/100 if NSS==NSC else
+            # MULT/200, divided by NO_QTR. This weight sums to PERSONS.
+            (pl.when(pl.col("nss") == pl.col("nsc"))
+             .then(pl.col("mult") / 100).otherwise(pl.col("mult") / 200)
+             / pl.col("no_qtr")).alias("weight"),
             (pl.col("earnings_regular").fill_null(0) + pl.col("earnings_self").fill_null(0))
             .alias("monthly_earnings"),
             # instruction manual p.88: 1-7 = eligible for some benefit, 8 = not

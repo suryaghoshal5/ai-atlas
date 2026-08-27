@@ -1,12 +1,12 @@
 {
-  "built_at": "2026-08-20T05:44:51.776440+00:00",
+  "built_at": "2026-08-24T07:48:51.300228+00:00",
   "status": "PRELIMINARY per D6 \u2014 not for paper/abstract",
   "n_workers": 164523,
   "employment_weight_coverage": 0.9937,
   "unmatched_groups": {
     "633": 0.00251,
-    "632": 0.00205,
-    "634": 0.00083,
+    "632": 0.00204,
+    "634": 0.00084,
     "523": 0.00083,
     "323": 8e-05
   },

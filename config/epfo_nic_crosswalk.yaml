@@ -1,0 +1,55 @@
+# EPFO industry heads -> NIC-2008 2-digit divisions (hand-authored, v0.1)
+#
+# Purpose: assign each EPF-Act industry head the set of NIC divisions whose PLFS
+# workers best represent its establishments, so head-level exposure can be
+# computed as the employment-weighted mean exposure of those divisions
+# (ANALYSIS_PLAN §5). This mapping is JUDGMENT, not data — it is the design's
+# acknowledged coarseness. Sets may overlap (heads are characterized
+# independently, not partitioned). Review before any result is declared final.
+#
+# Known limitations:
+# - "OTHERS" (a top-3 head by volume) is unmappable and excluded.
+# - EXPERT SERVICES bundles staffing/outsourcing agencies: workers supplied to
+#   client industries are counted here by EPFO but by actual industry in PLFS.
+#   Its exposure is proxied by professional/admin-services divisions; contract
+#   staffing placed into IT/BPO roles biases this head's true exposure UPWARD
+#   relative to the proxy. Flagged for the paper's limitations section.
+
+EXPERT SERVICES:
+  nic2: ["69", "70", "71", "73", "74", "78", "80", "82"]
+  note: consultancy, manpower supply, security, office admin/support
+ESTABLISHMENT ENGAGED IN MANUFACTURE, MARKETING SERVICING, USAGE OF COMPUTERS:
+  nic2: ["26", "62", "63"]
+  note: the IT head — computer manufacture, software, IT services
+TRADING - COMMERCIAL ESTABLISHMENTS:
+  nic2: ["45", "46", "47"]
+BUILDING AND CONSTRUCTION INDUSTRY:
+  nic2: ["41", "42", "43"]
+ENGINEERS - ENGG. CONTRACTORS:
+  nic2: ["33", "42", "71"]
+  note: engineering contractors; overlaps building (42) and expert services (71)
+ELEC, MECH OR GEN ENGG PRODUCTS:
+  nic2: ["25", "27", "28"]
+ESTABLISHMENTS ENGAGED IN CLEANING,SWEEPING SERVICES:
+  nic2: ["81"]
+TEXTILES:
+  nic2: ["13"]
+GARMENTS MAKING:
+  nic2: ["14"]
+FINANCING ESTABLISHMENT:
+  nic2: ["64", "66"]
+GENERAL INSURANCE:
+  nic2: ["65"]
+SCHOOL:
+  nic2: ["85"]
+HOSPITALS:
+  nic2: ["86"]
+SOCIETIES CLUBS OR ASSOCIATIONS:
+  nic2: ["94"]
+HOTEL:
+  nic2: ["55", "56"]
+PLASTICS PRODUCTS:
+  nic2: ["22"]
+OTHERS:
+  nic2: []
+  note: unmappable residual — excluded from exposure assignment
