@@ -188,6 +188,15 @@ differentiator from every doom-thread.)
 *Zoom into white-collar India: teachers and proprietors are the mass at
 moderate exposure; coders, finance and records work are the frontier.*
 
+![[insight_typology.png]]
+*Or let the data name its own worlds: k-means clustering on seven features
+(exposure mix, education, earnings, gender, age, location) sorts the 122
+occupation groups into five clusters — Frontier professionals (11M, chat-exposed,
+96% graduate, highest-paid), the Paperwork layer (10M, exposed mainly through
+tooling), Managers & teachers (40M, presence-bound), the Rural agrarian mass
+(232M) and Urban manual & retail (170M), both largely insulated. Five worlds,
+five different AI conversations.*
+
 ## 9. What this does NOT say  *(~300 words, no chart)*
 
 The steelman section — address the strongest critiques head-on:

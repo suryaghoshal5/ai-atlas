@@ -1,0 +1,22 @@
+{
+  "built_at": "2026-08-27T12:18:52.262750+00:00",
+  "status": "PRELIMINARY per D6",
+  "method": "k-means, standardized features, n_init=50, seed=42",
+  "silhouette_by_k": {
+    "3": 0.263,
+    "4": 0.265,
+    "5": 0.274,
+    "6": 0.24,
+    "7": 0.222
+  },
+  "chosen_k": 5,
+  "features": [
+    "alpha",
+    "e2_share",
+    "grad_share",
+    "female_share",
+    "urban_share",
+    "young_share",
+    "log_med_earn"
+  ]
+}
