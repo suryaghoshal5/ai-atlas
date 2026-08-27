@@ -57,7 +57,8 @@ def head_sub(ax, title, fontsize=12, loc="left", **_kw):
                 fontsize=ss, color=INK_2, linespacing=1.3, fontweight="normal")
 
 
-def add_source(fig, dataset: str) -> None:
-    # negative y sits below the axis labels; bbox_inches="tight" expands to fit
-    fig.text(0.01, -0.045, f"Source: {dataset}; author's calculations.",
+def add_source(fig, dataset: str, y: float = -0.045) -> None:
+    # negative y sits below the axis labels; bbox_inches="tight" expands to fit.
+    # Charts with rotated tick labels need a lower y (e.g. -0.18).
+    fig.text(0.01, y, f"Source: {dataset}; author's calculations.",
              ha="left", va="top", fontsize=7.5, color=MUTED)

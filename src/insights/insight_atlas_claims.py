@@ -95,8 +95,8 @@ def chart_education(df: pl.DataFrame) -> None:
     colors = [SB_RED if m > nat else SB_GREY for m in means]
     ax.bar([n for n, _ in edu], means, color=colors, width=0.65)
     ax.axhline(nat, color=SB_GOLD, lw=1.4, ls="--")
-    ax.text(len(edu) - 0.45, nat + 0.004, f"national avg {nat:.2f}", fontsize=8.5,
-            color="#a67102", ha="right")
+    ax.text(0.02, nat + 0.004, f"national avg {nat:.2f}", fontsize=8.5,
+            color="#a67102", ha="left", transform=ax.get_yaxis_transform())
     for i, m in enumerate(means):
         ax.text(i, m + 0.004, f"{m:.2f}", ha="center", fontsize=9,
                 fontweight="bold", color=colors[i])
@@ -106,7 +106,7 @@ def chart_education(df: pl.DataFrame) -> None:
     ax.set_ylabel("Mean exposure score (0-1)")
     ax.set_xlabel("Worker's general education level")
     plt.setp(ax.get_xticklabels(), rotation=20, ha="right")
-    add_source(fig, DATASET)
+    add_source(fig, DATASET, y=-0.18)
     _save(fig, "insight_education",
           "means: " + ", ".join(f"{n}={m:.3f}" for (n, _), m in zip(edu, means)) + f"; nat={nat:.3f}")
 
