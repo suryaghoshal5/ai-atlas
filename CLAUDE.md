@@ -33,7 +33,7 @@ Full analysis plan: see `ANALYSIS_PLAN.md` in this folder. Sprint tasks: see `CU
 | Validation | pandera schemas + pytest harness | latest stable |
 | Figures | matplotlib (paper style, no seaborn defaults) | latest stable |
 | Paper | LaTeX (Overleaf-compatible) | — |
-| Repo | git, local + GitHub private | — |
+| Repo | git, local + GitHub **public** (github.com/suryaghoshal5/ai-atlas; D7) | — |
 
 Do NOT use: Jupyter notebooks as source of record (exploration only, promoted to scripts), R, cloud data warehouses, Dask/Spark (data fits in memory), any non-Anthropic LLM for classification (single-model consistency).
 
@@ -182,4 +182,5 @@ Vault (this folder, docs only):
 - D3: claude-sonnet-4-6 as the single scoring model. — Rationale: consistency, cost, and AEI-comparability of pipeline style.
 - D4: Measurement-first framing; DiD is supporting evidence, not headline causal claim. — Rationale: referee honesty; IGIDR referee pool punishes overclaiming.
 - D5: Personal project, zero Think360 data or infrastructure. — Rationale: IP cleanliness during exit negotiation.
+- D7 (Aug 24, 2026, Surya): repo is PUBLIC at github.com/suryaghoshal5/ai-atlas (overrides the original "GitHub private"). — Rationale: index + rubric are the planned open deliverable anyway. Secret-scan clean (no keys in history/cache); raw data never committed; all committed results carry PRELIMINARY stamps. Accepted trade-off: methodology and preliminary results are visible pre-submission (scoop risk acknowledged).
 - D6 (Aug 10, 2026, Surya): **κ gate deferred, not dropped.** Pilot κ failed twice (0.59, 0.54; fault lines: managerial-task definition + E1/E2 seam). Surya's call: proceed with LLM-only ("AI ranking") scoring and index build now so analysis is unblocked; human validation and the managerial-tasks rubric ruling to be revisited BEFORE any result is declared final. **All outputs built on unvalidated scores are stamped PRELIMINARY — none may enter the abstract or paper (Golden Rules 1/4 still bind).** Surya's related idea, to be developed later: publish human-vs-LLM exposure variants with the delta as a sensitivity/bounds exhibit.
