@@ -166,10 +166,11 @@ def main() -> None:
     chart_wagebill_sectors(df)
     chart_top_functions(df)
     chart_bubble(df)
+    chart_bubble_wc(df)
     prov = OUT / "provenance.md"
     existing = prov.read_text() if prov.exists() else "# Substack chart provenance\n\n"
     prov.write_text(existing + "\n".join(PROV))
-    print("4 charts written")
+    print("charts written")
 
 
 
@@ -287,6 +288,79 @@ def chart_bubble(df: pl.DataFrame) -> None:
           "; ".join(f"{names_map.get(r['group3'], r['group3'])}: E={r['E']:.2f}, "
                     f"{r['workers_m']:.2f}M, wb={r['wb_pct']:.2f}%"
                     for r in g.sort("wb_pct", descending=True).head(12).iter_rows(named=True)))
+
+
+def chart_bubble_wc(df: pl.DataFrame) -> None:
+    """White-collar-only bubble map (NCO divisions 1-4): zoomed version of the
+    quadrant chart so the frontier fills the frame."""
+    names_map = {**GROUP_NAMES, "264": "Authors & journalists", "412": "Secretaries",
+                 "252": "Database professionals", "212": "Statisticians & actuaries",
+                 "233": "Secondary teachers", "234": "Primary teachers",
+                 "232": "Vocational teachers", "222": "Nursing professionals",
+                 "322": "Nursing associates", "421": "Tellers & cashiers",
+                 "131": "Production managers", "143": "Services managers",
+                 "112": "Proprietors & CEOs", "121": "Business services managers",
+                 "132": "Manufacturing managers", "134": "Professional services managers",
+                 "411": "General office clerks", "331": "Financial associates",
+                 "335": "Govt. regulatory associates", "235": "Other teaching professionals",
+                 "226": "Other health professionals", "214": "Engineers"}
+    e = df.filter(pl.col("monthly_earnings") > 0)
+    wb_total = float((e["monthly_earnings"] * e["weight"]).sum())
+    idx = pl.read_parquet(processed_dir() / "group3_index_PRELIMINARY.parquet")
+    g = (df.filter(pl.col("group3").str.slice(0, 1).is_in(["1", "2", "3", "4"]))
+         .group_by("group3")
+         .agg((pl.col("weight").sum() / 1e6).alias("workers_m"))
+         .join(e.group_by("group3")
+                .agg(((pl.col("monthly_earnings") * pl.col("weight")).sum() / wb_total * 100)
+                     .alias("wb_pct")), on="group3", how="left")
+         .join(idx.filter(pl.col("n_tasks") >= 5).select("group3", pl.col("beta").alias("E")),
+               on="group3", how="inner")
+         .filter(pl.col("workers_m") > 0.01)
+         .with_columns(pl.col("wb_pct").fill_null(0.0)))
+    wc_avg = 0.258  # employment-weighted white-collar mean (results brief)
+    fig, ax = plt.subplots(figsize=(7.2, 5.6))
+    x, y = g["E"].to_list(), g["workers_m"].to_list()
+    wb = g["wb_pct"].to_list()
+    sizes = [max(14.0, w * 160) for w in wb]
+    colors = [SB_RED if xi > wc_avg else SB_GREY for xi in x]
+    ax.scatter(x, y, s=sizes, c=colors, alpha=0.55, edgecolors="white", linewidths=0.6)
+    ax.set_yscale("log")
+    ax.set_ylim(0.01, 12)
+    ax.set_xlim(0, 1.0)
+    ax.axvline(wc_avg, color=SB_GOLD, lw=1.3, ls="--")
+    ax.axhline(1, color="#c9c7c0", lw=1.0, ls=":")
+    ax.text(wc_avg + 0.01, 0.012, "white-collar avg exposure", fontsize=7.5, color="#a67102")
+    ax.text(0.975, 1.13, "1M workers", fontsize=7.5, color="#8a8781", ha="right")
+    lab = {"233": (0.022, 0.9), "234": (-0.022, 0.6), "251": (0.02, 0.3), "241": (0.02, -0.5),
+           "431": (0.018, -0.45), "411": (0.018, -0.25), "421": (0.015, -0.2),
+           "212": (-0.02, 0.008), "264": (0.012, -0.07), "322": (-0.022, 0.0),
+           "331": (0.015, -0.12), "122": (-0.025, 0.5), "112": (0.02, 0.9),
+           "252": (0.012, 0.09), "351": (-0.02, -0.09), "214": (0.02, 0.4),
+           "242": (0.015, 0.08)}
+    for r in g.iter_rows(named=True):
+        if r["group3"] in lab:
+            dx, dy = lab[r["group3"]]
+            ha = "right" if dx < 0 else "left"
+            ax.annotate(names_map.get(r["group3"], "NCO " + r["group3"]),
+                        (r["E"], r["workers_m"]),
+                        xytext=(r["E"] + dx, r["workers_m"] + dy),
+                        fontsize=7.5, color="#52514e", ha=ha)
+    for wref, labl in [(1, "1% of wage bill"), (3, "3%")]:
+        ax.scatter([], [], s=max(14, wref * 160), c="#c9c7c0", alpha=0.7, label=labl)
+    ax.legend(frameon=False, fontsize=7.5, loc="lower center", title="bubble area",
+              title_fontsize=7.5, labelspacing=1.4, borderpad=0.8, ncols=2,
+              bbox_to_anchor=(0.68, 0.0))
+    head_sub(ax, "Teachers are white-collar India's mass - coders its frontier\n"
+                 "White-collar occupation groups only (NCO divisions 1-4). Exposure (x)\n"
+                 "vs workers (y, log); bubble area = share of NATIONAL wage bill;\n"
+                 "red: above the white-collar average. PLFS 2023-24.")
+    ax.set_xlabel("Mean exposure score (0-1)")
+    ax.set_ylabel("Workers employed (millions, log scale)")
+    add_source(fig, DATASET)
+    _save(fig, "insight_bubble_map_whitecollar",
+          "; ".join(f"{names_map.get(r['group3'], r['group3'])}: E={r['E']:.2f}, "
+                    f"{r['workers_m']:.2f}M, wb={r['wb_pct']:.2f}%"
+                    for r in g.sort("wb_pct", descending=True).head(14).iter_rows(named=True)))
 
 
 if __name__ == "__main__":
