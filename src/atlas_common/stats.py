@@ -10,6 +10,7 @@ through here.
 from __future__ import annotations
 
 import numpy as np
+import polars as pl
 
 
 def weighted_quantile(values, weights, q: float) -> float:
@@ -59,3 +60,17 @@ def weighted_quantile(values, weights, q: float) -> float:
 
 def weighted_median(values, weights) -> float:
     return weighted_quantile(values, weights, 0.5)
+
+
+def weighted_median_by(df: "pl.DataFrame", key: str, value: str, weight: str,
+                       alias: str) -> "pl.DataFrame":
+    """Survey-weighted median of `value` within each `key`.
+
+    polars has no weighted quantile, so the frame is partitioned and each part
+    goes through weighted_median. Segments are few (occupation groups, sectors,
+    clusters), so the explicit partition costs nothing worth optimising.
+    """
+    rows = [{key: part[key][0],
+             alias: weighted_median(part[value].to_numpy(), part[weight].to_numpy())}
+            for part in df.partition_by(key, maintain_order=True)]
+    return pl.DataFrame(rows, schema={key: df.schema[key], alias: pl.Float64})

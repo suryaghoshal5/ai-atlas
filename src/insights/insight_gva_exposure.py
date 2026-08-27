@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 import polars as pl
 
 from atlas_common import outputs_dir, processed_dir
+from atlas_common.sectors import GVA_TOTAL, NAS
 from insights._style import (SB_GOLD, SB_GREY, SB_RED, add_source, apply_style,
                              head_sub)
 
@@ -26,18 +27,6 @@ OUT = outputs_dir() / "substack"
 DATASET = ("PLFS 2023-24 x NCO-2015 exposure index (preliminary LLM scoring); "
            "GVA: NAS Statement 4A, FY2023-24 FRE, current prices (MoSPI)")
 
-# (label, GVA Rs crore 2023-24 FRE, NIC-2008 divisions)
-NAS = [
-    ("Agriculture & allied",              4877867, list(range(1, 4))),
-    ("Mining & quarrying",                 532343, list(range(5, 10))),
-    ("Manufacturing",                     3921596, list(range(10, 34))),
-    ("Utilities",                          766435, list(range(35, 40))),
-    ("Construction",                      2401618, list(range(41, 44))),
-    ("Trade, hotels, transport, comms",   4828505, [*range(45, 48), *range(49, 54), 55, 56, *range(58, 62)]),
-    ("Financial, real estate, prof. svcs", 6244153, [62, 63, *range(64, 69), *range(69, 76), *range(77, 83)]),
-    ("Public admin, defence, other svcs", 3840370, [84, 85, *range(86, 89), *range(90, 100)]),
-]
-GVA_TOTAL = 27412888  # Rs crore, Statement 4A
 
 
 def main() -> None:

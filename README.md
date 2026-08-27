@@ -24,8 +24,11 @@ Strict order — each stage gates the next:
 
 ```
 make ingest    # raw -> pandera-validated parquet (raw/ is read-only)
+make tasks     # NCO Vol II descriptions -> the scored task corpus
 make score     # LLM exposure scoring (gated on frozen rubric)
 make index     # exposure index (gated on validation kappa >= 0.7)
+make typology  # occupation clusters + the white paper section 8b table
+make masters   # task / occupation / sector master tables (docs/MASTER_TABLES.md)
 make results   # all tables and figures, reproducibly
 make harness   # regression check against golden outputs
 ```

@@ -41,7 +41,7 @@ from sklearn.preprocessing import StandardScaler
 
 from atlas_common import outputs_dir, paper_dir, processed_dir, run_seed
 from atlas_common.nco_labels import label
-from atlas_common.stats import weighted_median
+from atlas_common.stats import weighted_median_by
 
 HIGH_EXPOSURE_BETA = 0.5
 
@@ -52,16 +52,6 @@ END_MARK = "<!-- END generated: analysis.typology cluster profiles -->"
 def load_workers() -> pl.DataFrame:
     return (pl.read_parquet(processed_dir() / "plfs_exposure_PRELIMINARY.parquet")
             .filter(pl.col("beta").is_not_null()))
-
-
-def weighted_median_by(df: pl.DataFrame, key: str, value: str, weight: str,
-                       alias: str) -> pl.DataFrame:
-    """Survey-weighted median of `value` within each `key` (polars has no
-    weighted quantile; the groups are few, so an explicit partition is fine)."""
-    rows = [{key: part[key][0],
-             alias: weighted_median(part[value].to_numpy(), part[weight].to_numpy())}
-            for part in df.partition_by(key, maintain_order=True)]
-    return pl.DataFrame(rows, schema={key: df.schema[key], alias: pl.Float64})
 
 
 def build_features(df: pl.DataFrame) -> pl.DataFrame:
