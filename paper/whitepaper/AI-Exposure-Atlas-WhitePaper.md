@@ -199,13 +199,30 @@ earnings — and let the algorithm draw the map. It draws five worlds
 
 ![[insight_typology.png]]
 
-| World | Workers | Signature |
-|---|---|---|
-| **Frontier professionals** | 11M | chat-exposed (α 0.52), 96% graduate, 84% urban, highest-paid — software, finance, engineering |
-| **The paperwork layer** | 10M | modest α but E2 = 0.38: exposed through software, not chatbots — clerks, data entry, tellers |
-| **Managers & teachers** | 40M | authority- and presence-bound middle — proprietors, teachers, supervisors |
-| **Rural agrarian mass** | 232M | α 0.045, 11% urban — insulated |
-| **Urban manual & retail** | 170M | α 0.05, 90% male — insulated |
+**How the five worlds differ** *(employment-weighted cluster profiles; all
+PRELIMINARY):*
+
+| | Frontier professionals | Paperwork layer | Managers & teachers | Rural agrarian mass | Urban manual & retail |
+|---|---|---|---|---|---|
+| Occupation groups | 12 | 9 | 37 | 17 | 46 |
+| **Workers** | 11M | 10M | 40M | 232M | 170M |
+| Chat exposure (α) | **0.52** | 0.17 | 0.13 | 0.05 | 0.05 |
+| Tooling exposure (E2 share) | 0.16 | **0.38** | 0.07 | 0.01 | 0.03 |
+| Workers in high-exposure jobs (β ≥ 0.5) | **65%** | 18% | 0% | 0% | 0% |
+| Graduate share | **96%** | 88% | 74% | 14% | 22% |
+| Female share | 20% | 24% | 22% | **43%** | 10% |
+| Urban share | **84%** | 61% | 60% | 12% | 37% |
+| Young (18–29) share | **39%** | 33% | 17% | 17% | 28% |
+| Median monthly earnings | **₹33,700** | ₹23,000 | ₹25,800 | ₹8,400 | ₹13,600 |
+| Share of national wage bill | 8.9% | 4.8% | 24.2% | 29.2% | 32.6% |
+| Exemplar occupations | software, finance, engineers | clerks, data entry, tellers | proprietors, teachers, supervisors | farmers, farm labour | helpers, shop sales, drivers |
+
+Table-reading notes for the prose: the frontier holds 2.4% of workers but
+8.9% of the wage bill (≈3.7× its headcount weight) and is the youngest,
+most urban, most graduate world; the paperwork layer is the only world whose
+exposure is majority-E2 (tooling); the three unexposed worlds contain not a
+single occupation group above β 0.5 — but still 86% of the wage bill in
+aggregate, which is the "most of India's pay is insulated" counterweight to §4.
 
 Two things the thresholds could not see, and the write-up should land:
 
