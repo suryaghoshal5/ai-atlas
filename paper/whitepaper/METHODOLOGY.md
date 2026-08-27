@@ -200,6 +200,30 @@ cluster labels are ours, membership is the algorithm's. Reproduce with
 `python -m analysis.typology` (assignments in
 `occupation_typology_PRELIMINARY.parquet`).
 
+## Step 7 — The GVA bridge (what share of the economy's value-add)
+
+Two macro quantifications, both composition arithmetic, neither a forecast:
+
+1. **GVA by exposure band.** NAS Statement 4A (FY2023-24 First Revised
+   Estimates, current prices; archived + manifested in `data/raw/nas/`) gives
+   GVA for eight economic activities. Each activity's exposure = the
+   employment-weighted mean exposure of PLFS workers in its NIC divisions
+   (seam handled explicitly: computer services NIC 62-63 sit in NAS
+   "Financial, Real Estate & Professional Services"; telecom/broadcasting
+   58-61 in the trade-transport-communication group). Results: GVA-weighted
+   mean exposure 0.146 vs employment-weighted 0.086; activities above the
+   employment-weighted average produce 57.2% of GVA.
+2. **Exposed labour income.** Exposure is a labour-task property, so the
+   disciplined macro number applies the labour share: high-exposure
+   occupations hold 7.1% of measured labour compensation; at India's labour
+   income share of GVA (~0.45-0.5, India KLEMS), that is ~3% of GVA flowing
+   through high-exposure labour.
+
+**What we refuse to compute:** "GDP at risk/gain" totals — they require an
+assumed displacement or productivity-uplift rate, which is a forecast, not a
+measurement. We report where value-add is produced; the demand-side sections
+test what happens to it.
+
 ## What can go wrong (and what we do about it)
 
 1. **The scorer is an LLM judging LLM capability.** Mitigations: fixed public

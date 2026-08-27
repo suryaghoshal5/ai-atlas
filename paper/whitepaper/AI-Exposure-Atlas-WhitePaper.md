@@ -107,6 +107,17 @@ exposure weighted by earnings (0.155) is 1.8× the headcount figure (0.086).*
 *In IT, 75% of the sector's paycheque sits in high-exposure occupations;
 finance 21%; economy average 7%.*
 
+![[insight_gva_exposure.png]]
+*The third weighting completes the escalation — share of workers (mean E 0.086)
+-> share of pay (0.155) -> share of value-add: GVA-weighted mean exposure is
+0.146, and industries with above-average worker exposure produce 57% of
+India's FY2023-24 GVA (Rs274 lakh crore, NAS). Discipline note for the prose:
+this says where value-add is PRODUCED, not what happens to it — no "GDP at
+risk" multiplication. The rigorous macro line: high-exposure occupations hold
+7.1% of labour compensation; at India's labour share of GVA (~0.45-0.5, India
+KLEMS), that is roughly 3% of GVA flowing directly through high-exposure
+labour — small, but concentrated in a handful of urban sectors.*
+
 > [!quote] Callback — *K-Shaped Growth* (Jul 2026)
 > "In July I showed India's middle 40% sliding from 45% to 27% of national
 > income — the largest slide in a 50-country panel. Lay this chart over that
