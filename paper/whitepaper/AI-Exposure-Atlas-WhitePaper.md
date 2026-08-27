@@ -34,6 +34,12 @@ Thesis, in one line: **exposure is rare, but it is concentrated exactly where
 India's modern economy lives — its cities, its graduates, its women in
 offices, and above all its youngest white-collar workers.**
 
+> [!quote] Callback — the 2025 trilogy
+> "A year ago I sketched a mental model of how AI tilts the world
+> (*When the World Tilts*, Aug 2025). This is what happened when I stopped
+> sketching and started measuring: 18,622 tasks, 463 million workers, India's
+> own occupation dictionary." → link *When the World Tilts*.
+
 TL;DR box (4 bullets):
 - Mean exposure across ~463M workers: **0.086** — most of India is out of reach.
 - But high-exposure occupations hold **1.9% of workers and 7.1% of earnings**.
@@ -58,6 +64,11 @@ human-agreement pilot hasn't yet cleared the pre-registered κ ≥ 0.7 bar;
 validation on a fresh blind sample precedes any final claim.
 → Full detail: [[METHODOLOGY]]
 
+> [!quote] Callback — *When Work Begins to Think* (Nov 2025)
+> That essay argued work decomposes into tasks before it recomposes around
+> machines. This section is that claim made operational: the unit of analysis
+> here is the task sentence, not the job title.
+
 ## 3. Most of India is out of reach — for now  *(~300 words)*
 
 The anti-hype section, which buys credibility for everything after.
@@ -69,8 +80,19 @@ The anti-hype section, which buys credibility for everything after.
 *Agriculture: 194M workers at 0.06. Construction: 60M at 0.03. IT: 7M at 0.54.
 Exposure and employment are almost inversely distributed.*
 
-Pivot line to end the section: thin slices can matter enormously — depending
-on what they carry.
+![[insight_states.png]]
+*The geography of exposure: Delhi 0.14, Kerala 0.12 … Bihar 0.07.*
+
+> [!quote] Callbacks
+> - *The One-Person Economy* (Aug 2026): the subsistence mass documented there
+>   — vendors, farmers, one-person survival firms — is precisely the E0 block
+>   of this chart. AI barely touches the one-person economy's floor; it hovers
+>   over its aspirational ceiling (more in §9).
+> - *The Geography of Compute* (Aug 2026): that essay mapped where the
+>   world's intelligence supply sits, in megawatts. This is its demand-side
+>   twin — where India's exposure to that supply sits, in workers. Consider
+>   titling this passage "The Geography of Exposure" to make the diptych
+>   explicit.
 
 ## 4. Follow the money  *(~300 words)*
 
@@ -84,6 +106,14 @@ exposure weighted by earnings (0.155) is 1.8× the headcount figure (0.086).*
 ![[insight_wagebill_sectors.png]]
 *In IT, 75% of the sector's paycheque sits in high-exposure occupations;
 finance 21%; economy average 7%.*
+
+> [!quote] Callback — *K-Shaped Growth* (Jul 2026)
+> "In July I showed India's middle 40% sliding from 45% to 27% of national
+> income — the largest slide in a 50-country panel. Lay this chart over that
+> one: AI exposure sits almost entirely on the upper arm of the K. Whatever
+> generative AI does to Indian incomes, it does it to the arm that was
+> already pulling away." → link *K-Shaped Growth and India's Missing Middle
+> Class*.
 
 ## 5. Who, exactly  *(~350 words)*
 
@@ -103,6 +133,12 @@ numerical clerks, ICT technicians…*
 ![[insight_education.png]]
 *Exposure barely moves from illiterate (0.05) through higher-secondary (0.06),
 then triples at graduation (0.16). AI exposure is a graduate phenomenon.*
+
+> [!quote] Callback — *K-Shaped Growth* (Jul 2026)
+> The aspiration framing completes the K-shape link: a degree is the ticket
+> from the lower arm toward the upper one — and the education gradient shows
+> exposure switches on at exactly that ticket booth. India's exposure ladder
+> IS its aspiration ladder.
 
 ## 6. The gender flip  *(~250 words)*
 
@@ -135,6 +171,12 @@ exposed part of the mine — but it hasn't sung.* (Power limits: 16 industry
 clusters, net-only flows, crosswalk noise. This honesty is the
 differentiator from every doom-thread.)
 
+> [!quote] Callback — *K-Shaped Growth* (Jul 2026)
+> "The missing middle class has to come from somewhere. It comes up a
+> staircase: fresher job, clerk's desk, first professional rung. This chart
+> says the staircase is where AI landed first. Whatever the K-shape essay
+> worried about, the entry rung is where it would compound."
+
 ## 8. The whole atlas on one chart  *(~200 words)*
 
 ![[insight_bubble_map.png]]
@@ -156,8 +198,20 @@ The steelman section — address the strongest critiques head-on:
   design; the entry-rung result is currently a bounded null, not a verdict.
 - **40% of white-collar exposure needs tooling (E2)**: the outcome is
   adoption-contingent — a policy variable, not fate.
+  *Callback — the trilogy's* Infrastructure Shifts *(Oct 2025): "I argued
+  foundation models become utilities. The E2 layer is the meter waiting to be
+  connected — 40% of white-collar exposure is idle until that utility gets
+  wired into speech, records, and paperwork."*
 - **EPFO sees only the organised margin**: a displaced fresher who turns solo
   creator is invisible there; estimates are lower bounds on reallocation.
+  *Callback —* The One-Person Economy *(Aug 2026): "if the exposed fresher
+  doesn't get hired, the one-person economy is where they go — and my payroll
+  data goes dark exactly there. The two essays are watching opposite sides of
+  the same door."*
+- **Personal existence proof** (one sentence, disarming): the *Software for
+  One* series (2025-26) is the author's own E1→E2 story — a solo worker whose
+  output multiplied through tooling. The augmentation hypothesis isn't a
+  strawman; I live it. → link *Software for One, One Year On*.
 
 ## 10. What to watch, what to do  *(~300 words)*
 
@@ -180,6 +234,22 @@ academic paper is coming (IGIDR, Dec 2026).
 ## Appendix — Methodology
 The complete methodology with formulas and worked examples lives in
 [[METHODOLOGY]] (same folder). Chart-level numbers: [[provenance]].
+
+## Correlations with prior essays (link map)
+
+| Section | Links to | The connective claim |
+|---|---|---|
+| §1 cold open | *When the World Tilts* (Aug 2025) | from mental model to measurement |
+| §2 method | *When Work Begins to Think* (Nov 2025) | the task is the unit of analysis |
+| §3 out-of-reach + geography | *The One-Person Economy*; *The Geography of Compute* (Aug 2026) | E0 floor of the solo economy; supply-side/demand-side diptych |
+| §4 wage bill | *K-Shaped Growth* (Jul 2026) | exposure sits on the K's upper arm |
+| §5 education gradient | *K-Shaped Growth* | the exposure ladder is the aspiration ladder |
+| §7 entry rung | *K-Shaped Growth* | AI landed on the staircase into the middle class |
+| §9 steelman | *Infrastructure Shifts* (Oct 2025); *The One-Person Economy*; *Software for One, One Year On* (Jul 2026) | E2 = the unconnected utility; the invisible margin; personal augmentation proof |
+| Title register | *The Geography of Compute*, *The One-Person Economy* | declarative noun-phrase series spine → suggest **"The Exposure Atlas"** |
+
+Series positioning line (for the header or footer): *This essay is where the
+2025 AI trilogy meets the 2026 India-inequality series.*
 
 ## Production notes
 - Cut from the academic version: literature review (two name-drop sentences),
