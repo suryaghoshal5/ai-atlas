@@ -165,6 +165,7 @@ def main() -> None:
     chart_jobtypes(df)
     chart_wagebill_sectors(df)
     chart_top_functions(df)
+    chart_bubble(df)
     prov = OUT / "provenance.md"
     existing = prov.read_text() if prov.exists() else "# Substack chart provenance\n\n"
     prov.write_text(existing + "\n".join(PROV))
@@ -208,6 +209,84 @@ def chart_top_functions(df: pl.DataFrame) -> None:
     add_source(fig, DATASET)
     _save(fig, "insight_top_functions",
           "; ".join(f"{n}: E={e:.3f}, {w:.3f}M" for n, e, w in zip(names, E, wm)))
+
+
+def chart_bubble(df: pl.DataFrame) -> None:
+    """2x2 bubble map: exposure (x) vs employment (y, log) vs wage-bill share
+    (bubble area), one bubble per NCO 3-digit group."""
+    names_map = {**GROUP_NAMES, "264": "Authors & journalists", "412": "Secretaries",
+                 "252": "Database professionals", "611": "Crop farmers",
+                 "521": "Street & market sales", "911": "Domestic cleaners",
+                 "832": "Drivers", "711": "Building trades", "622": "Fishery workers",
+                 "941": "Food prep assistants", "962": "Odd-job workers",
+                 "212": "Statisticians & actuaries", "233": "Secondary teachers",
+                 "322": "Nurses", "421": "Tellers & cashiers"}
+    e = df.filter(pl.col("monthly_earnings") > 0)
+    wb_total = float((e["monthly_earnings"] * e["weight"]).sum())
+    idx = pl.read_parquet(processed_dir() / "group3_index_PRELIMINARY.parquet")
+    g = (df.group_by("group3")
+         .agg((pl.col("weight").sum() / 1e6).alias("workers_m"))
+         .join(e.group_by("group3")
+                .agg(((pl.col("monthly_earnings") * pl.col("weight")).sum() / wb_total * 100)
+                     .alias("wb_pct")), on="group3", how="left")
+         .join(idx.filter(pl.col("n_tasks") >= 5).select("group3", pl.col("beta").alias("E")),
+               on="group3", how="inner")
+         .filter(pl.col("workers_m") > 0.01)
+         .with_columns(pl.col("wb_pct").fill_null(0.0)))
+    nat = 0.086
+    fig, ax = plt.subplots(figsize=(7.2, 5.6))
+    x, y = g["E"].to_list(), g["workers_m"].to_list()
+    wb = g["wb_pct"].to_list()
+    sizes = [max(12.0, w * 110) for w in wb]
+    colors = [SB_RED if xi > nat else SB_GREY for xi in x]
+    ax.scatter(x, y, s=sizes, c=colors, alpha=0.55, edgecolors="white", linewidths=0.6)
+    ax.set_yscale("log")
+    ax.set_ylim(0.01, 400)
+    ax.set_xlim(0, 1.0)
+    ax.axvline(nat, color=SB_GOLD, lw=1.3, ls="--")
+    ax.axhline(1, color="#c9c7c0", lw=1.0, ls=":")
+    ax.text(nat + 0.01, 0.045, "national avg exposure", fontsize=7.5, color="#a67102")
+    ax.text(0.965, 1.15, "1M workers", fontsize=7.5, color="#8a8781", ha="right")
+    ax.text(0.02, 250, "MASS, INSULATED", fontsize=8, color="#8a8781",
+            fontweight="bold", alpha=0.8)
+    ax.text(0.62, 250, "THE POLICY FRONTIER", fontsize=8, color=SB_RED,
+            fontweight="bold", alpha=0.8)
+    ax.text(0.62, 0.014, "ELITE FRONTLINE", fontsize=8, color=SB_RED,
+            fontweight="bold", alpha=0.8)
+    lab_these = {"611": (0.02, -8), "251": (0.022, 0.0), "241": (0.022, -0.9), "431": (0.02, -0.5),
+                 "264": (0.015, 0.05), "522": (0.02, 8),
+                 "832": (0.02, -5), "711": (0.02, 10), "233": (0.02, 1.2),
+                 "421": (0.015, -0.15), "322": (0.015, 0.3)}
+    act = g.filter(pl.col("group3") == "212")
+    if act.height:
+        r = act.row(0, named=True)
+        ax.annotate("Statisticians & actuaries", (r["E"], r["workers_m"]),
+                    xytext=(r["E"] - 0.02, r["workers_m"] * 1.7),
+                    fontsize=7.5, color="#52514e", ha="right")
+    for r in g.iter_rows(named=True):
+        if r["group3"] in lab_these:
+            dx, dy = lab_these[r["group3"]]
+            ax.annotate(names_map.get(r["group3"], r["group3"]),
+                        (r["E"], r["workers_m"]),
+                        xytext=(r["E"] + dx, r["workers_m"] + dy),
+                        fontsize=7.5, color="#52514e")
+    for wref, lab in [(1, "1% of wage bill"), (5, "5%")]:
+        ax.scatter([], [], s=max(12, wref * 110), c="#c9c7c0", alpha=0.7, label=lab)
+    ax.legend(frameon=False, fontsize=7.5, loc="lower center", title="bubble area",
+              title_fontsize=7.5, labelspacing=1.4, borderpad=0.8, ncols=2,
+              bbox_to_anchor=(0.4, 0.0))
+    head_sub(ax, "India's AI question lives in the top-right corner\n"
+                 "Each bubble: one occupation group. Exposure (x) vs workers (y, log\n"
+                 "scale); bubble area = share of national wage bill; red: above-average\n"
+                 "exposure. PLFS 2023-24.")
+    ax.set_xlabel("Mean exposure score (0-1)")
+    ax.set_ylabel("Workers employed (millions, log scale)")
+    add_source(fig, DATASET)
+    _save(fig, "insight_bubble_map",
+          "122-group bubble map; " +
+          "; ".join(f"{names_map.get(r['group3'], r['group3'])}: E={r['E']:.2f}, "
+                    f"{r['workers_m']:.2f}M, wb={r['wb_pct']:.2f}%"
+                    for r in g.sort("wb_pct", descending=True).head(12).iter_rows(named=True)))
 
 
 if __name__ == "__main__":
