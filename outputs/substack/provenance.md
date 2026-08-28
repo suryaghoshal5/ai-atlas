@@ -112,3 +112,6 @@ Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM s
 ### insight_states (2026-08-28)
 Delhi=0.143; Kerala=0.120; Haryana=0.110; Telangana=0.106; Maharashtra=0.101; Karnataka=0.101; Tamil Nadu=0.093; Uttarakhand=0.085; Odisha=0.074; Madhya Pradesh=0.073; Chhattisgarh=0.072; Bihar=0.067; nat=0.086
 Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
+### insight_epfo_young_trend (2026-08-28)
+young avg 2021-11..2022-10: 0.591M; last 12m: 0.596M; older pre: 0.419M; last 12m: 0.513M; 64 months Apr2020-Jul2025
+Source: EPFO monthly payroll releases (net new subscribers by age band), Apr 2020 - Jul 2025.
