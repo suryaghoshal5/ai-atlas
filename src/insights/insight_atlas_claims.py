@@ -8,12 +8,14 @@ from __future__ import annotations
 
 from datetime import date
 
+import matplotlib.patheffects as pe
 import matplotlib.pyplot as plt
 import polars as pl
 
 from atlas_common import outputs_dir, processed_dir
-from insights._style import (SB_BLACK, SB_GOLD, SB_GREY, SB_RED, add_source,
-                             apply_style, head_sub)
+from atlas_common.education import BANDS, check_codes
+from insights._style import (SB_BLACK, SB_GOLD, SB_GREY, SB_RED, SURFACE,
+                             add_source, apply_style, fig_head_sub, head_sub)
 
 OUT = outputs_dir() / "substack"
 DATASET = "PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring)"
@@ -86,61 +88,143 @@ def chart_money(df: pl.DataFrame) -> None:
     _save(fig, "insight_wagebill", f"headcount {hc:.1f}%, wage bill {wb:.1f}% (beta>=0.5)")
 
 
+def _wshare(s: pl.DataFrame, total: float) -> float:
+    return float(s["weight"].sum()) / total * 100
+
+
 def chart_education(df: pl.DataFrame) -> None:
-    edu = [("Not literate", [1]), ("Primary or below", [2, 3, 4]), ("Middle", [5]),
-           ("Secondary/HS", [6, 7]), ("Diploma", [8]), ("Graduate+", [10, 11, 12, 13])]
-    means = [(_wmean(df.filter(pl.col("edu_code").is_in(v)))) for _, v in edu]
+    """Exposure by education rung, with the labour-force share behind it.
+
+    Bands come from atlas_common.education — the NSS ladder, with graduate (12)
+    and postgraduate (13) kept apart, since the whole claim of this exhibit is
+    that exposure switches on at a specific rung.
+    """
+    check_codes(df["edu_code"].unique().to_list())
+    W = float(df["weight"].sum())
+    names, means, shares = [], [], []
+    for name, codes in BANDS:
+        s = df.filter(pl.col("edu_code").is_in(codes))
+        if not s.height:
+            continue
+        names.append(name)
+        means.append(_wmean(s))
+        shares.append(_wshare(s, W))
     nat = _wmean(df)
-    fig, ax = plt.subplots(figsize=(7, 4.2))
+    xs = list(range(len(names)))
+
+    fig, ax = plt.subplots(figsize=(8.6, 4.6))
     colors = [SB_RED if m > nat else SB_GREY for m in means]
-    ax.bar([n for n, _ in edu], means, color=colors, width=0.65)
+    ax.bar(xs, means, color=colors, width=0.62)
     ax.axhline(nat, color=SB_GOLD, lw=1.4, ls="--")
-    ax.text(0.02, nat + 0.004, f"national avg {nat:.2f}", fontsize=8.5,
-            color="#a67102", ha="left", transform=ax.get_yaxis_transform())
+    halo = [pe.withStroke(linewidth=2.6, foreground=SURFACE)]
     for i, m in enumerate(means):
         ax.text(i, m + 0.004, f"{m:.2f}", ha="center", fontsize=9,
-                fontweight="bold", color=colors[i])
-    head_sub(ax, "AI exposure is a graduate phenomenon\n"
-                 "Mean exposure score by education; red: above national average.\n"
-                 "Exposure barely moves until graduation, then triples. PLFS 2023-24.")
-    ax.set_ylabel("Mean exposure score (0-1)")
+                fontweight="bold", color=colors[i], path_effects=halo)
+    # drawn after the bar labels, haloed: the average line runs through the
+    # short left-hand bars, so whichever text lands on top must stay readable
+    ax.text(0.02, nat + max(means) * 0.03, f"national avg {nat:.2f}", fontsize=8.5,
+            color="#a67102", ha="left", transform=ax.get_yaxis_transform(),
+            path_effects=halo)
+    ax.set_xticks(xs)
+    ax.set_xticklabels(names)
+    ax.set_ylabel("Mean exposure score, 0-1 (bars, left)")
     ax.set_xlabel("Worker's general education level")
+    ax.set_ylim(0, max(means) * 1.25)
+
+    # Labour-force share on the right axis. Two scales on one chart is a
+    # readability compromise, taken deliberately: the point of the exhibit is
+    # that the exposed rungs are the thin ones, and that only reads when both
+    # series sit over the same bars.
+    ax2 = ax.twinx()
+    ax2.plot(xs, shares, color=SB_BLACK, lw=1.8, marker="o", ms=5.5,
+             mfc=SURFACE, mew=1.4, zorder=5, label="% of employed workers (right)")
+    ax2.set_ylabel("% of employed workers (line, right)")
+    ax2.set_ylim(0, max(shares) * 1.35)
+    ax2.grid(False)
+    # direct-label only the peak and the two degree rungs — not every point
+    to_label = {shares.index(max(shares))}
+    to_label |= {i for i, n in enumerate(names) if n in ("Graduate", "Postgraduate+")}
+    for i in sorted(to_label):
+        ax2.annotate(f"{shares[i]:.0f}%", (i, shares[i]), textcoords="offset points",
+                     xytext=(0, 9), ha="center", fontsize=8.5, color=SB_BLACK,
+                     path_effects=halo)
+    ax2.legend(frameon=False, fontsize=8.5, loc="upper center")
+
+    head_sub(ax, "AI exposure is a graduate phenomenon\n"
+                 "Mean exposure score by education (bars, red: above national average)\n"
+                 "against each rung's share of all employed workers (line). PLFS 2023-24.")
     plt.setp(ax.get_xticklabels(), rotation=20, ha="right")
     add_source(fig, DATASET, y=-0.18)
+    # band names contain commas, so provenance fields are semicolon-separated
     _save(fig, "insight_education",
-          "means: " + ", ".join(f"{n}={m:.3f}" for (n, _), m in zip(edu, means)) + f"; nat={nat:.3f}")
+          "means: " + "; ".join(f"{n}={m:.3f}" for n, m in zip(names, means))
+          + f" | nat={nat:.3f} | labour-force shares %: "
+          + "; ".join(f"{n}={v:.1f}" for n, v in zip(names, shares)))
 
 
 def chart_gender(df: pl.DataFrame) -> None:
+    """Mean exposure AND high-exposure incidence, economy-wide vs organised.
+
+    The incidence panel exists because the white paper's "one in five
+    organised-sector women works in a high-exposure occupation, vs one in six
+    men" had nothing computing it — this chart carried the four means only, so
+    the claim was untraceable (Golden Rule 1). Incidence is the survey-weighted
+    share of each group working in an occupation scoring beta >= 0.5.
+    """
     org = (pl.col("sector_code") == 2) & (pl.col("formal_proxy") == True)  # noqa: E712
-    groups = {
-        "All workers": [ _wmean(df.filter(pl.col("sex_code") == 1)),
-                         _wmean(df.filter(pl.col("sex_code") == 2))],
-        "Organised sector\n(urban + benefits)": [_wmean(df.filter(org & (pl.col("sex_code") == 1))),
-                                                 _wmean(df.filter(org & (pl.col("sex_code") == 2)))],
-    }
-    fig, ax = plt.subplots(figsize=(6.6, 4.2))
-    x = [0, 1]
-    w = 0.32
-    men = [v[0] for v in groups.values()]
-    women = [v[1] for v in groups.values()]
-    ax.bar([i - w / 2 for i in x], men, width=w, color=SB_BLACK, label="Men")
-    ax.bar([i + w / 2 for i in x], women, width=w, color=SB_RED, label="Women")
-    for i in x:
-        ax.text(i - w / 2, men[i] + .005, f"{men[i]:.2f}", ha="center", fontsize=10,
-                fontweight="bold", color=SB_BLACK)
-        ax.text(i + w / 2, women[i] + .005, f"{women[i]:.2f}", ha="center", fontsize=10,
-                fontweight="bold", color=SB_RED)
-    ax.set_xticks(x)
-    ax.set_xticklabels(list(groups.keys()))
-    head_sub(ax, "Inside the organised sector, the gender gap flips\n"
-                 "Mean exposure score; black: men, red: women. Economy-wide women's jobs\n"
-                 "are less exposed - among urban workers with benefits, more. PLFS 2023-24.")
-    ax.set_ylabel("Mean exposure score (0-1)")
-    ax.legend(frameon=False, fontsize=9)
-    add_source(fig, DATASET)
+    cuts = [("All workers", pl.lit(True)),
+            ("Organised sector\n(urban + benefits)", org)]
+
+    def _hi(s: pl.DataFrame) -> float:
+        w = float(s["weight"].sum())
+        return float(s.filter(pl.col("beta") >= 0.5)["weight"].sum()) / w * 100 if w else 0.0
+
+    def by_sex(fn) -> tuple[list[float], list[float]]:
+        men = [fn(df.filter(cut & (pl.col("sex_code") == 1))) for _, cut in cuts]
+        women = [fn(df.filter(cut & (pl.col("sex_code") == 2))) for _, cut in cuts]
+        return men, women
+
+    men_beta, women_beta = by_sex(_wmean)
+    men_hi, women_hi = by_sex(_hi)
+
+    fig, axes = plt.subplots(1, 2, figsize=(9.8, 4.8))
+    x, w = [0, 1], 0.32
+    panels = [
+        (axes[0], men_beta, women_beta, "Mean exposure score (0-1)",
+         "Mean exposure score", lambda v: f"{v:.2f}", 1.20),
+        (axes[1], men_hi, women_hi, "% in high-exposure occupations",
+         "Share in high-exposure occupations (score 0.5+)",
+         lambda v: f"{v:.0f}%\n1 in {round(100 / v)}" if v else "0%", 1.34),
+    ]
+    for ax, men, women, ylabel, panel_title, fmt, headroom in panels:
+        ax.bar([i - w / 2 for i in x], men, width=w, color=SB_BLACK, label="Men")
+        ax.bar([i + w / 2 for i in x], women, width=w, color=SB_RED, label="Women")
+        top = max(men + women) or 1.0   # a cut with no high-exposure workers
+        for i in x:
+            ax.text(i - w / 2, men[i] + top * 0.025, fmt(men[i]), ha="center",
+                    fontsize=9.5, fontweight="bold", color=SB_BLACK, linespacing=1.25)
+            ax.text(i + w / 2, women[i] + top * 0.025, fmt(women[i]), ha="center",
+                    fontsize=9.5, fontweight="bold", color=SB_RED, linespacing=1.25)
+        ax.set_xticks(x)
+        ax.set_xticklabels([label for label, _ in cuts])
+        ax.set_ylabel(ylabel)
+        ax.set_ylim(0, top * headroom)
+        ax.set_title(panel_title, loc="left", fontsize=9.5, color=SB_GREY, pad=8)
+
+    fig_head_sub(fig, "Inside the organised sector, the gender gap flips\n"
+                      "Black: men, red: women. Economy-wide women's jobs are less exposed;\n"
+                      "among urban workers with benefits, more — and more of those women\n"
+                      "sit in the most exposed occupations outright. PLFS 2023-24.")
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="upper right", bbox_to_anchor=(0.995, 1.0),
+               ncol=2, frameon=False, fontsize=9)
+    fig.subplots_adjust(top=0.70, wspace=0.28)
+    add_source(fig, DATASET, y=0.005)
     _save(fig, "insight_gender_flip",
-          f"all M={men[0]:.3f} F={women[0]:.3f}; organised M={men[1]:.3f} F={women[1]:.3f}")
+          f"mean beta: all M={men_beta[0]:.3f} F={women_beta[0]:.3f}; "
+          f"organised M={men_beta[1]:.3f} F={women_beta[1]:.3f}; "
+          f"share in beta>=0.5 %: all M={men_hi[0]:.1f} F={women_hi[0]:.1f}; "
+          f"organised M={men_hi[1]:.1f} F={women_hi[1]:.1f}")
 
 
 def chart_entry_rung(df: pl.DataFrame) -> None:

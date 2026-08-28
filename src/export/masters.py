@@ -30,12 +30,12 @@ import polars as pl
 import yaml
 
 from atlas_common import REPO_ROOT, outputs_dir, processed_dir
+from atlas_common.education import GRADUATE_PLUS, check_codes
 from atlas_common.nco_labels import NAMES
 from atlas_common.sectors import GVA_TOTAL, NAS
 from atlas_common.stats import weighted_median_by
 
 SCORES = outputs_dir() / "full_batch_scoring" / "task_scores_full_PRELIMINARY.parquet"
-GRAD_CODES = [10, 11, 12, 13]
 YOUNG_AGE = (18, 29)
 HIGH_EXPOSURE_BETA = 0.5
 ENTRY_AGE_BANDS = ["<18", "18-21", "22-25"]
@@ -70,7 +70,7 @@ def plfs_aggregates(df: pl.DataFrame, key: str) -> pl.DataFrame:
             wshare(pl.col("beta") >= HIGH_EXPOSURE_BETA).alias("high_exposure_share"),
             wshare(pl.col("sex_code") == 2).alias("female_share"),
             wshare(pl.col("sector_code") == 2).alias("urban_share"),
-            wshare(pl.col("edu_code").is_in(GRAD_CODES)).alias("grad_share"),
+            wshare(pl.col("edu_code").is_in(GRADUATE_PLUS)).alias("grad_share"),
             wshare((pl.col("age") >= YOUNG_AGE[0]) & (pl.col("age") <= YOUNG_AGE[1]))
             .alias("young_share"),
             ((pl.col("monthly_earnings") * pl.col("weight")).sum() / 1e6)
@@ -104,8 +104,10 @@ def plfs_aggregates(df: pl.DataFrame, key: str) -> pl.DataFrame:
 
 
 def load_workers() -> pl.DataFrame:
-    return (pl.read_parquet(processed_dir() / "plfs_exposure_PRELIMINARY.parquet")
-            .filter(pl.col("beta").is_not_null()))
+    df = (pl.read_parquet(processed_dir() / "plfs_exposure_PRELIMINARY.parquet")
+          .filter(pl.col("beta").is_not_null()))
+    check_codes(df["edu_code"].unique().to_list())
+    return df
 
 
 def hierarchy(code_col: str = "group3") -> list[pl.Expr]:

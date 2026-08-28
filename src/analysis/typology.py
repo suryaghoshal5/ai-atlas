@@ -4,7 +4,8 @@ composition features (PRELIMINARY per D6).
 Features per group (PLFS 2023-24, survey-weighted throughout):
     alpha        chat-only exposure (E1 task share)
     e2_share     tooling-dependent exposure (zeta - alpha)
-    grad_share   share of workers with graduate+ education
+    grad_share   share of workers with a degree (graduate or postgraduate;
+                 atlas_common.education.GRADUATE_PLUS)
     female_share, urban_share, young_share (18-29)
     log_median_earn  log of the survey-weighted median monthly earnings
                      (earners only; salaried + self-employed, casual daily
@@ -40,6 +41,7 @@ from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import StandardScaler
 
 from atlas_common import outputs_dir, paper_dir, processed_dir, run_seed
+from atlas_common.education import GRADUATE_PLUS
 from atlas_common.nco_labels import label
 from atlas_common.stats import weighted_median_by
 
@@ -62,7 +64,7 @@ def build_features(df: pl.DataFrame) -> pl.DataFrame:
         df.group_by("group3")
         .agg(
             (pl.col("weight").sum() / 1e6).alias("workers_m"),
-            ((pl.col("edu_code").is_in([10, 11, 12, 13])).cast(pl.Float64) * pl.col("weight"))
+            ((pl.col("edu_code").is_in(GRADUATE_PLUS)).cast(pl.Float64) * pl.col("weight"))
             .sum().alias("_grad_w"),
             ((pl.col("sex_code") == 2).cast(pl.Float64) * pl.col("weight")).sum().alias("_fem_w"),
             ((pl.col("sector_code") == 2).cast(pl.Float64) * pl.col("weight")).sum().alias("_urb_w"),
@@ -114,7 +116,7 @@ def profile_clusters(df: pl.DataFrame, assigned: pl.DataFrame) -> pl.DataFrame:
             (((pl.col("zeta") - pl.col("alpha")) * pl.col("weight")).sum()
              / pl.col("weight").sum()).alias("e2_share"),
             wshare(pl.col("beta") >= HIGH_EXPOSURE_BETA).alias("high_exposure_share"),
-            wshare(pl.col("edu_code").is_in([10, 11, 12, 13])).alias("grad_share"),
+            wshare(pl.col("edu_code").is_in(GRADUATE_PLUS)).alias("grad_share"),
             wshare(pl.col("sex_code") == 2).alias("female_share"),
             wshare(pl.col("sector_code") == 2).alias("urban_share"),
             wshare((pl.col("age") >= 18) & (pl.col("age") <= 29)).alias("young_share"),

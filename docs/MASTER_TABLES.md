@@ -59,6 +59,10 @@ the PLFS 2023-24 block — `workers_m`, `n_records`, `employment_share`,
 `earner_share`, `female_share`, `urban_share`, `grad_share`, `young_share`,
 `formal_proxy_share`.
 
+`grad_share` is education codes 12–13 — graduate or postgraduate, nothing
+below (`atlas_common.education.GRADUATE_PLUS`). It does **not** include higher
+secondary or diploma holders.
+
 Every PLFS statistic is survey-weighted (`weight = mult/no_qtr`). Three
 definitions to read carefully:
 

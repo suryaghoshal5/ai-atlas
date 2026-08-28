@@ -142,8 +142,17 @@ software developers (3.9M at 0.74), finance professionals (2.1M at 0.63),
 numerical clerks, ICT technicians…*
 
 ![[insight_education.png]]
-*Exposure barely moves from illiterate (0.05) through higher-secondary (0.06),
-then triples at graduation (0.16). AI exposure is a graduate phenomenon.*
+*Exposure barely moves from illiterate through school, then jumps at the
+degree rungs. The chart now separates graduates from postgraduates, and
+carries each rung's share of the labour force as a line: the exposed rungs are
+the thin ones.*
+
+> **Numbers pending regeneration.** The figures previously quoted here (0.05 →
+> 0.06 → 0.16) came from an education banding that read PLFS codes 10–13 as
+> "graduate+", which counts higher-secondary and diploma holders as graduates.
+> The bands are corrected in `atlas_common.education`; rerun
+> `python -m insights.insight_atlas_claims` and requote from the regenerated
+> chart before this paragraph is written.
 
 > [!quote] Callback — *K-Shaped Growth* (Jul 2026)
 > The aspiration framing completes the K-shape link: a degree is the ticket
@@ -160,6 +169,12 @@ organised sector (urban + social-security benefits) and the sign flips.
 ![[insight_gender_flip.png]]
 *Organised-sector women: β 0.259 vs men 0.248; one in five organised-sector
 women works in a high-exposure occupation, vs one in six men.*
+
+> **Now computed, previously not.** The one-in-five / one-in-six incidence had
+> no script behind it — the chart carried the four means only. The second
+> panel of `insight_gender_flip` computes it (weighted share of each group in
+> occupations scoring β ≥ 0.5); requote both fractions from the regenerated
+> chart.
 
 Inclusion stake in one line: the women who made it into modern-sector
 employment are the most exposed to its disruption.

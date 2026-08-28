@@ -27,7 +27,7 @@ def workers() -> pl.DataFrame:
         for e, w in zip(earn, wts):
             rows.append({"group3": g, "cluster": c, "alpha": a, "zeta": z, "beta": b,
                          "monthly_earnings": float(e), "weight": w,
-                         "edu_code": 11 if grad else 5, "sex_code": 2 if fem else 1,
+                         "edu_code": 12 if grad else 5, "sex_code": 2 if fem else 1,
                          "sector_code": 2 if urb else 1, "age": age})
     df = pl.DataFrame(rows)
     return df.drop("cluster"), df.select("group3", "cluster").unique()

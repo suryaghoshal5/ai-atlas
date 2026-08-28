@@ -132,8 +132,18 @@ high-exposure (β ≥ 0.5) occupations.
   security benefit (PLFS codes 1–7; code 8 = not eligible). It is a proxy,
   defined for wage workers, not the full formality definition.
 - *High exposure* = occupation group with β ≥ 0.5.
-- Education buckets follow PLFS general-education codes; states use census
-  codes; age bands are 5-year.
+- *Education buckets* follow the NSS general-education ladder (PLFS b4q8),
+  which is not contiguous — there is no code 09 — and run: not literate (01);
+  below primary (02–05); primary (06); middle (07); secondary (08); higher
+  secondary (10); diploma/certificate (11); **graduate (12); postgraduate and
+  above (13)**. The last two are reported separately, so "graduate" means a
+  degree and nothing below it; *graduate share* wherever it appears is codes
+  12–13. The single source is `atlas_common.education`. **To confirm against
+  `docs/Data_LayoutPLFS_2023-24.xlsx` before publication** — the mapping is
+  read off the standard NSS code list, and it replaces an earlier banding that
+  read codes 10–13 as "graduate+", i.e. that counted higher-secondary and
+  diploma holders as graduates.
+- States use census codes; age bands are 5-year.
 
 ## Step 5 — The entry-rung analysis (EPFO)
 

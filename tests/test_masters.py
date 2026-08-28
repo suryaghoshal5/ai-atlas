@@ -63,7 +63,7 @@ def repo(tmp_path, monkeypatch):
     for earn, wt, formal in [(60_000, 1.0, True), (30_000, 9.0, False), (30_000, 9.0, None)]:
         rows.append({"group3": "251", "nic5": "62010", "monthly_earnings": float(earn),
                      "weight": wt, "alpha": 0.5, "beta": 0.75, "zeta": 1.0,
-                     "sex_code": 2, "sector_code": 2, "edu_code": 11, "age": 25,
+                     "sex_code": 2, "sector_code": 2, "edu_code": 12, "age": 25,
                      "formal_proxy": formal})
     for earn, wt in [(0, 40.0), (6_000, 10.0), (8_000, 5.0)]:
         rows.append({"group3": "611", "nic5": "01110", "monthly_earnings": float(earn),
