@@ -18,6 +18,12 @@ outputs/**
 !outputs/full_batch_scoring/**
 !outputs/pilot/
 !outputs/pilot/**
+!outputs/tables/**
+!outputs/figures/**
+!outputs/substack/
+!outputs/substack/**
+!outputs/substack/method_slides/
+!outputs/substack/method_slides/**
 logs/**
 !logs/.gitkeep
 

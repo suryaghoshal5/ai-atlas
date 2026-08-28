@@ -1,0 +1,21 @@
+{
+  "computed_at": "2026-08-24T09:30:48.330293+00:00",
+  "status": "PRELIMINARY per D6; crosswalk v0.1 is hand-authored judgment",
+  "n_usable_heads": 16,
+  "beta_range": [
+    0.032,
+    0.554
+  ],
+  "beta_iqr": [
+    0.067,
+    0.308
+  ],
+  "payroll_weighted_mean_beta": 0.197,
+  "payroll_weighted_sd_beta": 0.109,
+  "between_head_variance_share_eta2": 0.554,
+  "mapped_plfs_employment_share": 0.404,
+  "excluded_heads": [
+    "OTHERS (unmappable; large volume \u2014 limitation)"
+  ],
+  "decision_rule": "ANALYSIS_PLAN \u00a75: demote to descriptive if cross-head exposure variation is insufficient \u2014 threshold is Surya's gated call"
+}

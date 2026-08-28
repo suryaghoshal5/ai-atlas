@@ -1,0 +1,6 @@
+cluster,n_groups,workers_m,alpha,e2_share,grad_share,female_share,urban_share,young_share,log_med_earn,cluster_name,hi_exposure_worker_pct,national_wagebill_pct,median_earnings_rs
+0,9,9.611249011249999,0.171,0.376,0.881,0.242,0.61,0.327,10.043,Paperwork layer,18.3,4.8,22994
+1,37,39.932003004583336,0.125,0.072,0.736,0.22,0.598,0.172,10.157,Managers & teachers,0.0,24.2,25771
+2,12,10.80166368625,0.515,0.156,0.962,0.201,0.84,0.391,10.426,Frontier professionals,64.9,8.9,33725
+3,17,231.79196849833332,0.045,0.014,0.137,0.433,0.115,0.173,9.032,Rural agrarian mass,0.0,29.2,8367
+4,46,170.03823969958333,0.05,0.033,0.221,0.1,0.373,0.276,9.516,Urban manual & retail,0.0,32.6,13575

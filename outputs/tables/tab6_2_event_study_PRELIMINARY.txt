@@ -1,0 +1,50 @@
+PRELIMINARY (D6) - canaries event study
+
+== DiD (young cohort) ==
+             Estimate  Std. Error   t value  Pr(>|t|)      2.5%     97.5%
+Coefficient                                                              
+ExPost        0.22213    1.419163  0.156522  0.878737 -2.939963  3.384222
+
+== Triple diff ==
+             Estimate  Std. Error   t value  Pr(>|t|)      2.5%     97.5%
+Coefficient                                                              
+ExPostxY     -1.30717    3.182298 -0.410763  0.692028 -8.645563  6.031223
+
+== Quarterly event study (young) ==
+                 quarter         b        se
+Coefficient                                 
+qcat::2020Q2:E  2020Q2:E -4.826030  7.385908
+qcat::2020Q3:E  2020Q3:E -2.222897  5.341277
+qcat::2020Q4:E  2020Q4:E -0.500744  0.770361
+qcat::2021Q1:E  2021Q1:E -0.061591  0.546817
+qcat::2021Q2:E  2021Q2:E  0.863094  0.797118
+qcat::2021Q3:E  2021Q3:E  0.115077  0.986288
+qcat::2021Q4:E  2021Q4:E  0.198669  0.769307
+qcat::2022Q1:E  2022Q1:E  0.182383  0.785696
+qcat::2022Q2:E  2022Q2:E  0.179521  0.840103
+qcat::2022Q3:E  2022Q3:E  0.626504  0.483343
+qcat::2023Q1:E  2023Q1:E -0.482435  0.175176
+qcat::2023Q2:E  2023Q2:E -0.808948  0.394422
+qcat::2023Q3:E  2023Q3:E -0.086597  0.315474
+qcat::2023Q4:E  2023Q4:E -0.333201  0.302699
+qcat::2024Q1:E  2024Q1:E -0.408247  0.353505
+qcat::2024Q2:E  2024Q2:E -0.331167  0.376513
+qcat::2024Q3:E  2024Q3:E  0.484954  0.404060
+qcat::2024Q4:E  2024Q4:E  0.785834  0.376337
+qcat::2025Q1:E  2025Q1:E -0.229625  0.236082
+qcat::2025Q2:E  2025Q2:E -0.644298  0.679471
+qcat::2025Q3:E  2025Q3:E -0.350445  0.356906
+
+== Robustness (Aug 24; pre-authorized menu) ==
+spec                                          DiD E x Post          Triple-diff E x Post x Young
+asinh(net), full window (baseline)            +0.222 (1.419) p=.88  -1.307 (3.182) p=.69
+normalized net (pre-mean |net|), full window  -0.315 (0.625) p=.63  -0.411 (1.226) p=.75
+asinh(net), drop Apr20-Mar21 COVID rebound    -0.682 (0.472) p=.18  -0.432 (1.864) p=.82
+normalized net, drop Apr20-Mar21              -0.570 (0.604) p=.37  -0.598 (1.180) p=.63
+normalized net, post = Mar 2023 (GPT-4)       -0.238 (0.534) p=.67  -0.032 (0.815) p=.97
+
+Read: point estimates uniformly in the canaries direction (negative) once the
+COVID-rebound window or scale-free outcome is used, but never significant.
+Power constraints: 16 industry clusters; net-only flows; crosswalk measurement
+error attenuates; 33 post months. Complement: fresher-postings DiD (pending
+corpus decision) has occupation-level resolution and far more power.
