@@ -60,35 +60,36 @@ def d_title(ax):
         ("1", "Task statements from occupation dictionary", SB_BLACK,
          "Parse NCO-2015 Vol II - 3,442 occupation entries - into 18,622 single-duty task sentences: the unit of analysis."),
         ("2", "Scoring each task", SB_BLACK,
-         "One fixed rubric question: can an LLM, or LLM-powered software, halve this task at equal quality? Labels E0 / E1 / E2; result 83 / 10 / 6%."),
+         "One rubric question: could an LLM halve this task at equal quality? E0 - no: the task is physical or presence-bound. E1 - yes, via chat alone. E2 - yes, but only with LLM-powered software (speech, OCR, records)."),
         ("3", "Occupation level exposure score", SB_BLACK,
          "Shares per occupation: a (chat), z (with tooling); headline E = a + half the E2 share. Aggregated to 122 NCO groups."),
         ("4", "Workforce projection using PLFS", SB_RED,
          "Each surveyed worker inherits their group's score; official weights scale 164,523 respondents to 463M workers, cut by sector, state, gender, age, education, earnings."),
         ("5", "Entry-rung analysis", SB_GOLD,
-         "EPFO 88-month payroll panel: young (18-25) vs 29+ hiring in exposed vs insulated industries around Nov 2022. Verdict so far: power-limited negative null."),
+         "EPFO 88-month payroll panel: young (18-25) vs 29+ hiring in exposed vs insulated industries around Nov 2022."),
         ("6", "Occupation clustering", SB_GOLD,
          "k-means on 7 features, k = 5 by silhouette: five AI worlds - and the chat-vs-tooling split rediscovered unaided."),
         ("7", "GVA attribution", SB_GOLD,
-         "NAS value-add by activity x exposure: GVA-weighted mean E 0.146; industries above average exposure produce 57% of GVA."),
+         "NAS value-add by activity x exposure: where India's GVA meets its exposed occupations."),
     ]
-    W, notch, x0, y0, y1 = 13.05, 2.3, 4, 29.2, 37.0
-    ymid = (y0 + y1) / 2
+    W, notch, x0, y0, y1 = 13.05, 2.3, 4, 26.5, 38.0
     for i, (num, head, c, desc) in enumerate(chev):
         x = x0 + i * (W + 0.35)
+        ymid = (y0 + y1) / 2
         pts = [(x, y0), (x + W - notch, y0), (x + W, ymid), (x + W - notch, y1),
                (x, y1)] + ([(x + notch, ymid)] if i else [])
         ax.add_patch(Polygon(pts, closed=True, fc=c, ec="none"))
-        ax.text(x + (W + (notch if i else 0)) / 2, ymid, num, ha="center",
-                va="center", fontsize=13, color="white", fontweight="bold")
-        hx = x + 0.4
-        ax.text(hx, 26.4, "\n".join(textwrap.wrap(head, 15)), fontsize=7.5,
-                color=INK, fontweight="bold", va="top", linespacing=1.25)
-        ax.text(hx, 18.6, "\n".join(textwrap.wrap(desc, 20)), fontsize=6.1,
-                color=INK_2, va="top", linespacing=1.35)
-    ax.text(4, 38.3, "BUILD THE INDEX", fontsize=7, color=SB_BLACK, fontweight="bold")
-    ax.text(44.2, 38.3, "PROJECT IT", fontsize=7, color=SB_RED, fontweight="bold")
-    ax.text(57.6, 38.3, "ANALYSE IT", fontsize=7, color=SB_GOLD, fontweight="bold")
+        cx = x + (W + (notch if i else 0)) / 2
+        ax.text(cx, y1 - 2.1, num, ha="center", va="center", fontsize=10.5,
+                color="white", fontweight="bold", alpha=0.85)
+        ax.text(cx, (y0 + y1) / 2 - 1.1, "\n".join(textwrap.wrap(head, 13)),
+                ha="center", va="center", fontsize=6.6, color="white",
+                fontweight="bold", linespacing=1.3)
+        ax.text(x + 0.4, 22.8, "\n".join(textwrap.wrap(desc, 21)), fontsize=6.1,
+                color=INK_2, va="top", linespacing=1.38)
+    ax.text(4, 40.8, "BUILD THE INDEX", fontsize=7, color=SB_BLACK, fontweight="bold")
+    ax.text(44.2, 40.8, "PROJECT IT", fontsize=7, color=SB_RED, fontweight="bold")
+    ax.text(57.6, 40.8, "ANALYSE IT", fontsize=7, color=SB_GOLD, fontweight="bold")
 
 
 def d_step1(ax):
@@ -180,8 +181,7 @@ def main() -> None:
     apply_style()
     OUT.mkdir(parents=True, exist_ok=True)
     slide(8, None, "From India's own dictionary of work to its AI atlas",
-          "Seven steps, one pipeline - built on NCO-2015 task content, not a crosswalk from US O*NET.",
-          d_title, "slide_0_pipeline.png")
+          "", d_title, "slide_0_pipeline.png")
     slide(8, 1, "Start where India defines work",
           "The government's own occupation dictionary describes every job as a paragraph of duties.\n"
           "We split those paragraphs into single-duty sentences - the unit everything else is built on.",
