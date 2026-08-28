@@ -6,7 +6,7 @@ project: ai-exposure-atlas
 status: draft
 tags: [project/ai-exposure-atlas, type/whitepaper, status/draft]
 ---
-
+	
 # The AI Exposure Atlas
 ### Who in India's workforce is actually exposed to generative AI — measured on India's own terms
 
@@ -142,13 +142,15 @@ software developers (3.9M at 0.74), finance professionals (2.1M at 0.63),
 numerical clerks, ICT technicians…*
 
 ![[insight_education.png]]
-*Exposure barely moves from illiterate (0.05) through higher-secondary (0.06),
-then triples at graduation (0.16). AI exposure is a graduate phenomenon.*
+*Exposure climbs gently from illiterate (0.05) to higher secondary (0.10),
+then doubles at graduation (0.21; postgraduates 0.23). Bar widths show each
+group's share of the workforce. (Bucket coding corrected Aug 28 per PLFS
+manual C-19.)*
 
 > [!quote] Callback — *K-Shaped Growth* (Jul 2026)
 > The aspiration framing completes the K-shape link: a degree is the ticket
 > from the lower arm toward the upper one — and the education gradient shows
-> exposure switches on at exactly that ticket booth. India's exposure ladder
+> exposure doubling at exactly that ticket booth. India's exposure ladder
 > IS its aspiration ladder.
 
 ## 6. The gender flip  *(~250 words)*
@@ -220,7 +222,7 @@ PRELIMINARY):*
 | Chat exposure (α) | **0.52** | 0.17 | 0.13 | 0.05 | 0.05 |
 | Tooling exposure (E2 share) | 0.16 | **0.38** | 0.07 | 0.01 | 0.03 |
 | Workers in high-exposure jobs (β ≥ 0.5) | **65%** | 18% | 0% | 0% | 0% |
-| Graduate share | **96%** | 88% | 74% | 14% | 22% |
+| Post-secondary share (HS & above) | **96%** | 88% | 74% | 14% | 22% |
 | Female share | 20% | 24% | 22% | **43%** | 10% |
 | Urban share | **84%** | 61% | 60% | 12% | 37% |
 | Young (18–29) share | **39%** | 33% | 17% | 17% | 28% |

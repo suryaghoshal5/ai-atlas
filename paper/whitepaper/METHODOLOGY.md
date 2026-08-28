@@ -132,7 +132,9 @@ high-exposure (β ≥ 0.5) occupations.
   security benefit (PLFS codes 1–7; code 8 = not eligible). It is a proxy,
   defined for wage workers, not the full formality definition.
 - *High exposure* = occupation group with β ≥ 0.5.
-- Education buckets follow PLFS general-education codes; states use census
+- Education buckets follow PLFS general-education codes (manual C-19: 08 =
+  secondary, 10 = higher secondary, 11 = diploma, 12 = graduate, 13 =
+  postgraduate; an earlier draft mis-bucketed these — corrected Aug 28); states use census
   codes; age bands are 5-year.
 
 ## Step 5 — The entry-rung analysis (EPFO)

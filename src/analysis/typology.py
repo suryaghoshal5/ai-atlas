@@ -4,7 +4,7 @@ composition features (PRELIMINARY per D6).
 Features per group (employment-weighted within group, PLFS 2023-24):
     alpha        chat-only exposure (E1 task share)
     e2_share     tooling-dependent exposure (zeta - alpha)
-    grad_share   share of workers with graduate+ education
+    grad_share   share with post-secondary education (HS & above; PLFS codes 10-13)
     female_share, urban_share, young_share (18-29)
     log_median_earn  log median monthly earnings (earners only)
 

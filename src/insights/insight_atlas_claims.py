@@ -87,28 +87,55 @@ def chart_money(df: pl.DataFrame) -> None:
 
 
 def chart_education(df: pl.DataFrame) -> None:
-    edu = [("Not literate", [1]), ("Primary or below", [2, 3, 4]), ("Middle", [5]),
-           ("Secondary/HS", [6, 7]), ("Diploma", [8]), ("Graduate+", [10, 11, 12, 13])]
-    means = [(_wmean(df.filter(pl.col("edu_code").is_in(v)))) for _, v in edu]
-    nat = _wmean(df)
-    fig, ax = plt.subplots(figsize=(7, 4.2))
-    colors = [SB_RED if m > nat else SB_GREY for m in means]
-    ax.bar([n for n, _ in edu], means, color=colors, width=0.65)
+    # PLFS manual C-19 codes: 01 not literate; 02-04 literate w/o schooling;
+    # 05 below primary; 06 primary; 07 middle; 08 secondary; 10 higher
+    # secondary; 11 diploma; 12 graduate; 13 postgraduate+.
+    edu = [("Not literate", [1]), ("Below\nprimary", [2, 3, 4, 5]),
+           ("Primary", [6]), ("Middle", [7]), ("Secondary", [8]),
+           ("Higher\nsecondary", [10]), ("Diploma", [11]),
+           ("Graduate", [12]), ("Post-\ngraduate+", [13])]
+    W = float(df["weight"].sum())
+    rows = []
+    for n, codes in edu:
+        s = df.filter(pl.col("edu_code").is_in(codes))
+        w = float(s["weight"].sum())
+        rows.append((n, w / W, float((s["beta"] * s["weight"]).sum() / w)))
+    nat = float((df["beta"] * df["weight"]).sum() / W)
+    fig, ax = plt.subplots(figsize=(7.4, 4.4))
+    x = 0.0
+    for n, share, e in rows:
+        w = share * 100
+        color = SB_RED if e > nat else SB_GREY
+        ax.bar(x + w / 2, e, width=w - 0.45, color=color)
+        if w > 3:
+            ax.text(x + w / 2, e + 0.005, f"{e:.2f}", ha="center", fontsize=8,
+                    fontweight="bold", color=color)
+        rot = 0 if w > 9 else 90
+        ax.text(x + w / 2, -0.012, n, ha="center", va="top", fontsize=7.2,
+                color="#52514e", rotation=rot,
+                linespacing=1.1) if rot == 0 else ax.text(
+            x + w / 2, -0.018,
+            n.replace("\n", " ") + (f"  ({e:.2f})" if w <= 3 else ""),
+            ha="center", va="top", fontsize=6.4, color="#52514e",
+            rotation=40, rotation_mode="anchor")
+        if w > 5:
+            ax.text(x + w / 2, 0.008, f"{share:.0%}", ha="center", fontsize=7,
+                    color="white", fontweight="bold")
+        x += w
     ax.axhline(nat, color=SB_GOLD, lw=1.4, ls="--")
-    ax.text(0.02, nat + 0.004, f"national avg {nat:.2f}", fontsize=8.5,
-            color="#a67102", ha="left", transform=ax.get_yaxis_transform())
-    for i, m in enumerate(means):
-        ax.text(i, m + 0.004, f"{m:.2f}", ha="center", fontsize=9,
-                fontweight="bold", color=colors[i])
+    ax.text(1, nat + 0.005, f"national avg {nat:.2f}", fontsize=8.5, color="#a67102")
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 0.27)
+    ax.set_xticks([])
     head_sub(ax, "AI exposure is a graduate phenomenon\n"
-                 "Mean exposure score by education; red: above national average.\n"
-                 "Exposure barely moves until graduation, then triples. PLFS 2023-24.")
+                 "Mean exposure score by education; bar WIDTH = share of the workforce\n"
+                 "(white %); red: above national average. Exposure climbs gently through\n"
+                 "school, then doubles at graduation. PLFS 2023-24.")
     ax.set_ylabel("Mean exposure score (0-1)")
-    ax.set_xlabel("Worker's general education level")
-    plt.setp(ax.get_xticklabels(), rotation=20, ha="right")
-    add_source(fig, DATASET, y=-0.18)
+    add_source(fig, DATASET, y=-0.12)
     _save(fig, "insight_education",
-          "means: " + ", ".join(f"{n}={m:.3f}" for (n, _), m in zip(edu, means)) + f"; nat={nat:.3f}")
+          "; ".join(f"{n.replace(chr(10),' ')}: share={s:.3f}, E={e:.3f}" for n, s, e in rows)
+          + f"; nat={nat:.3f}; CORRECTED bucket coding per manual C-19 (2026-08-28)")
 
 
 def chart_gender(df: pl.DataFrame) -> None:
