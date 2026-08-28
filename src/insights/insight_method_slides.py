@@ -54,18 +54,41 @@ def arrow(ax, x1, y1, x2, y2):
 
 
 def d_title(ax):
-    steps = [("NCO-2015\ndictionary", SB_GREY), ("18,622\ntasks", SB_BLACK),
-             ("E0/E1/E2\nscores", SB_RED), ("122 group\nE-scores", SB_RED),
-             ("463M PLFS\nworkers", SB_BLACK), ("The Atlas", SB_GOLD),
-             ("EPFO\ncanaries", SB_GREY)]
-    x = 4
-    for i, (t, c) in enumerate(steps):
-        box(ax, x, 14, 10.8, 9, t, c, fs=8)
-        if i < len(steps) - 1:
-            arrow(ax, x + 11.6, 18.5, x + 13.1, 18.5)
-        x += 13.7
-    ax.text(4, 8.5, "Every arrow is a script; every number regenerates from the public repo.",
-            fontsize=9, color=INK_2, style="italic")
+    import textwrap
+    from matplotlib.patches import Polygon
+    chev = [
+        ("1", "Task statements from occupation dictionary", SB_BLACK,
+         "Parse NCO-2015 Vol II - 3,442 occupation entries - into 18,622 single-duty task sentences: the unit of analysis."),
+        ("2", "Scoring each task", SB_BLACK,
+         "One fixed rubric question: can an LLM, or LLM-powered software, halve this task at equal quality? Labels E0 / E1 / E2; result 83 / 10 / 6%."),
+        ("3", "Occupation level exposure score", SB_BLACK,
+         "Shares per occupation: a (chat), z (with tooling); headline E = a + half the E2 share. Aggregated to 122 NCO groups."),
+        ("4", "Workforce projection using PLFS", SB_RED,
+         "Each surveyed worker inherits their group's score; official weights scale 164,523 respondents to 463M workers, cut by sector, state, gender, age, education, earnings."),
+        ("5", "Entry-rung analysis", SB_GOLD,
+         "EPFO 88-month payroll panel: young (18-25) vs 29+ hiring in exposed vs insulated industries around Nov 2022. Verdict so far: power-limited negative null."),
+        ("6", "Occupation clustering", SB_GOLD,
+         "k-means on 7 features, k = 5 by silhouette: five AI worlds - and the chat-vs-tooling split rediscovered unaided."),
+        ("7", "GVA attribution", SB_GOLD,
+         "NAS value-add by activity x exposure: GVA-weighted mean E 0.146; industries above average exposure produce 57% of GVA."),
+    ]
+    W, notch, x0, y0, y1 = 13.05, 2.3, 4, 29.2, 37.0
+    ymid = (y0 + y1) / 2
+    for i, (num, head, c, desc) in enumerate(chev):
+        x = x0 + i * (W + 0.35)
+        pts = [(x, y0), (x + W - notch, y0), (x + W, ymid), (x + W - notch, y1),
+               (x, y1)] + ([(x + notch, ymid)] if i else [])
+        ax.add_patch(Polygon(pts, closed=True, fc=c, ec="none"))
+        ax.text(x + (W + (notch if i else 0)) / 2, ymid, num, ha="center",
+                va="center", fontsize=13, color="white", fontweight="bold")
+        hx = x + 0.4
+        ax.text(hx, 26.4, "\n".join(textwrap.wrap(head, 15)), fontsize=7.5,
+                color=INK, fontweight="bold", va="top", linespacing=1.25)
+        ax.text(hx, 18.6, "\n".join(textwrap.wrap(desc, 20)), fontsize=6.1,
+                color=INK_2, va="top", linespacing=1.35)
+    ax.text(4, 38.3, "BUILD THE INDEX", fontsize=7, color=SB_BLACK, fontweight="bold")
+    ax.text(44.2, 38.3, "PROJECT IT", fontsize=7, color=SB_RED, fontweight="bold")
+    ax.text(57.6, 38.3, "ANALYSE IT", fontsize=7, color=SB_GOLD, fontweight="bold")
 
 
 def d_step1(ax):
@@ -157,8 +180,7 @@ def main() -> None:
     apply_style()
     OUT.mkdir(parents=True, exist_ok=True)
     slide(8, None, "From India's own dictionary of work to its AI atlas",
-          "Seven steps, one pipeline: parse - score - aggregate - project - test - cluster - value.\n"
-          "Built on NCO-2015 task content, not a crosswalk from US O*NET.",
+          "Seven steps, one pipeline - built on NCO-2015 task content, not a crosswalk from US O*NET.",
           d_title, "slide_0_pipeline.png")
     slide(8, 1, "Start where India defines work",
           "The government's own occupation dictionary describes every job as a paragraph of duties.\n"
