@@ -97,10 +97,6 @@ Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM s
 headcount 1.9%, wage bill 7.1% (beta>=0.5)
 Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
 
-### insight_education (2026-08-28)
-Not literate: share=0.215, E=0.050; Below primary: share=0.058, E=0.052; Primary: share=0.139, E=0.055; Middle: share=0.214, E=0.063; Secondary: share=0.120, E=0.076; Higher secondary: share=0.098, E=0.099; Diploma: share=0.018, E=0.119; Graduate: share=0.106, E=0.210; Post- graduate+: share=0.034, E=0.233; nat=0.086; CORRECTED bucket coding per manual C-19 (2026-08-28)
-Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
-
 ### insight_gender_flip (2026-08-28)
 all M=0.091 F=0.073; organised M=0.248 F=0.259
 Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
@@ -115,3 +111,45 @@ Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM s
 ### insight_epfo_young_trend (2026-08-28)
 young avg 2021-11..2022-10: 0.591M; last 12m: 0.596M; older pre: 0.419M; last 12m: 0.513M; 64 months Apr2020-Jul2025
 Source: EPFO monthly payroll releases (net new subscribers by age band), Apr 2020 - Jul 2025.
+### insight_exposure_rare (2026-09-01)
+bin shares %: 0-.05=47.5, .05-.10=32.2, .10-.20=11.7, .20-.30=3.6, .30-.40=2.2, .40-.50=0.8, .50+=1.9
+Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
+
+### insight_wagebill (2026-09-01)
+headcount 1.9%, wage bill 7.1% (beta>=0.5)
+Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
+
+### insight_gender_flip (2026-09-01)
+all M=0.091 F=0.073; organised M=0.248 F=0.259
+Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
+
+### insight_entry_rung (2026-09-01)
+hi-share % by band: 20-24=17.7, 25-29=25.0, 30-34=17.0, 35-39=11.4, 40-44=10.7, 45-49=7.2, 50-54=7.7, 55-59=4.7; wc avg=13.4
+Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
+
+### insight_states (2026-09-01)
+Delhi=0.143; Kerala=0.120; Haryana=0.110; Telangana=0.106; Maharashtra=0.101; Karnataka=0.101; Tamil Nadu=0.093; Uttarakhand=0.085; Odisha=0.074; Madhya Pradesh=0.073; Chhattisgarh=0.072; Bihar=0.067; nat=0.086
+Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
+### insight_exposure_rare (2026-09-01)
+bin shares %: 0-.05=47.5, .05-.10=32.2, .10-.20=11.7, .20-.30=3.6, .30-.40=2.2, .40-.50=0.8, .50+=1.9
+Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
+
+### insight_wagebill (2026-09-01)
+headcount 1.9%, wage bill 7.1% (beta>=0.5)
+Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
+
+### insight_education (2026-09-01)
+Not literate: share=21.5%, E=0.050; Below primary: share=5.8%, E=0.052; Primary: share=13.9%, E=0.055; Middle: share=21.4%, E=0.063; Secondary: share=12.0%, E=0.076; Higher secondary: share=9.8%, E=0.099; Diploma: share=1.8%, E=0.119; Graduate: share=10.6%, E=0.210; Post- graduate+: share=3.4%, E=0.233; nat=0.086; coding per manual C-19
+Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
+
+### insight_gender_flip (2026-09-01)
+all M=0.091 F=0.073; organised M=0.248 F=0.259
+Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
+
+### insight_entry_rung (2026-09-01)
+hi-share % by band: 20-24=17.7, 25-29=25.0, 30-34=17.0, 35-39=11.4, 40-44=10.7, 45-49=7.2, 50-54=7.7, 55-59=4.7; wc avg=13.4
+Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
+
+### insight_states (2026-09-01)
+Delhi=0.143; Kerala=0.120; Haryana=0.110; Telangana=0.106; Maharashtra=0.101; Karnataka=0.101; Tamil Nadu=0.093; Uttarakhand=0.085; Odisha=0.074; Madhya Pradesh=0.073; Chhattisgarh=0.072; Bihar=0.067; nat=0.086
+Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).

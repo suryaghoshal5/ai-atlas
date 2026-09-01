@@ -90,52 +90,56 @@ def chart_education(df: pl.DataFrame) -> None:
     # PLFS manual C-19 codes: 01 not literate; 02-04 literate w/o schooling;
     # 05 below primary; 06 primary; 07 middle; 08 secondary; 10 higher
     # secondary; 11 diploma; 12 graduate; 13 postgraduate+.
-    edu = [("Not literate", [1]), ("Below\nprimary", [2, 3, 4, 5]),
+    edu = [("Not\nliterate", [1]), ("Below\nprimary", [2, 3, 4, 5]),
            ("Primary", [6]), ("Middle", [7]), ("Secondary", [8]),
            ("Higher\nsecondary", [10]), ("Diploma", [11]),
            ("Graduate", [12]), ("Post-\ngraduate+", [13])]
     W = float(df["weight"].sum())
-    rows = []
+    names, shares, E = [], [], []
     for n, codes in edu:
         s = df.filter(pl.col("edu_code").is_in(codes))
         w = float(s["weight"].sum())
-        rows.append((n, w / W, float((s["beta"] * s["weight"]).sum() / w)))
+        names.append(n)
+        shares.append(w / W * 100)
+        E.append(float((s["beta"] * s["weight"]).sum() / w))
     nat = float((df["beta"] * df["weight"]).sum() / W)
     fig, ax = plt.subplots(figsize=(7.4, 4.4))
-    x = 0.0
-    for n, share, e in rows:
-        w = share * 100
-        color = SB_RED if e > nat else SB_GREY
-        ax.bar(x + w / 2, e, width=w - 0.45, color=color)
-        if w > 3:
-            ax.text(x + w / 2, e + 0.005, f"{e:.2f}", ha="center", fontsize=8,
-                    fontweight="bold", color=color)
-        rot = 0 if w > 9 else 90
-        ax.text(x + w / 2, -0.012, n, ha="center", va="top", fontsize=7.2,
-                color="#52514e", rotation=rot,
-                linespacing=1.1) if rot == 0 else ax.text(
-            x + w / 2, -0.018,
-            n.replace("\n", " ") + (f"  ({e:.2f})" if w <= 3 else ""),
-            ha="center", va="top", fontsize=6.4, color="#52514e",
-            rotation=40, rotation_mode="anchor")
-        if w > 5:
-            ax.text(x + w / 2, 0.008, f"{share:.0%}", ha="center", fontsize=7,
-                    color="white", fontweight="bold")
-        x += w
-    ax.axhline(nat, color=SB_GOLD, lw=1.4, ls="--")
-    ax.text(1, nat + 0.005, f"national avg {nat:.2f}", fontsize=8.5, color="#a67102")
-    ax.set_xlim(0, 100)
-    ax.set_ylim(0, 0.27)
-    ax.set_xticks([])
-    head_sub(ax, "AI exposure is a graduate phenomenon\n"
-                 "Mean exposure score by education; bar WIDTH = share of the workforce\n"
-                 "(white %); red: above national average. Exposure climbs gently through\n"
-                 "school, then doubles at graduation. PLFS 2023-24.")
+    x = list(range(len(names)))
+    colors = [SB_RED if e > nat else SB_GREY for e in E]
+    ax.bar(x, E, color=colors, width=0.62)
+    for i, e in enumerate(E):
+        ax.text(i, e + 0.006, f"{e:.2f}", ha="center", fontsize=8.5,
+                fontweight="bold", color=colors[i])
+    ax.axhline(nat, color="#c9c7c0", lw=1.1, ls="--")
+    ax.text(0.02, nat + 0.005, f"national avg {nat:.2f}", fontsize=8,
+            color="#8a8781", transform=ax.get_yaxis_transform())
+    ax.set_xticks(x)
+    ax.set_xticklabels(names, fontsize=8)
     ax.set_ylabel("Mean exposure score (0-1)")
-    add_source(fig, DATASET, y=-0.12)
+    ax.set_ylim(0, 0.27)
+    ax2 = ax.twinx()
+    ax2.plot(x, shares, color=SB_GOLD, lw=1.8, marker="o", ms=4.5)
+    below = {1, 4}  # points whose label would kiss a bar top
+    for i, s in enumerate(shares):
+        dy, va = (-1.6, "top") if i in below else (1.2, "bottom")
+        ax2.text(i, s + dy, f"{s:.0f}%", ha="center", va=va, fontsize=7.2,
+                 color="#a67102", fontweight="bold")
+    ax2.set_ylabel("% of workforce (gold line)", color="#a67102")
+    ax2.set_ylim(0, 46)
+    ax2.tick_params(axis="y", colors="#a67102")
+    ax2.spines["right"].set_visible(True)
+    ax2.spines["right"].set_color("#a67102")
+    ax2.spines["top"].set_visible(False)
+    ax2.grid(False)
+    head_sub(ax, "AI exposure is a graduate phenomenon\n"
+                 "Bars (left axis): mean exposure score by education; red: above national\n"
+                 "average. Gold line (right axis): each group's share of the workforce.\n"
+                 "Exposure doubles at graduation - held by 11% of workers. PLFS 2023-24.")
+    add_source(fig, DATASET, y=-0.08)
     _save(fig, "insight_education",
-          "; ".join(f"{n.replace(chr(10),' ')}: share={s:.3f}, E={e:.3f}" for n, s, e in rows)
-          + f"; nat={nat:.3f}; CORRECTED bucket coding per manual C-19 (2026-08-28)")
+          "; ".join(f"{n.replace(chr(10),' ')}: share={s:.1f}%, E={e:.3f}"
+                    for n, s, e in zip(names, shares, E))
+          + f"; nat={nat:.3f}; coding per manual C-19")
 
 
 def chart_gender(df: pl.DataFrame) -> None:
