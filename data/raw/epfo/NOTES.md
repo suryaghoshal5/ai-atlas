@@ -58,3 +58,28 @@ EPFO-era releases head it "Transgender". The parser maps both to `transgender`.
 - FY-aggregate table typo in mid-2024–mid-2025 EPFO releases: the 2019-20 × 22-25 cell
   shows 1771707 (a copy of 18-21 × 2018-19); corrected again in epfo_September-2025.
   Irrelevant to the panel (FY rows are never parsed), noted for awareness.
+
+## Exit-recording lag inflates the freshest months' net additions (2026-09-01)
+
+Diagnosed while explaining the apparent mid-2025 "hiring surge" in the age-band trend
+chart. Net = new − ceased + rejoined, and **ceased members are recorded only when the
+exit claim/transfer is filed — months after the actual exit**. So the last ~2–4 data
+months of any release systematically understate exits and overstate net additions;
+later releases revise them down (consistent with the downward-revision pattern in the
+vintage caveat above).
+
+Evidence from our own panel (national totals):
+- Steady-state ceased ≈ 1.7–1.8M/month (2024-06…09, seasoned vintages).
+- 2025-06 ceased = 1.005M and 2025-07 ceased = 0.518M (2–3 months mature at the
+  epfo_2025-09 release) → net jumps to 1.91M / 2.10M.
+- 2025-04, five months mature in the same release, already shows ceased back at 1.45M.
+- Gross new subscribers stay flat (0.75–1.1M/month through 2024–25) — no real hiring
+  surge underlies the net spike, and the spike appears identically in every age band
+  (an artifact signature, not a cohort story).
+
+Handling: (a) trend charts draw rolling means that touch data months ≥ 2025-03 as a
+dashed "provisional" tail with a subtitle caveat; (b) event-study month FE absorb the
+aggregate artifact, but note in §6 limitations that vintage maturity could differ
+across industry heads in recent months; (c) prefer **new subscribers (gross joins)**
+for entry-rung visuals — that series does not depend on lagged exits. Do NOT
+"correct" the raw values; this is inherent to the source.

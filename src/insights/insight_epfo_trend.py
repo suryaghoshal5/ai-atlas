@@ -29,6 +29,12 @@ def main() -> None:
     months = [m for m in months if m >= "2020-04"]
     x = list(range(len(months)))
 
+    # Exits reach EPFO with a claim-filing lag, so the freshest months understate
+    # ceased members and overstate net additions (documented in data/raw/epfo/NOTES.md).
+    # Rolling means touching those months are drawn dashed as provisional.
+    PROVISIONAL_FROM = "2025-03"
+    cut = months.index(PROVISIONAL_FROM)
+
     fig, ax = plt.subplots(figsize=(7.6, 4.6))
     ax.axhline(0, color="#c9c7c0", lw=0.8)
     prov_bits = []
@@ -38,7 +44,8 @@ def main() -> None:
              .filter(pl.col("data_month") >= "2020-04")
              .with_columns(pl.col("value").rolling_mean(6).alias("r6")))
         vals = [v / 1e6 if v is not None else None for v in s["r6"]]
-        ax.plot(x, vals, color=color, lw=1.9)
+        ax.plot(x[: cut + 1], vals[: cut + 1], color=color, lw=1.9)
+        ax.plot(x[cut:], vals[cut:], color=color, lw=1.6, ls=(0, (2, 2)), alpha=0.55)
         last = next(v for v in reversed(vals) if v is not None)
         ends.append((last, lab, color))
         prov_bits.append(f"{band}: last r6={last:.3f}M")
@@ -65,7 +72,8 @@ def main() -> None:
     head_sub(ax, "The 22-25s carry India's payroll growth\n"
                  "Net EPFO additions by age band, 6-month rolling means. Reds: the young\n"
                  "entry bands (18-25); gold: 26-28; black/grey: 29+ and under-18.\n"
-                 "Apr 2020 - Jul 2025.")
+                 "Dashed tail: provisional — EPFO records exits with a lag, so recent\n"
+                 "net additions are overstated. Apr 2020 - Jul 2025.")
     add_source(fig, DATASET)
     fig.savefig(OUT / "insight_epfo_young_trend.png", bbox_inches="tight")
     plt.close(fig)
@@ -74,7 +82,9 @@ def main() -> None:
     existing = prov.read_text() if prov.exists() else "# Substack chart provenance\n\n"
     existing += (f"### insight_epfo_young_trend ({date.today()})\n"
                  "6-mo rolling means, all bands; " + "; ".join(prov_bits)
-                 + f"\nSource: {DATASET}.\n")
+                 + f"\nDashed from {PROVISIONAL_FROM}: provisional (exit-recording lag "
+                 "overstates recent net additions; see data/raw/epfo/NOTES.md).\n"
+                 f"Source: {DATASET}.\n")
     prov.write_text(existing)
     print("trend chart written")
 

@@ -156,3 +156,7 @@ Source: EPFO monthly payroll releases (net new subscribers by age band), Apr 202
 ### insight_epfo_young_trend (2026-09-01)
 6-mo rolling means, all bands; 18-21: last r6=0.351M; 22-25: last r6=0.379M; 26-28: last r6=0.212M; 29-35: last r6=0.340M; >35: last r6=0.324M; <18: last r6=0.008M
 Source: EPFO monthly payroll releases (net new subscribers by age band), Apr 2020 - Jul 2025.
+### insight_epfo_young_trend (2026-09-01)
+6-mo rolling means, all bands; 18-21: last r6=0.351M; 22-25: last r6=0.379M; 26-28: last r6=0.212M; 29-35: last r6=0.340M; >35: last r6=0.324M; <18: last r6=0.008M
+Dashed from 2025-03: provisional (exit-recording lag overstates recent net additions; see data/raw/epfo/NOTES.md).
+Source: EPFO monthly payroll releases (net new subscribers by age band), Apr 2020 - Jul 2025.
