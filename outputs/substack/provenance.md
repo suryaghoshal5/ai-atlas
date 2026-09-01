@@ -108,9 +108,6 @@ Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM s
 ### insight_states (2026-08-28)
 Delhi=0.143; Kerala=0.120; Haryana=0.110; Telangana=0.106; Maharashtra=0.101; Karnataka=0.101; Tamil Nadu=0.093; Uttarakhand=0.085; Odisha=0.074; Madhya Pradesh=0.073; Chhattisgarh=0.072; Bihar=0.067; nat=0.086
 Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
-### insight_epfo_young_trend (2026-08-28)
-young avg 2021-11..2022-10: 0.591M; last 12m: 0.596M; older pre: 0.419M; last 12m: 0.513M; 64 months Apr2020-Jul2025
-Source: EPFO monthly payroll releases (net new subscribers by age band), Apr 2020 - Jul 2025.
 ### insight_exposure_rare (2026-09-01)
 bin shares %: 0-.05=47.5, .05-.10=32.2, .10-.20=11.7, .20-.30=3.6, .30-.40=2.2, .40-.50=0.8, .50+=1.9
 Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
@@ -153,3 +150,9 @@ Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM s
 ### insight_states (2026-09-01)
 Delhi=0.143; Kerala=0.120; Haryana=0.110; Telangana=0.106; Maharashtra=0.101; Karnataka=0.101; Tamil Nadu=0.093; Uttarakhand=0.085; Odisha=0.074; Madhya Pradesh=0.073; Chhattisgarh=0.072; Bihar=0.067; nat=0.086
 Source: PLFS 2023-24 unit data x NCO-2015 task-exposure index (preliminary LLM scoring).
+### insight_epfo_young_trend (2026-09-01)
+6-mo rolling means, all bands; 18-21: last r6=0.351M; 22-25: last r6=0.379M; 26-28: last r6=0.212M; 29-35: last r6=0.340M; >35: last r6=0.324M; <18: last r6=0.008M
+Source: EPFO monthly payroll releases (net new subscribers by age band), Apr 2020 - Jul 2025.
+### insight_epfo_young_trend (2026-09-01)
+6-mo rolling means, all bands; 18-21: last r6=0.351M; 22-25: last r6=0.379M; 26-28: last r6=0.212M; 29-35: last r6=0.340M; >35: last r6=0.324M; <18: last r6=0.008M
+Source: EPFO monthly payroll releases (net new subscribers by age band), Apr 2020 - Jul 2025.
