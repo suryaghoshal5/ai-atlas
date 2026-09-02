@@ -1,0 +1,124 @@
+# Vintage-check task lists v1 (2026-09-02, authorized by Surya "go ahead with point 2")
+#
+# Purpose: bound the NCO-2015 description-vintage problem (referee point 2).
+# For 10 visibly-digitised occupations, these are AUTHOR-CONSTRUCTED modernised
+# duty statements describing the same occupation's present-day Indian workflow
+# (core banking, UPI/POS, GST/EPFO portals, CRM/omnichannel, HRMS/ERP).
+# They are an assumption exhibit, not measurement: the drift beta(modernised) -
+# beta(original NCO text) bounds how much description vintage could understate
+# native exposure. Scored under the FROZEN rubric (v0.2-draft) through
+# src/llm/score.py; the index itself is unchanged.
+#
+# Original task lists: data/processed/task_statements_full.parquet (same codes).
+
+occupations:
+  "4211.0400":
+    title: Teller, Bank
+    tasks:
+      - Verifies customer identity and account details on the core banking system terminal before processing transactions.
+      - Processes cash withdrawals against withdrawal slips or cheques after verifying the customer's signature image and account balance on screen.
+      - Counts and pays out cash using a currency counting machine and records the disbursement in the core banking system.
+      - Accepts cash and cheque deposits, enters them in the core banking system, and issues printed or SMS acknowledgement.
+      - Updates passbooks at the passbook printing kiosk or prints account statements on request.
+      - Balances the teller drawer against the core banking system's teller report at end of day and reports discrepancies to the supervisor.
+      - Guides customers to ATM, internet banking, UPI or mobile banking channels for routine transactions.
+      - Processes NEFT, RTGS and IMPS transfer requests submitted at the counter.
+  "3321.0100":
+    title: Insurance Agent
+    tasks:
+      - Generates and follows up leads for insurance policies through phone, messaging apps and referrals recorded in the insurer's agent app.
+      - Explains policy features, premiums and riders to prospective clients using the insurer's digital illustration and quotation tools.
+      - Completes proposal forms digitally with the client, uploading KYC documents through e-KYC or document scans.
+      - Schedules medical examinations or property inspections through the insurer's portal where policy conditions require.
+      - Collects first premiums through online payment links, UPI or auto-debit mandates set up in the insurer's system.
+      - Tracks policy issuance, renewals and lapses on the agent portal and reminds clients of premium due dates by phone or message.
+      - Assists policyholders in filing claims online, uploading supporting documents and tracking claim status.
+      - Monitors commission statements and business targets on the insurer's agent dashboard.
+  "4221.0300":
+    title: Reservation Clerk, Transport
+    tasks:
+      - Reserves berths and seats in trains or buses by entering passenger details in the computerised passenger reservation system.
+      - Answers passenger enquiries about timings, fare classes and berth availability by consulting the reservation system.
+      - Collects fares by cash, card or UPI and issues system-printed tickets and reservation slips.
+      - Processes cancellations and refunds in the reservation system according to refund rules.
+      - Modifies bookings for date or class changes where the system permits.
+      - Reconciles counter collections against the system's shift report and remits cash to the head cashier.
+      - Assists passengers in using ticket vending machines or online booking when counters are congested.
+      - Prepares exception reports for failed transactions or system outages during the shift.
+  "4211.0100":
+    title: Cashier, General
+    tasks:
+      - Receives payments by cash, card and UPI at the counter and records each transaction in the billing or ERP system.
+      - Counts cash and checks notes with a counterfeit detection machine.
+      - Issues system-generated receipts and invoices to customers.
+      - Makes authorised payments against approved digital vouchers and records them in the accounting system.
+      - Reconciles the day's cash, card and UPI collections against the system's settlement report.
+      - Deposits cash in the bank or arranges cash pickup and records the deposit in the system.
+      - Maintains the cash float and requests replenishment through the ERP workflow.
+      - Prepares daily collection summaries for the accounts department from system reports.
+      - Processes salary or wage disbursements through bank transfer files prepared in the payroll system.
+  "4211.0200":
+    title: Cashier, Bank; Shroff
+    tasks:
+      - Receives cash deposits at the bank counter, counts notes with a counting machine and posts credits in the core banking system.
+      - Makes cash payments against cheques and withdrawal forms after on-screen verification of signatures and balances.
+      - Scans and uploads instruments to the cheque truncation system for clearing.
+      - Balances the cash position at day end against the core banking system's teller summary.
+      - Transfers excess cash to the vault custodian and records the movement in the system.
+      - Issues demand drafts and processes NEFT and RTGS requests received at the counter.
+      - Reports suspected counterfeit notes through the prescribed reporting system.
+      - Guides customers to self-service channels for routine deposits and withdrawals.
+  "4223.0100":
+    title: Telephone Operator (contact-centre modernisation)
+    tasks:
+      - Answers inbound customer calls through a softphone integrated with the contact-centre platform.
+      - Verifies caller identity against records in the customer relationship management system.
+      - Logs each interaction, its category and resolution in the CRM ticketing system.
+      - Follows on-screen call scripts and knowledge-base articles to resolve queries.
+      - Escalates unresolved issues to specialist queues through the ticketing workflow.
+      - Makes outbound follow-up calls scheduled by the dialler system.
+      - Handles customer chats and emails in the same omnichannel queue during low call volume.
+      - Meets service metrics tracked automatically by the platform, such as handle time and resolution rate.
+  "4131.0100":
+    title: Secretary / Back Office Support
+    tasks:
+      - Drafts letters, minutes and reports on a word processor from oral instructions, voice notes or rough drafts.
+      - Manages the officer's calendar, meetings and video-conference bookings through office software.
+      - Prepares presentations and spreadsheets as directed.
+      - Maintains digital filing of correspondence and documents in shared drives or document management systems.
+      - Screens emails and phone calls and forwards or responds per instructions.
+      - Transcribes recorded dictation or meeting audio into formatted documents.
+      - Arranges travel bookings and expense claims through online systems.
+  "2411.0100":
+    title: Accountant
+    tasks:
+      - Maintains books of account in accounting software or an ERP, supervising entry work by accounts clerks.
+      - Scrutinises scanned bills, receipts and payment records against ledger entries in the system.
+      - Files GST returns, TDS returns and other statutory filings on government portals within due dates.
+      - Prepares trial balance, profit and loss statement and balance sheet from the accounting system.
+      - Reconciles bank statements imported into the accounting software with book entries.
+      - Monitors budget-versus-actual reports generated from the system and reports variances.
+      - Conducts periodic and surprise verification of inventory and cash against system records.
+      - Advises management on tax, procurement and financial procedure matters.
+      - Prepares audit schedules and responds to auditor queries with system-generated documentation.
+  "4313.0101":
+    title: Accounts Clerk (Payroll)
+    tasks:
+      - Processes monthly payroll in payroll software, importing attendance from the biometric or HRMS system.
+      - Calculates income tax, provident fund and ESI deductions through the payroll system and validates exceptions.
+      - Uploads EPFO electronic challan-cum-return files and ESI contributions on government portals.
+      - Prepares salary bank transfer files and uploads them for disbursement.
+      - Issues digital payslips and answers employee queries about deductions.
+      - Checks vendor bills and expense claims in the ERP workflow before payment approval.
+      - Prepares periodical expenditure and headcount cost statements from system reports.
+      - Maintains employee master data for pay, allowances and statutory numbers in the HRMS.
+  "4221.0400":
+    title: Booking Clerk, Transport
+    tasks:
+      - Issues tickets at the counter through the computerised ticketing system after confirming destination, class and seat availability.
+      - Collects fares by cash, card or UPI and issues machine-printed tickets.
+      - Processes ticket cancellations and refunds in the system per rules.
+      - Reconciles counter sales against the ticketing system's shift-end report and remits collections.
+      - Books luggage and parcels in the parcel management system and prints labels.
+      - Assists passengers with automatic ticket vending machines and mobile ticketing apps.
+      - Reports ticket stock and system issues to supervisors through the prescribed channel.
