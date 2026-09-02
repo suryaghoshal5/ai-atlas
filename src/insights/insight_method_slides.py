@@ -60,11 +60,11 @@ def d_title(ax):
         ("1", "Task statements from occupation dictionary", SB_BLACK,
          "Parse NCO-2015 Vol II - 3,442 occupation entries - into 18,622 single-duty task sentences: the unit of analysis."),
         ("2", "Scoring each task", SB_BLACK,
-         "One rubric question: could an LLM halve this task at equal quality? E0 - no: the task is physical or presence-bound. E1 - yes, via chat alone. E2 - yes, but only with LLM-powered software (speech, OCR, records)."),
+         "One rubric question: could an LLM halve this task at equal quality? E0 - no (physical, presence-bound). E1 - yes, via chat alone. E2 - with LLM software (speech, OCR, records)."),
         ("3", "Occupation level exposure score", SB_BLACK,
          "Shares per occupation: a (chat), z (with tooling); headline E = a + half the E2 share. Aggregated to 122 NCO groups."),
         ("4", "Workforce projection using PLFS", SB_RED,
-         "Each surveyed worker inherits their group's score; official weights scale 164,523 respondents to 463M workers, cut by sector, state, gender, age, education, earnings."),
+         "Each surveyed worker inherits their group's score; official weights scale 164,523 respondents to 463M workers, cut by geography, gender, education, earnings."),
         ("5", "Entry-rung analysis", SB_GOLD,
          "EPFO 88-month payroll panel: young (18-25) vs 29+ hiring in exposed vs insulated industries around Nov 2022."),
         ("6", "Occupation clustering", SB_GOLD,
@@ -90,6 +90,17 @@ def d_title(ax):
     ax.text(4, 40.8, "BUILD THE INDEX", fontsize=7, color=SB_BLACK, fontweight="bold")
     ax.text(44.2, 40.8, "PROJECT IT", fontsize=7, color=SB_RED, fontweight="bold")
     ax.text(57.6, 40.8, "ANALYSE IT", fontsize=7, color=SB_GOLD, fontweight="bold")
+    # TEST IT band: the robustness layer added in the referee round (Sep 2026)
+    ax.add_patch(FancyBboxPatch((4, 3.9), 92.4, 4.9, boxstyle="round,pad=0.4",
+                                fc=GRID, ec="none"))
+    ax.text(6.2, 6.35, "TEST IT", fontsize=7, color=SB_BLACK, fontweight="bold",
+            va="center")
+    ax.text(15.5, 6.35,
+            "Every number stress-tested:  O*NET crosswalk comparison (2.4× = upper bound)  ·  "
+            "vintage decomposition (≤32% staleness, 1.40× residual)\n"
+            "E2-weight bounds (0 / ½ / 1)  ·  human-label substitution bounds "
+            "(pilot β moves 5% under full human relabelling)",
+            fontsize=6.3, color=INK_2, va="center", linespacing=1.55)
 
 
 def d_step1(ax):

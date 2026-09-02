@@ -71,14 +71,20 @@ def main() -> None:
     df = pl.DataFrame(rows)
     # decomposition: join each occupation's group-level crosswalk gap; the
     # closure share is how much of that gap the modernised rescoring closes
+    # closure is computed on the DISPLAYED occupation-level basis so every
+    # table row reconciles from its printed columns (referee fix, Sep 2):
+    # closure = (modernised - original) / (group crosswalk twin - original).
     cw = (pl.read_parquet(processed_dir() / "crosswalk_comparison_PRELIMINARY.parquet")
-          .select("group3", pl.col("gap").alias("group_crosswalk_gap")))
+          .select("group3", pl.col("beta_crosswalked").round(2).alias("beta_crosswalked_group")))
     df = (df.with_columns(pl.col("nco_code").str.slice(0, 3).alias("group3"))
           .join(cw, on="group3", how="left")
+          .with_columns((pl.col("beta_crosswalked_group") - pl.col("beta_original_3s"))
+                        .alias("_denom"))
           .with_columns(
-              pl.when(pl.col("group_crosswalk_gap") < -0.01)
-              .then((pl.col("drift") / -pl.col("group_crosswalk_gap")).round(2))
-              .otherwise(None).alias("gap_closure_share")))
+              pl.when(pl.col("_denom").abs() > 0.05)
+              .then((pl.col("drift") / pl.col("_denom")).round(2))
+              .otherwise(None).alias("gap_closure_share"))
+          .drop("_denom"))
     df.write_csv(outputs_dir() / "tables" / "vintage_check_PRELIMINARY.csv")
     meta = {
         "built_at": datetime.now(timezone.utc).isoformat(),
@@ -89,7 +95,7 @@ def main() -> None:
         "mean_drift": round(float(df["drift"].mean()), 3),
         "mean_beta_original": round(float(df["beta_original_3s"].mean()), 3),
         "mean_beta_modernised": round(float(df["beta_modernised_3s"].mean()), 3),
-        "mean_gap_closure_share_overstated_groups": round(
+        "mean_gap_closure_share_occupation_basis": round(
             float(df.filter(pl.col("gap_closure_share").is_not_null())["gap_closure_share"].mean()), 2),
         "design_note": ("sampled from high-divergence clerical groups per referee; managerial "
                         "groups excluded (their gap traces to rubric Rule 8, not vintage)"),
