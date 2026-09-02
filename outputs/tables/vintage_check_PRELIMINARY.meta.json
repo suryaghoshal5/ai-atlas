@@ -1,0 +1,12 @@
+{
+  "built_at": "2026-09-02T12:30:13.827582+00:00",
+  "status": "PRELIMINARY per D6; assumption exhibit (author-constructed modernised task lists)",
+  "task_lists": "config/vintage_tasks_v1.yaml",
+  "scorer": "src/llm/score.py, frozen rubric, 3-sample majority vote, both variants",
+  "ties_escalated": 0,
+  "mean_drift": 0.079,
+  "mean_beta_original": 0.346,
+  "mean_beta_modernised": 0.425,
+  "mean_gap_closure_share_overstated_groups": 0.31,
+  "design_note": "sampled from high-divergence clerical groups per referee; managerial groups excluded (their gap traces to rubric Rule 8, not vintage)"
+}

@@ -69,6 +69,16 @@ def main() -> None:
         print(rows[-1])
 
     df = pl.DataFrame(rows)
+    # decomposition: join each occupation's group-level crosswalk gap; the
+    # closure share is how much of that gap the modernised rescoring closes
+    cw = (pl.read_parquet(processed_dir() / "crosswalk_comparison_PRELIMINARY.parquet")
+          .select("group3", pl.col("gap").alias("group_crosswalk_gap")))
+    df = (df.with_columns(pl.col("nco_code").str.slice(0, 3).alias("group3"))
+          .join(cw, on="group3", how="left")
+          .with_columns(
+              pl.when(pl.col("group_crosswalk_gap") < -0.01)
+              .then((pl.col("drift") / -pl.col("group_crosswalk_gap")).round(2))
+              .otherwise(None).alias("gap_closure_share")))
     df.write_csv(outputs_dir() / "tables" / "vintage_check_PRELIMINARY.csv")
     meta = {
         "built_at": datetime.now(timezone.utc).isoformat(),
@@ -79,6 +89,10 @@ def main() -> None:
         "mean_drift": round(float(df["drift"].mean()), 3),
         "mean_beta_original": round(float(df["beta_original_3s"].mean()), 3),
         "mean_beta_modernised": round(float(df["beta_modernised_3s"].mean()), 3),
+        "mean_gap_closure_share_overstated_groups": round(
+            float(df.filter(pl.col("gap_closure_share").is_not_null())["gap_closure_share"].mean()), 2),
+        "design_note": ("sampled from high-divergence clerical groups per referee; managerial "
+                        "groups excluded (their gap traces to rubric Rule 8, not vintage)"),
     }
     (outputs_dir() / "tables" / "vintage_check_PRELIMINARY.meta.json").write_text(
         json.dumps(meta, indent=2))
