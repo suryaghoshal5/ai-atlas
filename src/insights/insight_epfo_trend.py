@@ -1,9 +1,10 @@
-"""Substack charts: EPFO net payroll additions by age band (national series,
-Apr 2020 - Jul 2025). Raw EPFO administrative data.
+"""Substack chart: EPFO net payroll additions by age band (national series,
+Apr 2020 - Jul 2025), 6-mo rolling means for all six bands. Raw EPFO
+administrative data.
 
-Two views:
-  insight_epfo_young_trend.png    levels, 6-mo rolling means, all six bands
-  insight_epfo_trend_indexed.png  same series indexed to pre-ChatGPT avg = 100
+An indexed variant (rebased to pre-ChatGPT band averages) was built and RETIRED
+on 2026-09-02 per Surya: bands are flow cross-sections, not linked cohorts, and
+the rebased view invites cohort interpretation. See data/raw/epfo/NOTES.md.
 """
 
 from __future__ import annotations
@@ -27,7 +28,6 @@ BANDS = [("18-21", SB_RED, "18-21"), ("22-25", "#e0636e", "22-25"),
 # ceased members and overstate net additions (documented in data/raw/epfo/NOTES.md).
 # Rolling means touching those months are drawn dashed as provisional.
 PROVISIONAL_FROM = "2025-03"
-BASE_LO, BASE_HI = "2022-01", "2022-10"  # pre-ChatGPT base window for the index
 
 
 def load_series() -> tuple[list[str], dict[str, list[float | None]]]:
@@ -94,55 +94,10 @@ def chart_levels(months: list[str], series: dict) -> list[str]:
     return prov_bits
 
 
-def chart_indexed(months: list[str], series: dict) -> list[str]:
-    """Each band's rolling mean rebased so its Jan-Oct 2022 average = 100.
-
-    Under-18 is dropped: its base is ~7k/month (vs 150-300k for the working
-    bands), so an index on it is noise.
-    """
-    x = list(range(len(months)))
-    cut = months.index(PROVISIONAL_FROM)
-    lo, hi = months.index(BASE_LO), months.index(BASE_HI)
-    fig, ax = plt.subplots(figsize=(7.6, 4.6))
-    ax.axhline(100, color="#c9c7c0", lw=1.0)
-    ax.text(1, 101.5, "pre-ChatGPT average = 100", fontsize=7.6, color="#8a8781")
-    prov_bits, ends = [], []
-    for band, color, lab in BANDS:
-        if band == "<18":
-            continue
-        vals = series[band]
-        base_vals = [v for v in vals[lo: hi + 1] if v is not None]
-        base = sum(base_vals) / len(base_vals)
-        idx = [100 * v / base if v is not None else None for v in vals]
-        ax.plot(x[: cut + 1], idx[: cut + 1], color=color, lw=1.9)
-        ax.plot(x[cut:], idx[cut:], color=color, lw=1.6, ls=(0, (2, 2)), alpha=0.55)
-        last_solid = next(v for v in reversed(idx[: cut + 1]) if v is not None)
-        ends.append((last_solid, lab, color))
-        prov_bits.append(f"{band}: base={base:.3f}M, Feb-2025 idx={last_solid:.0f}")
-    ymax = 145
-    ax.set_ylim(0, ymax)
-    _end_labels(ax, ends, len(x) - 0.4, 5.5)
-    chatgpt = _frame(ax, months, len(x))
-    ax.text(chatgpt + 0.8, ymax - 2, "ChatGPT\n(Nov 2022)", fontsize=8,
-            color="#898781", va="top")
-    ax.set_ylabel("Net additions, 6-mo rolling mean\n(index: Jan-Oct 2022 average = 100)")
-    head_sub(ax, "Entry-age additions run below their pre-ChatGPT pace\n"
-                 "Net EPFO additions rebased to each band's own Jan-Oct 2022 average.\n"
-                 "Post-ChatGPT averages: 22-25 at 90, 18-21 at 99, 29-35 at 103, 35+\n"
-                 "at 105. Bands are flow snapshots at each age rung, not tracked\n"
-                 "cohorts; cohort-size shifts also move these lines. Descriptive, not\n"
-                 "causal. End labels at Feb 2025; dashed tail provisional (exit lag).")
-    add_source(fig, DATASET)
-    fig.savefig(OUT / "insight_epfo_trend_indexed.png", bbox_inches="tight")
-    plt.close(fig)
-    return prov_bits
-
-
 def main() -> None:
     apply_style()
     months, series = load_series()
     prov_levels = chart_levels(months, series)
-    prov_idx = chart_indexed(months, series)
 
     prov = OUT / "provenance.md"
     existing = prov.read_text() if prov.exists() else "# Substack chart provenance\n\n"
@@ -151,12 +106,8 @@ def main() -> None:
                  + f"\nDashed from {PROVISIONAL_FROM}: provisional (exit-recording lag "
                  "overstates recent net additions; see data/raw/epfo/NOTES.md).\n"
                  f"Source: {DATASET}.\n")
-    existing += (f"### insight_epfo_trend_indexed ({date.today()})\n"
-                 f"Same series indexed to {BASE_LO}..{BASE_HI} avg = 100; under-18 "
-                 "dropped (tiny base); " + "; ".join(prov_idx)
-                 + f"\nDashed from {PROVISIONAL_FROM} as above.\nSource: {DATASET}.\n")
     prov.write_text(existing)
-    print("trend charts written")
+    print("trend chart written")
 
 
 if __name__ == "__main__":
