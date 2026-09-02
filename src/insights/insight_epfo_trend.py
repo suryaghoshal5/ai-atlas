@@ -82,7 +82,7 @@ def chart_levels(months: list[str], series: dict) -> list[str]:
     ax.text(chatgpt + 0.8, 0.405, "ChatGPT\n(Nov 2022)", fontsize=8,
             color="#898781", va="top")
     ax.set_ylabel("Net new EPFO subscribers (millions/month, 6-mo rolling mean)")
-    head_sub(ax, "The 22-25s carry India's payroll growth\n"
+    head_sub(ax, "India's formal payroll runs on the under-25s\n"
                  "Net EPFO additions by age band, 6-month rolling means. Reds: the young\n"
                  "entry bands (18-25); gold: 26-28; black/grey: 29+ and under-18.\n"
                  "Dashed tail: provisional — EPFO records exits with a lag, so recent\n"

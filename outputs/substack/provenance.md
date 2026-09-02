@@ -176,3 +176,11 @@ Source: EPFO monthly payroll releases (net new subscribers by age band), Apr 202
 Same series indexed to 2022-01..2022-10 avg = 100; under-18 dropped (tiny base); 18-21: base=0.273M, Feb-2025 idx=87; 22-25: base=0.324M, Feb-2025 idx=80; 26-28: base=0.161M, Feb-2025 idx=89; 29-35: base=0.227M, Feb-2025 idx=100; >35: base=0.199M, Feb-2025 idx=106
 Dashed from 2025-03 as above.
 Source: EPFO monthly payroll releases (net new subscribers by age band), Apr 2020 - Jul 2025.
+### insight_epfo_young_trend (2026-09-02)
+6-mo rolling means, all bands; 18-21: last r6=0.351M; 22-25: last r6=0.379M; 26-28: last r6=0.212M; 29-35: last r6=0.340M; >35: last r6=0.324M; <18: last r6=0.008M
+Dashed from 2025-03: provisional (exit-recording lag overstates recent net additions; see data/raw/epfo/NOTES.md).
+Source: EPFO monthly payroll releases (net new subscribers by age band), Apr 2020 - Jul 2025.
+### insight_epfo_trend_indexed (2026-09-02)
+Same series indexed to 2022-01..2022-10 avg = 100; under-18 dropped (tiny base); 18-21: base=0.273M, Feb-2025 idx=87; 22-25: base=0.324M, Feb-2025 idx=80; 26-28: base=0.161M, Feb-2025 idx=89; 29-35: base=0.227M, Feb-2025 idx=100; >35: base=0.199M, Feb-2025 idx=106
+Dashed from 2025-03 as above.
+Source: EPFO monthly payroll releases (net new subscribers by age band), Apr 2020 - Jul 2025.
