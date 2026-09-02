@@ -83,3 +83,22 @@ aggregate artifact, but note in §6 limitations that vintage maturity could diff
 across industry heads in recent months; (c) prefer **new subscribers (gross joins)**
 for entry-rung visuals — that series does not depend on lagged exits. Do NOT
 "correct" the raw values; this is inherent to the source.
+
+## Age bands are flow cross-sections, not cohorts (2026-09-02)
+
+Raised by Surya on the indexed trend chart. EPFO publishes net additions by AGE BAND;
+there is no cohort linkage. Implications for interpretation:
+- A continuously-employed member ageing across a band boundary generates no flow
+  (correct — nothing added or lost).
+- But an entry and its eventual reversing exit land in DIFFERENT bands: join at 24
+  → +1 in 22-25; exit at 27 → −1 in 26-28. Young-band net is therefore ~pure gross
+  entry, while older-band net absorbs exits of workers hired years earlier. Never
+  compare band levels as if they were age-specific hiring rates.
+- Within-band-over-time (the indexed chart) avoids the level trap but is still not
+  cohort-clean: changes in churn timing and in the SIZE of the population cohort
+  currently passing through a band move the line without any change in hiring
+  propensity per person.
+Handling: chart subtitles state "flow snapshots, not tracked cohorts"; the event
+study's young-vs-old contrast is within industry × month (netting aggregate churn
+shifts); population-cohort normalisation (dividing by projected cohort size) is a
+possible robustness step for the paper. Cannot be fixed from published EPFO data.

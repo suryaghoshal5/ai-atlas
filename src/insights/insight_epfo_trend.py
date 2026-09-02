@@ -126,11 +126,12 @@ def chart_indexed(months: list[str], series: dict) -> list[str]:
     ax.text(chatgpt + 0.8, ymax - 2, "ChatGPT\n(Nov 2022)", fontsize=8,
             color="#898781", va="top")
     ax.set_ylabel("Net additions, 6-mo rolling mean\n(index: Jan-Oct 2022 average = 100)")
-    head_sub(ax, "The 22-25s never got back to their pre-ChatGPT pace\n"
-                 "Net EPFO additions by age band, rebased to each band's own Jan-Oct\n"
-                 "2022 average. Post-ChatGPT averages: 22-25 at 90, 18-21 at 99 —\n"
-                 "vs 29-35 at 103 and 35+ at 105. Descriptive, not causal. End labels\n"
-                 "at Feb 2025 (last mature month); dashed tail provisional (exit lag).")
+    head_sub(ax, "Entry-age additions run below their pre-ChatGPT pace\n"
+                 "Net EPFO additions rebased to each band's own Jan-Oct 2022 average.\n"
+                 "Post-ChatGPT averages: 22-25 at 90, 18-21 at 99, 29-35 at 103, 35+\n"
+                 "at 105. Bands are flow snapshots at each age rung, not tracked\n"
+                 "cohorts; cohort-size shifts also move these lines. Descriptive, not\n"
+                 "causal. End labels at Feb 2025; dashed tail provisional (exit lag).")
     add_source(fig, DATASET)
     fig.savefig(OUT / "insight_epfo_trend_indexed.png", bbox_inches="tight")
     plt.close(fig)
