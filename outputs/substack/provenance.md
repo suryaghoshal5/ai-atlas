@@ -210,3 +210,12 @@ removed from insight_epfo_trend.py. Diagnosis: data/raw/epfo/NOTES.md.
 6-mo rolling means, all bands; 18-21: last r6=0.351M; 22-25: last r6=0.379M; 26-28: last r6=0.212M; 29-35: last r6=0.340M; >35: last r6=0.324M; <18: last r6=0.008M
 Dashed from 2025-03: provisional (exit-recording lag overstates recent net additions; see data/raw/epfo/NOTES.md).
 Source: EPFO monthly payroll releases (net new subscribers by age band), Apr 2020 - Jul 2025.
+### insight_crosswalk_divergence (2026-09-02)
+122/122 groups matched via O*NET-SOC2019->2010->SOC10->ISCO-08 minor; corr 0.78; emp-weighted native 0.086 vs crosswalked 0.204; mean |gap| 0.124 (emp-weighted); 82/122 groups |gap|>=0.10 holding 191M workers (41%). Key rows: 251 software 0.74/0.79; 413 keyboard clerks 0.27/0.82; 411 office clerks 0.30/0.60; 522 shop sales 0.17/0.41; 421 tellers 0.26/0.42; 112 managing directors 0.15/0.49; 212 actuaries 0.91/0.69.
+Source: Eloundou et al. (2024) O*NET exposure scores via BLS/IBS SOC-ISCO crosswalk vs NCO-2015 native scores (preliminary LLM scoring); PLFS 2023-24 employment.
+### insight_crosswalk_divergence (2026-09-02)
+122/122 groups matched via O*NET-SOC2019->2010->SOC10->ISCO-08 minor; corr 0.78; emp-weighted native 0.086 vs crosswalked 0.204; mean |gap| 0.124 (emp-weighted); 82/122 groups |gap|>=0.10 holding 191M workers (41%). Key rows: 251 software 0.74/0.79; 413 keyboard clerks 0.27/0.82; 411 office clerks 0.30/0.60; 522 shop sales 0.17/0.41; 421 tellers 0.26/0.42; 112 managing directors 0.15/0.49; 212 actuaries 0.91/0.69.
+Source: Eloundou et al. (2024) O*NET exposure scores via BLS/IBS SOC-ISCO crosswalk vs NCO-2015 native scores (preliminary LLM scoring); PLFS 2023-24 employment.
+### insight_crosswalk_divergence (2026-09-02)
+122/122 groups matched via O*NET-SOC2019->2010->SOC10->ISCO-08 minor; corr 0.78; emp-weighted native 0.086 vs crosswalked 0.204; mean |gap| 0.124 (emp-weighted); 82/122 groups |gap|>=0.10 holding 191M workers (41%). Key rows: 251 software 0.74/0.79; 413 keyboard clerks 0.27/0.82; 411 office clerks 0.30/0.60; 522 shop sales 0.17/0.41; 421 tellers 0.26/0.42; 112 managing directors 0.15/0.49; 212 actuaries 0.91/0.69.
+Source: Eloundou et al. (2024) O*NET exposure scores via BLS/IBS SOC-ISCO crosswalk vs NCO-2015 native scores (preliminary LLM scoring); PLFS 2023-24 employment.
