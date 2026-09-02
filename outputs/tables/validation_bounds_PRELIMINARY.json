@@ -1,0 +1,37 @@
+{
+  "status": "PRELIMINARY per D6; round-1 pilot confusion matrix, 383 pairs",
+  "n_pairs": 383,
+  "n_disagreements": 55,
+  "disagreement_rate_pct": 14.4,
+  "flips": {
+    "E0<->E1_full_weight": {
+      "n": 22,
+      "share_of_tasks_pct": 5.7,
+      "direction_split": {
+        "human_E0_llm_E1": 12,
+        "human_E1_llm_E0": 10
+      }
+    },
+    "E1<->E2_half_weight": {
+      "n": 21,
+      "share_of_tasks_pct": 5.5
+    },
+    "E0<->E2_half_weight": {
+      "n": 12,
+      "share_of_tasks_pct": 3.1
+    }
+  },
+  "pilot_mean_beta_llm": 0.176,
+  "pilot_mean_beta_human_substituted": 0.167,
+  "substitution_delta": -0.009,
+  "substitution_delta_relative_pct": -5.2,
+  "adversarial_bound": {
+    "low": 0.121,
+    "high": 0.222,
+    "relative_pct": [
+      -31.0,
+      26.0
+    ]
+  },
+  "reading": "Full substitution of human for machine labels moves pilot beta by -0.009 (5% relative): directional flips nearly cancel (12 human-E0/llm-E1 vs 10 human-E1/llm-E0). The one-directional adversarial bound is wide but assumes every disagreement resolves the same way, which the observed human labels contradict."
+}
