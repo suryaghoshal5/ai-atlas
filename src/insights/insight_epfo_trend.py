@@ -82,11 +82,12 @@ def chart_levels(months: list[str], series: dict) -> list[str]:
     ax.text(chatgpt + 0.8, 0.405, "ChatGPT\n(Nov 2022)", fontsize=8,
             color="#898781", va="top")
     ax.set_ylabel("Net new EPFO subscribers (millions/month, 6-mo rolling mean)")
-    head_sub(ax, "India's formal payroll runs on the under-25s\n"
-                 "Net EPFO additions by age band, 6-month rolling means. Reds: the young\n"
-                 "entry bands (18-25); gold: 26-28; black/grey: 29+ and under-18.\n"
-                 "Dashed tail: provisional — EPFO records exits with a lag, so recent\n"
-                 "net additions are overstated. Apr 2020 - Jul 2025.")
+    head_sub(ax, "Net payroll additions peak at entry age\n"
+                 "Net EPFO additions by age band, 6-month rolling means. Reds: entry\n"
+                 "bands (18-25); gold: 26-28; black/grey: 29+ and under-18. Additions\n"
+                 "concentrate young by construction (first formal jobs, more frequent\n"
+                 "switches), making the red bands the entry margin to watch. Dashed\n"
+                 "tail: provisional (exit-recording lag). Apr 2020 - Jul 2025.")
     add_source(fig, DATASET)
     fig.savefig(OUT / "insight_epfo_young_trend.png", bbox_inches="tight")
     plt.close(fig)
