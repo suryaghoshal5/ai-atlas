@@ -1,0 +1,30 @@
+{
+  "status": "PRELIMINARY",
+  "built_at": "2026-09-14T13:20:15+00:00",
+  "total_squares": 463,
+  "sectors": {
+    "agriculture": {
+      "workers_m": 193.95,
+      "squares": 194
+    },
+    "industry": {
+      "workers_m": 117.91,
+      "squares": 118
+    },
+    "services": {
+      "workers_m": 150.93,
+      "squares": 151
+    }
+  },
+  "national": {
+    "workers_m": 462.78,
+    "n_groups": 122,
+    "beta": 0.0858,
+    "tasks_e": [
+      15498,
+      1946,
+      1150
+    ],
+    "n_tasks": 18594
+  }
+}

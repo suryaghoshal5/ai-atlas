@@ -223,7 +223,12 @@ def load_real() -> tuple[pl.DataFrame, pl.DataFrame, dict, list[str]]:
                          f"{EMP_AGG.relative_to(REPO_ROOT)}; or run with --fixture.")
     emp: dict[str, dict[str, float]] = {}
     unsect = 0.0
+    scored_groups = set(scores["group3"].unique().to_list())
+    unindexed = {g: 0.0 for g in agg["group3"].unique().to_list() if g not in scored_groups}
     for r in agg.iter_rows(named=True):
+        if r["group3"] in unindexed:
+            unindexed[r["group3"]] += r["workers_m"]
+            continue
         s = sector_of(r["nic_div"])
         if s is None:
             unsect += r["workers_m"]
@@ -234,7 +239,8 @@ def load_real() -> tuple[pl.DataFrame, pl.DataFrame, dict, list[str]]:
         "PRELIMINARY per D6: LLM-only task scores, human-validation gate not cleared.",
         "Headcount: PLFS 2023-24, principal usual status employed, official weights "
         f"(mult/no_qtr), by NCO-2015 3-digit group x NIC-2008 division; source: {emp_src}.",
-        f"Workers with no NIC division ({unsect:.2f}M) are excluded from the bands.",
+        f"Excluded from the bands: {sum(unindexed.values()):.2f}M workers in NCO groups with no "
+        f"scored tasks ({', '.join(sorted(unindexed)) or 'none'}) and {unsect:.2f}M with no NIC division.",
         "Colour: beta = share E1 + 0.5 x share E2 of the group's NCO Vol II task statements.",
     ]
     return scores, tasks, emp, notes
