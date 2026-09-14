@@ -45,6 +45,7 @@ so the inputs can be re-downloaded and verified byte-for-byte.
 | Atlas descriptives, entry rung, EPFO event study, typology, GVA bridge | `src/analysis/` | paper tables & figures |
 | **Stress tests**: O*NET crosswalk comparison, vintage decomposition, E2-weight sensitivity, human-label substitution bounds | `src/analysis/{crosswalk_compare,vintage_check,e2_sensitivity,validation_bounds}.py` | robustness appendix |
 | Media charts for the essay/white-paper versions | `src/insights/` | **not required for any paper number** |
+| Interactive atlas grid (463 one-million-worker squares by sector, drill-down to NCO groups, occupations and E0/E1/E2 tasks); `make atlas-grid`, or `make atlas-grid-fixture` from committed files only | `src/insights/atlas_grid.py`, `config/nco2015_titles.yaml` | `outputs/atlas_grid/index.html`; **presentation only** |
 
 `src/insights/` is presentation-layer only (house-style charts and slides for
 the Substack/white-paper editions of the same results); skip it when auditing

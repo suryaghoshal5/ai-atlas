@@ -3,7 +3,7 @@
 
 PY := PYTHONPATH=src uv run python
 
-.PHONY: help ingest score index results test harness lint
+.PHONY: help ingest score index results test harness lint atlas-grid
 
 help:
 	@echo "Targets:"
@@ -14,6 +14,7 @@ help:
 	@echo "  test     - run pytest suite incl. schema tests"
 	@echo "  harness  - regression harness: compare outputs against golden copies"
 	@echo "  lint     - ruff check"
+	@echo "  atlas-grid - 463-square interactive atlas (outputs/atlas_grid/index.html); presentation layer"
 
 ingest:
 	$(PY) -m ingest.run
@@ -37,3 +38,9 @@ harness:
 
 lint:
 	uv run ruff check src tests
+
+atlas-grid:
+	$(PY) -m insights.atlas_grid
+
+atlas-grid-fixture:
+	$(PY) -m insights.atlas_grid --fixture
