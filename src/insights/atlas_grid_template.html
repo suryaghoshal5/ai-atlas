@@ -1,4 +1,5 @@
 <title>Atlas of 463 Million</title>
+<meta name="color-scheme" content="light only">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600&display=swap">
 <style>
@@ -23,22 +24,7 @@
     --dim: rgba(255,255,255,0.62);
     --sel: #111111;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --paper: #141414; --ink: #f1f1ee; --ink-2: #a2a29d; --ink-3: #6e6e6a;
-      --rule: #2a2a28; --rule-2: #3a3a37; --panel: #1c1c1b; --accent: #ff4a52;
-      --e0: #4b4b48; --e1: #ff4a52; --e2: #ff4a52;
-      --b0: #2b2b29; --b1: #55292a; --b2: #86332f; --b3: #bb4440; --b4: #e8393f; --b5: #ff7b80;
-      --dim: rgba(20,20,20,0.6); --sel: #f1f1ee;
-    }
-  }
-  :root[data-theme="dark"] {
-    --paper: #141414; --ink: #f1f1ee; --ink-2: #a2a29d; --ink-3: #6e6e6a;
-    --rule: #2a2a28; --rule-2: #3a3a37; --panel: #1c1c1b; --accent: #ff4a52;
-    --e0: #4b4b48; --e1: #ff4a52; --e2: #ff4a52;
-    --b0: #2b2b29; --b1: #55292a; --b2: #86332f; --b3: #bb4440; --b4: #e8393f; --b5: #ff7b80;
-    --dim: rgba(20,20,20,0.6); --sel: #f1f1ee;
-  }
+  /* Swiss white ground in every viewer theme: light palette only, painted explicitly. */
 
   * { box-sizing: border-box; }
   body {
