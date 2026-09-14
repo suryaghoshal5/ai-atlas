@@ -216,14 +216,24 @@ def load_real() -> tuple[pl.DataFrame, pl.DataFrame, dict, list[str]]:
 
 def load_fixture() -> tuple[pl.DataFrame, pl.DataFrame, dict, list[str]]:
     scores = pl.read_parquet(SCORES)
-    pilot = pl.read_csv(PILOT_SHEET).select("task_id", "task_text", "occupation_title")
-    vint = (pl.read_csv(VINTAGE, schema_overrides={"nco_code": pl.Utf8})
-            .select(pl.col("nco_code").alias("code"), pl.col("title").alias("vtitle")).unique("code"))
-    tasks = (scores.select("task_id", "nco_code")
-             .join(pilot, on="task_id", how="left")
-             .join(vint, left_on="nco_code", right_on="code", how="left")
-             .with_columns(pl.coalesce("occupation_title", "vtitle").alias("occupation_title"))
-             .select("task_id", "task_text", "occupation_title"))
+    full = processed_dir() / "task_statements_full.parquet"
+    if full.exists():
+        # the parsed NCO Vol II statements are present (not committed, but may be
+        # dropped in): full titles and task text, only the headcounts stay synthetic
+        tasks = pl.read_parquet(full).select("task_id", "task_text", "occupation_title")
+        text_note = ("Occupation titles and task text: NCO-2015 Vol II statements "
+                     "(data/processed/task_statements_full.parquet), complete.")
+    else:
+        pilot = pl.read_csv(PILOT_SHEET).select("task_id", "task_text", "occupation_title")
+        vint = (pl.read_csv(VINTAGE, schema_overrides={"nco_code": pl.Utf8})
+                .select(pl.col("nco_code").alias("code"), pl.col("title").alias("vtitle")).unique("code"))
+        tasks = (scores.select("task_id", "nco_code")
+                 .join(pilot, on="task_id", how="left")
+                 .join(vint, left_on="nco_code", right_on="code", how="left")
+                 .with_columns(pl.coalesce("occupation_title", "vtitle").alias("occupation_title"))
+                 .select("task_id", "task_text", "occupation_title"))
+        text_note = ("Occupation titles and task text are present only for the 50-occupation "
+                     "pilot and the vintage-check occupations; everything else shows its NCO code.")
 
     rng = random.Random(run_seed())
     codes = sorted(scores["group3"].unique().to_list())
@@ -252,8 +262,7 @@ def load_fixture() -> tuple[pl.DataFrame, pl.DataFrame, dict, list[str]]:
         "of provenance sector totals). Only the task scores, the codes and the exposure "
         "colours are real. Run `make atlas-grid` on a machine with the processed PLFS "
         "merge to replace them.",
-        "Occupation titles and task text are present only for the 50-occupation pilot "
-        "and the vintage-check occupations; everything else shows its NCO code.",
+        text_note,
         "Colour: beta = share E1 + 0.5 x share E2 of the group's NCO Vol II task statements "
         "(real, PRELIMINARY per D6).",
     ]
