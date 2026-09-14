@@ -95,7 +95,14 @@
   /* ---------- panel */
   .panel { position: sticky; top: 16px; border-top: 1px solid var(--ink); padding-top: 12px; min-height: 420px; }
   @media (max-width: 960px) { .panel { position: static; } }
-  .crumbs { display: flex; flex-wrap: wrap; gap: 4px 6px; font-size: 12px; color: var(--ink-2); margin-bottom: 14px; align-items: center; }
+  .pnav { position: sticky; top: 0; z-index: 3; background: var(--paper); display: flex; gap: 12px; align-items: flex-start; padding: 6px 0 8px; margin-bottom: 8px; border-bottom: 1px solid var(--rule); }
+  .pnav .up { flex: none; font-size: 12px; font-weight: 600; border: 1px solid var(--ink); padding: 3px 8px; white-space: nowrap; }
+  .pnav .up:hover { background: var(--ink); color: var(--paper); }
+  .crumbs { display: flex; flex-wrap: wrap; gap: 4px 6px; font-size: 12px; color: var(--ink-2); align-items: center; padding-top: 4px; }
+  .sib { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--ink-2); margin: -6px 0 14px; }
+  .sib button { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .sib button:disabled { color: var(--ink-3); text-decoration: none; cursor: default; }
+  .sib button:hover:not(:disabled) { color: var(--accent); }
   .crumbs button { color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; }
   .crumbs button:hover { color: var(--accent); }
   .crumbs .cur { color: var(--ink); font-weight: 500; }
@@ -327,7 +334,9 @@
     view = v; render();
   }
   function back() { view = stack.pop() || { type: 'home' }; render(); }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && view.type !== 'home') back(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && curCrumbs.length > 1 && view.type !== 'home') go(curCrumbs[curCrumbs.length - 2].v);
+  });
 
   function markSelection() {
     document.querySelectorAll('.sq.sel').forEach(x => x.classList.remove('sel'));
@@ -341,12 +350,16 @@
     } else bandsEl.classList.remove('has-sel');
   }
 
+  let curCrumbs = [];
   function crumbs(parts) {
-    return `<div class="crumbs">` + parts.map((p, i) => {
+    curCrumbs = parts;
+    const up = parts[parts.length - 2];
+    return `<div class="pnav"><button class="up" data-nav="${parts.length - 2}" title="Up one level (Esc)">&uarr; ${esc(up.up || up.label)}</button>` +
+      `<div class="crumbs">` + parts.map((p, i) => {
       const last = i === parts.length - 1;
       const sep = i ? `<span class="sep">/</span>` : '';
       return sep + (last ? `<span class="cur">${esc(p.label)}</span>` : `<button data-nav="${i}">${esc(p.label)}</button>`);
-    }).join('') + `</div>`;
+    }).join('') + `</div></div>`;
   }
   function tasksBar(e) {
     const n = e[0] + e[1] + e[2] || 1;
@@ -381,7 +394,7 @@
     }
     else if (view.type === 'sector') {
       const s = sectorByKey[view.key];
-      html += crumbs([{ label: 'India', v: { type: 'home' } }, { label: s.label }]);
+      html += crumbs([{ label: 'India', v: { type: 'home' } }, { label: s.label, v: view }]);
       html += `<div class="p-code">${esc(s.sub)}</div><div class="p-title">${esc(s.label)}</div>`;
       html += facts([['workers', fmtM(s.workers_m), 'M'], ['squares', s.squares], ['mean <i>β</i>', fmtB(s.beta)]]);
       html += `<div class="sect-h"><span class="eyebrow">Groups, most exposed first</span><span class="hint">workers in band · squares · β</span></div><div class="list">`;
@@ -404,7 +417,7 @@
     }
     else if (view.type === 'group') {
       const g = G[view.code]; const s = sectorByKey[view.sector];
-      html += crumbs([{ label: 'India' }, { label: s.label }, { label: g.code }]);
+      html += crumbs([{ label: 'India', v: { type: 'home' } }, { label: s.label, v: { type: 'sector', key: s.key } }, { label: g.code, v: view }]);
       html += `<div class="p-code">NCO-2015 group ${g.code} · ${g.families.length} families · ${g.families.reduce((a, f) => a + f.occupations.length, 0)} occupations</div>`;
       html += `<div class="p-title">${esc(g.title)}</div>`;
       html += facts([['workers', fmtM(g.workers_m), 'M'], ['<i>β</i>', fmtB(g.beta)], ['tasks', fmtN(g.n_tasks)]]);
@@ -431,7 +444,15 @@
       const g = G[view.occ.slice(0, 3)]; const s = sectorByKey[view.sector];
       let occ, fam;
       for (const f of g.families) for (const o of f.occupations) if (o.code === view.occ) { occ = o; fam = f; }
-      html += crumbs([{ label: 'India' }, { label: s.label }, { label: g.code + ' ' + g.title }, { label: occ.code }]);
+      const sibs = g.families.flatMap(f => f.occupations);
+      const si = sibs.findIndex(o => o.code === occ.code);
+      const gv = { type: 'group', code: g.code, sector: s.key };
+      html += crumbs([{ label: 'India', v: { type: 'home' } }, { label: s.label, v: { type: 'sector', key: s.key } },
+        { label: g.code + ' ' + g.title, v: gv, up: 'Occupations of ' + g.code }, { label: fam.code, v: gv, up: 'Occupations of ' + g.code }, { label: occ.code, v: view }]);
+      html += `<div class="sib"><button data-sib="${si - 1}" ${si <= 0 ? 'disabled' : ''}>&larr; ${si > 0 ? esc(sibs[si - 1].code) : 'first'}</button>` +
+        `<span class="num">${si + 1} of ${sibs.length} in group ${g.code}</span>` +
+        `<button data-sib="${si + 1}" ${si >= sibs.length - 1 ? 'disabled' : ''}>${si < sibs.length - 1 ? esc(sibs[si + 1].code) : 'last'} &rarr;</button></div>`;
+      view.sibs = sibs;
       html += `<div class="p-code num">${g.code} ${esc(g.title)} <span class="pre">→</span> ${codeOf(fam.code, 3)} ${esc(fam.title)} <span class="pre">→</span> ${codeOf(occ.code, 5)}</div><div class="p-title">${esc(occ.title)}</div>`;
       html += facts([['<i>β</i>', fmtB(occ.beta)], ['<i>α</i>', fmtB(occ.alpha)], ['tasks', occ.n_tasks]]);
       html += tasksBar(occ.e);
@@ -443,15 +464,12 @@
       }
       html += `</div>`;
     }
-    if (view.type !== 'home') html += `<div class="back"><button data-back>&larr; back</button> · Esc</div>`;
+    if (view.type !== 'home') html += `<div class="back"><button data-back>&larr; back</button> · Esc goes up one level</div>`;
     panel.innerHTML = html;
 
-    panel.querySelectorAll('[data-nav]').forEach(b => b.addEventListener('click', () => {
-      const i = +b.dataset.nav;
-      if (i === 0) go({ type: 'home' });
-      else if (i === 1) go({ type: 'sector', key: view.sector || view.key });
-      else if (i === 2) go({ type: 'group', code: view.occ.slice(0, 3), sector: view.sector });
-    }));
+    panel.querySelectorAll('[data-nav]').forEach(b => b.addEventListener('click', () => go(curCrumbs[+b.dataset.nav].v)));
+    panel.querySelectorAll('[data-sib]').forEach(b => b.addEventListener('click', () =>
+      go({ type: 'occ', occ: view.sibs[+b.dataset.sib].code, sector: view.sector }, false)));
     panel.querySelectorAll('[data-sector]').forEach(b => b.addEventListener('click', () => {
       if (b.dataset.group) go({ type: 'group', code: b.dataset.group, sector: b.dataset.sector });
       else go({ type: 'sector', key: b.dataset.sector });
