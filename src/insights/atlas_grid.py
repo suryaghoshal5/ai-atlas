@@ -9,7 +9,10 @@ Outputs (outputs/atlas_grid/):
 
 Two build modes:
     default    reads the processed pipeline files (PLFS exposure merge, task
-               statements, task scores). Status stamp = PRELIMINARY per D6.
+               statements, task scores) and writes the group3 x NIC-division
+               headcount aggregate to outputs/atlas_grid/; if the PLFS merge is
+               absent but that aggregate is present, builds from the aggregate.
+               Status stamp = PRELIMINARY per D6.
     --fixture  reads ONLY files committed to the repo (task scores, pilot
                sheet, title table). Employment by group x sector is NOT
                available in the repo, so the fixture allocates squares with a
@@ -189,25 +192,48 @@ def load_titles() -> dict:
             "families": {str(k): v for k, v in t["families"].items()}}
 
 
+EMP_AGG = OUT / "group_by_nic_division_PRELIMINARY.csv"
+
+
+def aggregate_plfs() -> pl.DataFrame:
+    """PLFS worker records -> headcount (millions) by NCO group3 x NIC-2008
+    2-digit division. 122 x ~88 rows, no individual-level data: safe to move or
+    commit, and enough to rebuild the grid anywhere."""
+    plfs = pl.read_parquet(processed_dir() / "plfs_exposure_PRELIMINARY.parquet")
+    div = pl.col("nic5").cast(pl.Utf8).str.zfill(5).str.slice(0, 2).cast(pl.Int32, strict=False)
+    return (plfs.with_columns(div.alias("nic_div"))
+            .group_by("group3", "nic_div")
+            .agg((pl.col("weight").sum() / 1e6).alias("workers_m"))
+            .sort("group3", "nic_div"))
+
+
 def load_real() -> tuple[pl.DataFrame, pl.DataFrame, dict, list[str]]:
     scores = pl.read_parquet(SCORES)
     tasks = pl.read_parquet(processed_dir() / "task_statements_full.parquet")
-    plfs = pl.read_parquet(processed_dir() / "plfs_exposure_PRELIMINARY.parquet")
-    div = pl.col("nic5").cast(pl.Utf8).str.zfill(5).str.slice(0, 2).cast(pl.Int32, strict=False)
-    plfs = plfs.with_columns(div.alias("div"))
+    if (processed_dir() / "plfs_exposure_PRELIMINARY.parquet").exists():
+        agg = aggregate_plfs()
+        OUT.mkdir(parents=True, exist_ok=True)
+        agg.write_csv(EMP_AGG)
+        emp_src = "PLFS merge (aggregate written to outputs/atlas_grid/)"
+    elif EMP_AGG.exists():
+        agg = pl.read_csv(EMP_AGG, schema_overrides={"group3": pl.Utf8, "nic_div": pl.Int32})
+        emp_src = f"{EMP_AGG.relative_to(REPO_ROOT)} (pre-aggregated from the PLFS merge)"
+    else:
+        raise SystemExit("Need data/processed/plfs_exposure_PRELIMINARY.parquet or "
+                         f"{EMP_AGG.relative_to(REPO_ROOT)}; or run with --fixture.")
     emp: dict[str, dict[str, float]] = {}
-    for r in plfs.group_by("group3", "div").agg(pl.col("weight").sum().alias("w")).iter_rows(named=True):
-        s = sector_of(r["div"])
+    unsect = 0.0
+    for r in agg.iter_rows(named=True):
+        s = sector_of(r["nic_div"])
         if s is None:
+            unsect += r["workers_m"]
             continue
         emp.setdefault(r["group3"], {}).setdefault(s, 0.0)
-        emp[r["group3"]][s] += r["w"] / 1e6
-    unsect = plfs.filter(pl.col("div").is_null() | ~pl.col("div").is_in(
-        [d for s in SECTORS for d in s["divs"]]))["weight"].sum() / 1e6
+        emp[r["group3"]][s] += r["workers_m"]
     notes = [
         "PRELIMINARY per D6: LLM-only task scores, human-validation gate not cleared.",
         "Headcount: PLFS 2023-24, principal usual status employed, official weights "
-        "(mult/no_qtr), grouped by NCO-2015 3-digit group and NIC-2008 division.",
+        f"(mult/no_qtr), by NCO-2015 3-digit group x NIC-2008 division; source: {emp_src}.",
         f"Workers with no NIC division ({unsect:.2f}M) are excluded from the bands.",
         "Colour: beta = share E1 + 0.5 x share E2 of the group's NCO Vol II task statements.",
     ]
