@@ -44,6 +44,8 @@ so the inputs can be re-downloaded and verified byte-for-byte.
 | PLFS merge (official weights; 99.4% employment coverage) | `src/merge/plfs.py` | atlas cuts |
 | Atlas descriptives, entry rung, EPFO event study, typology, GVA bridge | `src/analysis/` | paper tables & figures |
 | **Stress tests**: O*NET crosswalk comparison, vintage decomposition, E2-weight sensitivity, human-label substitution bounds | `src/analysis/{crosswalk_compare,vintage_check,e2_sensitivity,validation_bounds}.py` | robustness appendix |
+| Human-validation round: blind 3-rater sheet (200 per LLM label + unresolved, seed 42, pilot tasks excluded), rater manual with the rubric verbatim, κ report (`make validation-sheet`, `make validation-kappa`) | `src/analysis/validation_sheet.py`, `src/analysis/validation_kappa.py`, `outputs/validation/` | κ gate (Golden Rule 4, D6) |
+| Rubric ambiguity log with proposed rulings for v0.3 | `config/RUBRIC_REVISION_NOTES.md` | rubric revision |
 | Media charts for the essay/white-paper versions | `src/insights/` | **not required for any paper number** |
 | Interactive atlas grid (463 one-million-worker squares by sector, drill-down to NCO groups, occupations and E0/E1/E2 tasks); `make atlas-grid`, or `make atlas-grid-fixture` from committed files only | `src/insights/atlas_grid.py`, `config/nco2015_titles.yaml` | `outputs/atlas_grid/index.html`; **presentation only** |
 

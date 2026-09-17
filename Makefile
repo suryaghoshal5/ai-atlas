@@ -3,7 +3,7 @@
 
 PY := PYTHONPATH=src uv run python
 
-.PHONY: help ingest score index results test harness lint atlas-grid
+.PHONY: help ingest score index results test harness lint atlas-grid validation-sheet validation-kappa
 
 help:
 	@echo "Targets:"
@@ -15,6 +15,8 @@ help:
 	@echo "  harness  - regression harness: compare outputs against golden copies"
 	@echo "  lint     - ruff check"
 	@echo "  atlas-grid - 463-square interactive atlas (outputs/atlas_grid/index.html); presentation layer"
+	@echo "  validation-sheet - blind 3-rater rating sheets + manual (outputs/validation/)"
+	@echo "  validation-kappa - agreement report from the filled rating sheet (kappa gate)"
 
 ingest:
 	$(PY) -m ingest.run
@@ -44,3 +46,9 @@ atlas-grid:
 
 atlas-grid-fixture:
 	$(PY) -m insights.atlas_grid --fixture
+
+validation-sheet:
+	$(PY) -m analysis.validation_sheet
+
+validation-kappa:
+	$(PY) -m analysis.validation_kappa

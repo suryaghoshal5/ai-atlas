@@ -46,6 +46,7 @@ Do NOT use: Jupyter notebooks as source of record (exploration only, promoted to
 | Data acquisition: NCO-2015 Vol I/II-A/II-B, EPFO payroll archive (2018–Sep 2025 releases), PLFS 2022-23 + 2023-24 unit CSVs + docs, NCS postings audit — all manifested (sha256/source/timestamp) | Done (Jul 17, 2026) | `data/raw/{nco,epfo,plfs,postings}/` |
 | NCO Vol II parser (3,442 entries) + 50-occupation pilot selector (400 tasks, 90.7% employment coverage, deterministic) | Done (Jul 17, 2026) | `src/ingest/nco.py`, `src/ingest/pilot_select.py`, `outputs/pilot/pilot_scoring_sheet.csv` |
 | Atlas grid interactive (463 squares x sector, group -> occupation -> task drill-down; DEV_FIXTURE mode from committed files, PRELIMINARY mode from the PLFS merge) + NCO-2015 group/family title table | Done (Sep 14, 2026) | `src/insights/atlas_grid.py`, `src/insights/atlas_grid_template.html`, `config/nco2015_titles.yaml`, `outputs/atlas_grid/` |
+| Human-validation round tooling: blind 3-rater rating sheet (628 tasks), rater manual, Fleiss/Cohen κ report; rubric revision log R-01..R-05 | Built (Sep 17, 2026); ratings not yet collected | `src/analysis/validation_sheet.py`, `src/analysis/validation_kappa.py`, `outputs/validation/`, `config/RUBRIC_REVISION_NOTES.md` |
 | Everything else | Not started | — |
 
 (Update this table as components land. If this table says "not started," do not assume prior code exists anywhere.)
