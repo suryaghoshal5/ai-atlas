@@ -11,6 +11,8 @@ data/raw/**
 data/processed/**
 !data/processed/.gitkeep
 !data/processed/*.meta.json
+# public NCO Vol II task statements (no personal data); input to the Pages build
+!data/processed/task_statements_full.parquet
 outputs/**
 !outputs/*/
 !outputs/**/.gitkeep

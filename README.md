@@ -10,6 +10,8 @@ against a fixed public rubric; the human-validation gate (Cohen's κ ≥ 0.7)
 has not yet been cleared, and nothing here is final until it is. Bounding
 exercises for the validation gap are part of the pipeline (see below).
 
+**Live atlas:** https://suryaghoshal5.github.io/ai-atlas/ (463 one-million-worker squares by sector, drill-down to NCO groups, occupations and task labels; rebuilt by `.github/workflows/pages.yml` on every push to `main`).
+
 ## Reproducing the paper's numbers
 
 Every number in the paper traces to a script, a dataset version, and a run

@@ -1,0 +1,69 @@
+# Publish the atlas grid to GitHub Pages.
+#
+# Rebuilds outputs/atlas_grid/ from committed inputs on every push to main
+# (task scores, the group x NIC-division headcount aggregate, NCO task
+# statements, title table), then deploys that folder as the site root:
+#   https://suryaghoshal5.github.io/ai-atlas/
+# One-time repository setting: Settings -> Pages -> Source: "GitHub Actions".
+# The page carries its PRELIMINARY stamp (D6); nothing here is a paper result.
+
+name: pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/insights/atlas_grid.py"
+      - "src/insights/atlas_grid_template.html"
+      - "config/nco2015_titles.yaml"
+      - "outputs/full_batch_scoring/**"
+      - "outputs/atlas_grid/group_by_nic_division_PRELIMINARY.csv"
+      - "data/processed/task_statements_full.parquet"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: uv sync --frozen
+      - name: Build atlas grid from committed inputs
+        run: |
+          test -f outputs/atlas_grid/group_by_nic_division_PRELIMINARY.csv
+          test -f data/processed/task_statements_full.parquet
+          make atlas-grid
+          test "$(python3 -c "import json;print(json.load(open('outputs/atlas_grid/atlas_grid.meta.json'))['status'])")" = "PRELIMINARY"
+      - name: Assemble site
+        run: |
+          mkdir -p site
+          cp outputs/atlas_grid/index.html site/index.html
+          cp outputs/atlas_grid/atlas_grid_data.json outputs/atlas_grid/atlas_grid.meta.json \
+             outputs/atlas_grid/group_by_nic_division_PRELIMINARY.csv site/
+          touch site/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
