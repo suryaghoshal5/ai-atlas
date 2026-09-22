@@ -1,8 +1,14 @@
 {
   "status": "PRELIMINARY",
-  "built_at": "2026-09-14T13:32:42+00:00",
+  "status_note": "PRELIMINARY per D6: LLM-only task scores, human-validation gate not cleared.",
+  "built_at": "2026-09-22T07:25:42+00:00",
   "total_squares": 463,
+  "headcount_source": "PLFS merge (aggregate written to outputs/atlas_grid/)",
   "sectors": {
+    "services": {
+      "workers_m": 150.93,
+      "squares": 151
+    },
     "agriculture": {
       "workers_m": 193.95,
       "squares": 194
@@ -10,10 +16,6 @@
     "industry": {
       "workers_m": 117.91,
       "squares": 118
-    },
-    "services": {
-      "workers_m": 150.93,
-      "squares": 151
     }
   },
   "national": {

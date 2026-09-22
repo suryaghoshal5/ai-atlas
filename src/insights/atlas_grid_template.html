@@ -171,10 +171,10 @@
   .back { font-size: 12px; color: var(--ink-2); margin-top: 14px; }
 
   /* ---------- footer */
-  footer { margin-top: 44px; border-top: 1px solid var(--ink); padding-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; font-size: 12px; color: var(--ink-2); }
-  @media (max-width: 720px) { footer { grid-template-columns: 1fr; } }
+  footer { margin-top: 44px; border-top: 1px solid var(--ink); padding-top: 12px; font-size: 12px; color: var(--ink-2); max-width: 96ch; }
   footer ul { margin: 6px 0 0; padding-left: 16px; }
   footer li { margin-bottom: 4px; }
+  footer li.gap { margin-top: 14px; }
 </style>
 
 <div class="wrap">
@@ -210,19 +210,13 @@
   </div>
 
   <footer>
-    <div>
-      <div class="eyebrow">Method</div>
-      <ul>
-        <li>One square is one million workers, apportioned by largest remainder: first across the three bands, then across occupation groups within a band. Bands sort their groups from most to least exposed.</li>
-        <li>Group scores aggregate NCO-2015 Vol II task statements with equal weights, following Eloundou et al. (2024) adapted to NCO-2015 (rubric v0.2-draft, claude-sonnet-4-6, one sample per task).</li>
-        <li>Groups below half a million workers in a band get no square; they are listed under the band.</li>
-      </ul>
-    </div>
-    <div>
-      <div class="eyebrow">Status</div>
-      <ul id="notes"></ul>
-      <div class="small-note" id="built"></div>
-    </div>
+    <div class="eyebrow">Method</div>
+    <ul id="notes">
+      <li>One square is one million workers, apportioned by largest remainder: first across the three bands, then across occupation groups within a band. Bands sort their groups from most to least exposed.</li>
+      <li>Group scores aggregate NCO-2015 Vol II task statements with equal weights, following Eloundou et al. (2024) adapted to NCO-2015.</li>
+      <li>Groups below half a million workers in a band get no square; they are listed under the band.</li>
+    </ul>
+    <div class="small-note" id="built"></div>
   </footer>
 </div>
 <div class="tip" id="tip"></div>
@@ -261,8 +255,9 @@
   } else {
     stamp.textContent = D.status.toLowerCase() + ' · not for citation';
   }
-  document.getElementById('notes').innerHTML = D.notes.map(n => `<li>${esc(n)}</li>`).join('');
-  document.getElementById('built').textContent = `Built ${D.built_at.replace('T', ' ').replace('+00:00', ' UTC')} · src/insights/atlas_grid.py`;
+  document.getElementById('notes').insertAdjacentHTML('beforeend',
+    D.notes.map(n => `<li class="${n.startsWith('Colour') ? 'gap' : ''}">${esc(n)}</li>`).join(''));
+  document.getElementById('built').textContent = `Built ${D.built_at.replace('T', ' ').replace('+00:00', ' UTC')}`;
   document.getElementById('ramp').innerHTML = BIN_LABELS.map((l, i) =>
     `<div><div class="swatch" style="background:var(--b${i})"></div><div class="lab">${l}</div></div>`).join('');
 

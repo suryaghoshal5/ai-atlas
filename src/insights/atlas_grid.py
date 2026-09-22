@@ -133,7 +133,7 @@ def build_hierarchy(scores: pl.DataFrame, tasks: pl.DataFrame, titles: dict) -> 
 
 # ------------------------------------------------------------------ assembly
 def assemble(groups: dict, emp: dict[str, dict[str, float]], status: str, notes: list[str],
-             wbeta: dict[str, float] | None = None) -> dict:
+             headcount_source: str = "") -> dict:
     """emp: group3 -> {sector_key: workers_m}. wbeta: optional worker-weighted
     beta per group (from the PLFS merge); falls back to the task-level beta."""
     for g in groups.values():
@@ -170,13 +170,18 @@ def assemble(groups: dict, emp: dict[str, dict[str, float]], status: str, notes:
                             "beta": wmean([g["code"] for g in members], s["key"]),
                             "n_groups": len(cells), "cells": cells, "small": small})
 
+    # bands read top-down from most to least exposed, like the groups within them
+    sectors_out.sort(key=lambda x: -(x["beta"] or 0))
     e_tot = [sum(g["e"][i] for g in groups.values()) for i in range(3)]
     return {
         "status": status,
+        "status_note": "PRELIMINARY per D6: LLM-only task scores, human-validation gate not cleared."
+                       if status == "PRELIMINARY" else "DEV_FIXTURE: synthetic headcounts",
         "built_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "square_m": SQUARE_M,
         "total_squares": n_sq,
         "notes": notes,
+        "headcount_source": headcount_source,
         "national": {"workers_m": round(total_m, 2), "n_groups": len(groups),
                      "beta": wmean(list(groups), None), "tasks_e": e_tot,
                      "n_tasks": sum(e_tot)},
@@ -214,7 +219,7 @@ def load_real() -> tuple[pl.DataFrame, pl.DataFrame, dict, list[str]]:
         agg = aggregate_plfs()
         OUT.mkdir(parents=True, exist_ok=True)
         agg.write_csv(EMP_AGG)
-        emp_src = "PLFS merge (aggregate written to outputs/atlas_grid/)"
+        emp_src = "PLFS merge (aggregate written to outputs/atlas_grid/)"  # recorded in meta
     elif EMP_AGG.exists():
         agg = pl.read_csv(EMP_AGG, schema_overrides={"group3": pl.Utf8, "nic_div": pl.Int32})
         emp_src = f"{EMP_AGG.relative_to(REPO_ROOT)} (pre-aggregated from the PLFS merge)"
@@ -236,14 +241,13 @@ def load_real() -> tuple[pl.DataFrame, pl.DataFrame, dict, list[str]]:
         emp.setdefault(r["group3"], {}).setdefault(s, 0.0)
         emp[r["group3"]][s] += r["workers_m"]
     notes = [
-        "PRELIMINARY per D6: LLM-only task scores, human-validation gate not cleared.",
         "Headcount: PLFS 2023-24, principal usual status employed, official weights "
-        f"(mult/no_qtr), by NCO-2015 3-digit group x NIC-2008 division; source: {emp_src}.",
+        "(mult/no_qtr), by NCO-2015 3-digit group x NIC-2008 division.",
         f"Excluded from the bands: {sum(unindexed.values()):.2f}M workers in NCO groups with no "
         f"scored tasks ({', '.join(sorted(unindexed)) or 'none'}) and {unsect:.2f}M with no NIC division.",
         "Colour: beta = share E1 + 0.5 x share E2 of the group's NCO Vol II task statements.",
     ]
-    return scores, tasks, emp, notes
+    return scores, tasks, emp, notes, emp_src
 
 
 def load_fixture() -> tuple[pl.DataFrame, pl.DataFrame, dict, list[str]]:
@@ -298,7 +302,7 @@ def load_fixture() -> tuple[pl.DataFrame, pl.DataFrame, dict, list[str]]:
         "Colour: beta = share E1 + 0.5 x share E2 of the group's NCO Vol II task statements "
         "(real, PRELIMINARY per D6).",
     ]
-    return scores, tasks, emp, notes
+    return scores, tasks, emp, notes, "synthetic (fixture)"
 
 
 # ----------------------------------------------------------------------- main
@@ -314,18 +318,18 @@ def main(argv: list[str] | None = None) -> None:
 
     titles = load_titles()
     if args.fixture:
-        scores, tasks, emp, notes = load_fixture()
+        scores, tasks, emp, notes, emp_src = load_fixture()
         status = "DEV_FIXTURE"
     else:
-        scores, tasks, emp, notes = load_real()
+        scores, tasks, emp, notes, emp_src = load_real()
         status = "PRELIMINARY"
 
     groups = build_hierarchy(scores, tasks, titles)
-    data = assemble(groups, emp, status, notes)
+    data = assemble(groups, emp, status, notes, headcount_source=emp_src)
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "atlas_grid_data.json").write_text(json.dumps(data, ensure_ascii=False, indent=None))
     (OUT / "index.html").write_text(render(data))
-    meta = {k: data[k] for k in ("status", "built_at", "total_squares")}
+    meta = {k: data[k] for k in ("status", "status_note", "built_at", "total_squares", "headcount_source")}
     meta["sectors"] = {s["key"]: {"workers_m": s["workers_m"], "squares": s["squares"]}
                        for s in data["sectors"]}
     meta["national"] = data["national"]
