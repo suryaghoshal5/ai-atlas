@@ -64,6 +64,8 @@ SECTORS = [
      "divs": range(45, 100)},
 ]
 
+BAND_ORDER = ["services", "industry", "agriculture"]
+
 # Fixture-only sector totals (millions), from outputs/substack/provenance.md
 # (insight_sector_exposure, 2026-08-27), scaled to a 463-square canvas.
 FIXTURE_SECTOR_M = {"agriculture": 193.9, "industry": 54.0 + 59.9 + 2.8, "services": 149.9}
@@ -170,8 +172,8 @@ def assemble(groups: dict, emp: dict[str, dict[str, float]], status: str, notes:
                             "beta": wmean([g["code"] for g in members], s["key"]),
                             "n_groups": len(cells), "cells": cells, "small": small})
 
-    # bands read top-down from most to least exposed, like the groups within them
-    sectors_out.sort(key=lambda x: -(x["beta"] or 0))
+    # band order on the page (author's call, Sep 23 2026): services, industry, agriculture
+    sectors_out.sort(key=lambda x: BAND_ORDER.index(x["key"]))
     e_tot = [sum(g["e"][i] for g in groups.values()) for i in range(3)]
     return {
         "status": status,
