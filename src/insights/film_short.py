@@ -5,10 +5,10 @@ long cut); this module re-times the story to 90 s and lays every scene out for
 either orientation. Paced for reading (one idea per card, each held long
 enough to read on a phone), which at 90 s means 15 cards. Kept: cold open,
 title, signal, the imported forecast, the task count and the rubric, the atlas
-(full-frame reveal), the wage bill, gender flip and entry rung, the canary, end
-card. Cut from the long version: the 0.27x usage figure, the Stanford -13/-19
-beat, 122 groups / 463M build steps, the pay-weighted 0.155, the 2.4x
-crosswalk mirror, the bank teller and the coda.
+(full-frame reveal), the wage bill, the entry rung, the canary, the
+2.4x crosswalk mirror, end card. Cut from the long version: the 0.27x usage figure, the Stanford -13/-19
+beat, 122 groups / 463M build steps, the pay-weighted 0.155, the gender flip,
+the bank teller and the coda.
 
 Vertical is 1080x1920 with all type and data inside the central 1080x1350
 (4:5) zone, which the letterbox bars frame; `--crop45` also writes a 4:5 file
@@ -70,8 +70,8 @@ def mono(size):
 # this cut keeps one idea per card and drops the rest (see module docstring).
 T = {
     "cold": (0.0, 6.0), "title": (6.0, 11.0), "signal": (11.0, 22.0), "fear": (22.0, 27.5),
-    "build": (27.5, 38.5), "atlas": (38.5, 57.5), "money": (57.5, 63.5), "who": (63.5, 74.0),
-    "canary": (74.0, 84.0), "end": (84.0, 90.0),
+    "build": (27.5, 38.5), "atlas": (38.5, 57.5), "money": (57.5, 63.5), "who": (63.5, 69.0),
+    "canary": (69.0, 79.0), "mirror": (79.0, 85.0), "end": (85.0, 90.0),
 }
 DURATION = T["end"][1]
 IMAX = [(38.6, 57.2)]
@@ -80,14 +80,15 @@ FI, FO = 0.7, 0.5  # default fade in / out
 
 CUES = {
     "duration": DURATION,
-    "rate_pts": [(0, 1.0), (11.0, 1.1), (38.5, 1.5), (57.5, 1.5), (74.0, 2.0), (CLOCK_STOP, 3.2)],
+    "rate_pts": [(0, 1.0), (11.0, 1.1), (38.5, 1.5), (57.5, 1.5), (T["canary"][0], 2.0), (CLOCK_STOP, 3.2)],
     "clock_stop": CLOCK_STOP,
     "tick_ramp": (38.5, CLOCK_STOP),
-    "watch2": (84.3, 89.0),
-    "drone_mute": (CLOCK_STOP, 84.0),
-    "shepard": [(27.7, 38.5, 0.028), (74.5, CLOCK_STOP, 0.04)],
-    "braams": [(0.8, 0.55), (6.3, 0.35), (39.0, 0.7), (52.5, 0.6), (CLOCK_STOP + 0.5, 0.4)],
-    "end_note": 84.4,
+    "watch2": (T["mirror"][0] + 0.3, T["mirror"][1]),  # quiet second watch under the mirror
+    "drone_mute": (CLOCK_STOP, T["mirror"][0]),
+    "shepard": [(27.7, 38.5, 0.028), (T["canary"][0] + 0.5, CLOCK_STOP, 0.04)],
+    "braams": [(0.8, 0.55), (6.3, 0.35), (39.0, 0.7), (52.5, 0.6), (CLOCK_STOP + 0.5, 0.4),
+               (T["mirror"][0] + 1.4, 0.5)],
+    "end_note": T["end"][0] + 0.4,
 }
 
 
@@ -318,30 +319,10 @@ def s_money(d, t, ctx):
                  yt + pk(290, 330), font("title", pk(32, 36)), INK, a2, lead=1.5)
 
 
-def pair(d, x, label, w_val, m_val, a, g, red_w, base):
-    text(d, label, (x - 5, base + 75), mono(18), INK2, a, track=0.24)
-    for j, (lab, v) in enumerate([("WOMEN", w_val), ("MEN", m_val)]):
-        bx = x - 110 + j * 150
-        hgt = 1250 * v * g
-        c = RED if (j == 0 and red_w) else INK if j == 0 else INK2
-        d.rectangle([bx, base - hgt, bx + 70, base], fill=mix(c, a))
-        text(d, f"{v:.2f}", (bx + 35, base - hgt - 30), font("title_l", 34), c, a * g)
-        text(d, lab, (bx + 35, base + 30), mono(16), INK2, a, track=0.2)
-
-
 def s_who(d, t, ctx):
     t0, t1 = T["who"]
-    tag(d, t, "who", "V · WHO, EXACTLY")
-    base = CY + pk(150, 170)
-    e0 = t0 + 5.5
-    a = env(t, t0 + 0.2, e0, FI, FO)
-    text(d, "MEAN EXPOSURE, WOMEN AND MEN", (CX, CY - pk(270, 330)), mono(18), INK3, a, track=0.2)
-    pair(d, CX - pk(330, 250), "ALL WORKERS", 0.07, 0.09, a, ease_out((t - t0 - 0.4) / 1.2), False, base)
-    pair(d, CX + pk(330, 250), pk("ORGANISED SECTOR", "ORGANISED"), 0.26, 0.25, env(t, t0 + 1.4, e0, FI, FO),
-         ease_out((t - t0 - 1.6) / 1.2), True, base)
-    text(d, "THE SIGN REVERSES.", (CX, base + pk(170, 200)), font("title", pk(30, 34)), RED,
-         env(t, t0 + 2.8, e0, FI, FO), track=0.34)
-    a2 = env(t, e0 + 0.2, t1 - 0.2, FI, FO)
+    tag(d, t, "who", "V · THE ENTRY RUNG")
+    a2 = env(t, t0 + 0.2, t1 - 0.2, FI, FO)
     hdr = pk(["WHITE-COLLAR WORKERS IN HIGH-EXPOSURE OCCUPATIONS"], ["WHITE-COLLAR WORKERS", "IN HIGH-EXPOSURE OCCUPATIONS"])
     for i, r in enumerate(hdr):
         text(d, r, (CX, CY - pk(190, 230) + i * 30), mono(18), INK2, a2, track=0.2)
@@ -352,7 +333,7 @@ def s_who(d, t, ctx):
     text(d, "THEIR SENIORS", (CX + dx, CY + 70), mono(18), INK2, a2, track=0.2)
     stack(d, pk(["About 3.5 million young workers hold those rungs."],
                 ["About 3.5 million young workers", "hold those rungs."]),
-          CY + pk(170, 190), font("body", pk(30, 36)), INK2, env(t, e0 + 1.0, t1 - 0.2, FI, FO))
+          CY + pk(170, 190), font("body", pk(30, 36)), INK2, env(t, t0 + 1.0, t1 - 0.2, FI, FO))
 
 
 def s_canary(d, t, ctx):
@@ -399,6 +380,22 @@ def s_canary(d, t, ctx):
                  font("title", pk(52, 58)), INK, a3, lead=1.4, track=0.32)
 
 
+def s_mirror(d, t, ctx):
+    t0, t1 = T["mirror"]
+    tag(d, t, "mirror", "VII · THE MIRROR")
+    a = env(t, t0 + 0.2, t1 - 0.2, FI, FO)
+    dx = pk(330, 240)
+    text(d, "US O*NET CROSSWALK", (CX - dx, CY - pk(150, 160)), mono(pk(18, 16)), INK2, a, track=0.16)
+    text(d, "0.204", (CX - dx, CY - 40), font("title_l", pk(140, 120)), INK2, a)
+    text(d, "INDIA'S OWN TASKS", (CX + dx, CY - pk(150, 160)), mono(pk(18, 16)), INK2, a, track=0.16)
+    text(d, "0.086", (CX + dx, CY - 40), font("title_l", pk(140, 120)), INK, a)
+    k = env(t, t0 + 1.4, t1 - 0.2, FI, FO)
+    text(d, "2.4\u00d7", (CX, CY + pk(110, 120)), font("title", 70), RED, k, track=0.06)
+    stack(d, pk(["the exposure that India's own task content supports"],
+                ["the exposure that India's", "own task content supports"]),
+          CY + pk(185, 215), font("body", pk(30, 34)), INK2, env(t, t0 + 2.0, t1 - 0.2, FI, FO))
+
+
 def s_end(d, t, ctx):
     t0, t1 = T["end"]
     a = env(t, t0 + 0.3, t1, 0.8, 0.9)
@@ -428,7 +425,7 @@ def s_end(d, t, ctx):
 
 SCENES = [(T[k], f) for k, f in [
     ("cold", s_cold), ("title", s_title), ("signal", s_signal), ("fear", s_fear), ("build", s_build),
-    ("atlas", s_atlas), ("money", s_money), ("who", s_who), ("canary", s_canary), ("end", s_end)]]
+    ("atlas", s_atlas), ("money", s_money), ("who", s_who), ("canary", s_canary), ("mirror", s_mirror), ("end", s_end)]]
 
 # ------------------------------------------------------------------ render
 _CTX: dict = {}
@@ -486,7 +483,7 @@ def main():
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     init_ctx(args.orient)
-    stem = f"atlas_film_90s_{'9x16' if P else '16x9'}"
+    stem = f"atlas_film_{DURATION:.0f}s_{'9x16' if P else '16x9'}"
 
     if args.stills:
         for s in args.stills.split(","):
@@ -494,7 +491,7 @@ def main():
                 out / f"{stem}_still_{float(s):05.1f}.png")
         return
 
-    wav = out / "atlas_film_90s_score.wav"
+    wav = out / f"atlas_film_{DURATION:.0f}s_score.wav"
     write_wav(wav, score(CUES))
     mp4 = out / f"{stem}.mp4"
     ff = subprocess.Popen(
@@ -514,7 +511,7 @@ def main():
     ff.wait()
     print(f"wrote {mp4}")
     if P and args.crop45:
-        crop = out / "atlas_film_90s_4x5.mp4"
+        crop = out / f"atlas_film_{DURATION:.0f}s_4x5.mp4"
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(mp4), "-vf", f"crop={W}:1350:0:{BAR}",
                         "-c:v", "libx264", "-preset", "medium", "-b:v", "3.5M", "-maxrate", "5M", "-bufsize", "7M",
                         "-pix_fmt", "yuv420p", "-c:a", "copy", "-movflags", "+faststart", str(crop)], check=True)
