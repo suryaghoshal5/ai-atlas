@@ -651,20 +651,37 @@ def hp(x, fc):
     return sosfilt(butter(2, fc, "high", fs=SR, output="sos"), x)
 
 
-def tick_rate(t):
-    pts = [(0, 1.0), (7, 1.0), (59, 1.5), (81, 1.5), (110, 2.0), (121.3, 3.2)]
-    for (a, ra), (b, rb) in zip(pts, pts[1:]):
-        if a <= t < b:
-            return ra + (rb - ra) * (t - a) / (b - a)
-    return 0.0
-
-
 CLOCK_STOP = T["canary"][0] + 11.4
 
+# Score cue sheet: every sound event keyed to picture time. The short cut
+# (insights.film_short) passes its own sheet to the same synthesiser.
+CUES = {
+    "duration": DURATION,
+    "rate_pts": [(0, 1.0), (7, 1.0), (59, 1.5), (81, 1.5), (110, 2.0), (121.3, 3.2)],
+    "clock_stop": CLOCK_STOP,
+    "tick_ramp": (59, 119),
+    "watch2": (T["mirror"][0] + 0.5, T["end"][0]),     # quiet second watch
+    "drone_mute": (CLOCK_STOP, T["mirror"][0]),       # silence after the clock stops
+    "shepard": [(T["build"][0] + 2.5, T["build"][1], 0.028), (T["canary"][0] + 2.5, CLOCK_STOP, 0.04)],
+    "braams": [(1.0, 0.55), (7.4, 0.35), (T["atlas"][0] + 0.8, 0.7), (T["atlas"][0] + 16.2, 0.6),
+               (T["canary"][0] + 12.2, 0.4), (T["mirror"][0] + 4.2, 0.5), (T["coda"][0] + 4.7, 0.45)],
+    "end_note": T["end"][0] + 0.4,
+}
 
-def score() -> np.ndarray:
-    n = int(DURATION * SR)
+
+def score(cues: dict = CUES) -> np.ndarray:
+    n = int(cues["duration"] * SR)
     tt = np.arange(n) / SR
+    pts = cues["rate_pts"]
+
+    def tick_rate(t):
+        for (a, ra), (b, rb) in zip(pts, pts[1:]):
+            if a <= t < b:
+                return ra + (rb - ra) * (t - a) / (b - a)
+        return 0.0
+
+    clock_stop = cues["clock_stop"]
+    ra0, ra1 = cues["tick_ramp"]  # window over which tick level rises
     rng = np.random.default_rng(run_seed())
     out = np.zeros((n, 2))
 
@@ -676,19 +693,19 @@ def score() -> np.ndarray:
     tock = (np.sin(2 * np.pi * 2300 * click_t) * np.exp(-click_t / 0.005)
             + 0.5 * hp(rng.normal(0, 1, click_t.size), 2000) * np.exp(-click_t / 0.002))
     t, k = 0.6, 0
-    while t < CLOCK_STOP:
+    while t < clock_stop:
         r = tick_rate(t)
         if r <= 0:
             break
         i = int(t * SR)
-        g = 0.22 + 0.12 * clamp((t - 59) / 60)
+        g = 0.22 + 0.12 * clamp((t - ra0) / (ra1 - ra0))
         seg = (tick if k % 2 == 0 else tock) * g
         ticks[i:i + seg.size] += seg[: n - i]
         t += 1.0 / r
         k += 1
     # a slow, quiet resumption under the mirror/coda, like a second watch
-    t = T["mirror"][0] + 0.5
-    while t < T["end"][0]:
+    t, t_end = cues["watch2"]
+    while t < t_end:
         i = int(t * SR)
         seg = (tick if k % 2 == 0 else tock) * 0.08
         ticks[i:i + seg.size] += seg[: n - i]
@@ -701,7 +718,7 @@ def score() -> np.ndarray:
              + 0.35 * np.sin(2 * np.pi * 73.42 * tt + 1.1))
     drone += 0.8 * lp(rng.normal(0, 1, n), 160)
     denv = 0.08 + 0.05 * np.sin(2 * np.pi * tt / 23.0) ** 2
-    denv = np.where((tt > CLOCK_STOP) & (tt < T["mirror"][0]), 0.0, denv)
+    denv = np.where((tt > cues["drone_mute"][0]) & (tt < cues["drone_mute"][1]), 0.0, denv)
     denv = np.where(tt < 0.6, 0.0, denv)
     denv = np.convolve(denv, np.ones(SR // 5) / (SR // 5), mode="same")
     out += (drone * denv)[:, None] * np.array([1.0, 0.95])
@@ -724,8 +741,8 @@ def score() -> np.ndarray:
         sig[-tail:] *= np.linspace(1, 0, tail)  # hard cut, no click
         out[m] += sig[:, None] * np.array([1.0, 1.0])
 
-    shepard(T["build"][0] + 2.5, T["build"][1], 0.028)
-    shepard(T["canary"][0] + 2.5, CLOCK_STOP, 0.04)
+    for a, b, g in cues["shepard"]:
+        shepard(a, b, g)
 
     # --- braams on the reveals
     def braam(at, gain=0.5, dur=5.0):
@@ -743,12 +760,11 @@ def score() -> np.ndarray:
         sig *= e * gain / 6
         out[i0:i0 + m] += sig[:, None] * np.array([1.0, 0.97])
 
-    for at, g in [(1.0, 0.55), (7.4, 0.35), (T["atlas"][0] + 0.8, 0.7), (T["atlas"][0] + 16.2, 0.6),
-                  (T["canary"][0] + 12.2, 0.4), (T["mirror"][0] + 4.2, 0.5), (T["coda"][0] + 4.7, 0.45)]:
+    for at, g in cues["braams"]:
         braam(at, g)
 
     # --- closing low note
-    i0 = int((T["end"][0] + 0.4) * SR)
+    i0 = int(cues["end_note"] * SR)
     ts = np.arange(n - i0) / SR
     note = sum(np.sin(2 * np.pi * 73.42 * h * ts) / h ** 1.5 for h in range(1, 8))
     out[i0:] += (note * np.exp(-ts / 2.8) * (1 - np.exp(-ts / 0.01)) * 0.18)[:, None]
