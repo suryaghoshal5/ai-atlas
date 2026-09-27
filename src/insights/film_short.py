@@ -2,10 +2,13 @@
 
 Same grammar, palette, data and score synthesiser as insights.film (the 2:36
 long cut); this module re-times the story to 90 s and lays every scene out for
-either orientation. Chapters kept: cold open, title, signal, imported fear,
-build, atlas (full-frame reveal), money, who, canary, mirror, end card. Cut
-from the long version: the 0.27x usage figure, the Stanford -13/-19 beat, the
-bank-teller comparison and the coda.
+either orientation. Paced for reading (one idea per card, each held long
+enough to read on a phone), which at 90 s means 15 cards. Kept: cold open,
+title, signal, the imported forecast, the task count and the rubric, the atlas
+(full-frame reveal), the wage bill, gender flip and entry rung, the canary, end
+card. Cut from the long version: the 0.27x usage figure, the Stanford -13/-19
+beat, 122 groups / 463M build steps, the pay-weighted 0.155, the 2.4x
+crosswalk mirror, the bank teller and the coda.
 
 Vertical is 1080x1920 with all type and data inside the central 1080x1350
 (4:5) zone, which the letterbox bars frame; `--crop45` also writes a 4:5 file
@@ -62,25 +65,29 @@ def mono(size):
 
 
 # ================================================================ timeline
+# Paced for reading: every card is held >= ~1.2 s + words / 3 per second of
+# clear screen, with 0.6-0.9 s fades. 90 s holds 15 cards at that pace, so
+# this cut keeps one idea per card and drops the rest (see module docstring).
 T = {
-    "cold": (0.0, 5.5), "title": (5.5, 10.5), "signal": (10.5, 17.5), "fear": (17.5, 24.5),
-    "build": (24.5, 36.5), "atlas": (36.5, 52.5), "money": (52.5, 60.0), "who": (60.0, 70.5),
-    "canary": (70.5, 81.0), "mirror": (81.0, 85.0), "end": (85.0, 90.0),
+    "cold": (0.0, 6.0), "title": (6.0, 11.0), "signal": (11.0, 22.0), "fear": (22.0, 27.5),
+    "build": (27.5, 38.5), "atlas": (38.5, 57.5), "money": (57.5, 63.5), "who": (63.5, 74.0),
+    "canary": (74.0, 84.0), "end": (84.0, 90.0),
 }
 DURATION = T["end"][1]
-IMAX = [(36.6, 52.2)]
-CLOCK_STOP = 77.5
+IMAX = [(38.6, 57.2)]
+CLOCK_STOP = T["canary"][0] + 6.4
+FI, FO = 0.7, 0.5  # default fade in / out
 
 CUES = {
     "duration": DURATION,
-    "rate_pts": [(0, 1.0), (10.5, 1.1), (36.5, 1.5), (52.5, 1.5), (70.5, 2.0), (CLOCK_STOP, 3.2)],
+    "rate_pts": [(0, 1.0), (11.0, 1.1), (38.5, 1.5), (57.5, 1.5), (74.0, 2.0), (CLOCK_STOP, 3.2)],
     "clock_stop": CLOCK_STOP,
-    "tick_ramp": (36.5, CLOCK_STOP),
-    "watch2": (81.3, 85.0),
-    "drone_mute": (CLOCK_STOP, 81.0),
-    "shepard": [(24.7, 36.5, 0.028), (71.0, CLOCK_STOP, 0.04)],
-    "braams": [(0.8, 0.55), (5.8, 0.35), (37.0, 0.7), (48.8, 0.6), (78.3, 0.4), (81.8, 0.5)],
-    "end_note": 85.4,
+    "tick_ramp": (38.5, CLOCK_STOP),
+    "watch2": (84.3, 89.0),
+    "drone_mute": (CLOCK_STOP, 84.0),
+    "shepard": [(27.7, 38.5, 0.028), (74.5, CLOCK_STOP, 0.04)],
+    "braams": [(0.8, 0.55), (6.3, 0.35), (39.0, 0.7), (52.5, 0.6), (CLOCK_STOP + 0.5, 0.4)],
+    "end_note": 84.4,
 }
 
 
@@ -93,7 +100,7 @@ def bars(t):
 
 def tag(d, t, key, label):
     a, b = T[key]
-    text(d, label, (CX, BAR + pk(56, 70)), mono(pk(18, 20)), RED, env(t, a + 0.2, b - 0.15, 0.5, 0.3),
+    text(d, label, (CX, BAR + pk(56, 70)), mono(pk(18, 20)), RED, env(t, a + 0.2, b - 0.15, 0.6, 0.4),
          track=0.3)
 
 
@@ -101,125 +108,91 @@ def stack(d, rows, y, f, c, a, lead=1.35):
     lines(d, rows, CX, y, f, c, a, lead=lead)
 
 
+def tracked_rows(d, rows, y0, f, c, a, lead=1.35, track=0.3):
+    for i, r in enumerate(rows):
+        text(d, r, (CX, y0 + i * f.size * lead), f, c, a, track=track)
+
+
 # ------------------------------------------------------------------ scenes
 def s_cold(d, t, ctx):
-    a = env(t, 0.7, 5.2, 0.3, 0.12)
-    k = ease_out((t - 0.7) / 1.8)
+    a = env(t, 0.7, 5.8, 0.4, 0.3)
+    k = ease_out((t - 0.7) / 2.0)
     text(d, fmt_int(463_000_000 * k), (CX, CY - 20), font("title_xl", pk(150, 112)), INK, a, track=0.08)
-    text(d, "WORKERS.", (CX, CY + pk(105, 90)), font("title", 28), INK2, env(t, 2.6, 5.2, 0.5, 0.12), track=0.6)
-    text(d, "ONE QUESTION.", (CX, CY + pk(160, 145)), font("title", 28), RED, env(t, 3.5, 5.2, 0.4, 0.12),
+    text(d, "WORKERS.", (CX, CY + pk(105, 90)), font("title", 28), INK2, env(t, 3.0, 5.8, FI, 0.3), track=0.6)
+    text(d, "ONE QUESTION.", (CX, CY + pk(160, 145)), font("title", 28), RED, env(t, 3.9, 5.8, FI, 0.3),
          track=0.6)
 
 
 def s_title(d, t, ctx):
-    a = env(t, 5.8, 10.3, 0.9, 0.5)
+    t0, t1 = T["title"]
+    a = env(t, t0 + 0.3, t1 - 0.2, 0.9, 0.6)
     rows = pk(["WHERE DOES AI", "ACTUALLY LAND IN INDIA?"], ["WHERE DOES AI", "ACTUALLY LAND", "IN INDIA?"])
     f = font("title", pk(76, 64))
     step = f.size * 1.3
-    for i, r in enumerate(rows):
-        text(d, r, (CX, CY - 10 - step * (len(rows) - 1) / 2 + i * step), f, INK, a, track=0.3)
-    b = env(t, 6.8, 10.3, 0.7, 0.5)
-    yb = CY - 10 + step * (len(rows) - 1) / 2 + pk(100, 110)
+    y0 = CY - 10 - step * (len(rows) - 1) / 2
+    tracked_rows(d, rows, y0, f, INK, a, lead=1.3)
+    b = env(t, t0 + 1.3, t1 - 0.2, FI, 0.6)
+    yb = y0 + step * (len(rows) - 1) + pk(100, 110)
     if P:
         stack(d, ["AN ATLAS OF 463 MILLION WORKERS", "SURYADIP GHOSHAL"], yb, mono(20), INK2, b, 1.6)
     else:
-        text(d, "AN ATLAS OF 463 MILLION WORKERS  ·  SURYADIP GHOSHAL", (CX, yb), mono(20), INK2, b,
-             track=0.22)
+        text(d, "AN ATLAS OF 463 MILLION WORKERS  ·  SURYADIP GHOSHAL", (CX, yb), mono(20), INK2, b, track=0.22)
 
 
 def s_signal(d, t, ctx):
+    t0, t1 = T["signal"]
     tag(d, t, "signal", "I · THE SIGNAL")
-    text(d, "45%", (CX, CY - 40), font("title_l", pk(190, 200)), RED, env(t, 10.7, 14.2, 0.35, 0.4))
-    stack(d, pk(["of Indian work with Claude maps to software occupations.", "The highest share of any country."],
-                ["of Indian work with Claude maps", "to software occupations.", "The highest share of any country."]),
-          CY + pk(150, 180), font("body", pk(34, 36)), INK2, env(t, 11.1, 14.2, 0.5, 0.4))
+    text(d, "45%", (CX, CY - 40), font("title_l", pk(190, 200)), RED, env(t, t0 + 0.2, t0 + 5.4, FI, FO))
+    stack(d, pk(["of Indian Claude usage maps to software occupations.", "The highest share of any country."],
+                ["of Indian Claude usage maps", "to software occupations.", "The highest share of any country."]),
+          CY + pk(150, 180), font("body", pk(34, 38)), INK2, env(t, t0 + 0.8, t0 + 5.4, FI, FO))
     text(d, "ANTHROPIC ECONOMIC INDEX  ·  INDIA BRIEF (FEB 2026)", (CX, H - BAR - 44), mono(pk(17, 16)),
-         INK2, env(t, 11.1, 14.2, 0.6, 0.4) * 0.8, track=0.08)
-    a = env(t, 14.4, 17.3, 0.45, 0.35)
+         INK2, env(t, t0 + 0.8, t0 + 5.4, FI, FO) * 0.8, track=0.08)
     stack(d, pk(["A few million coders met AI early."], ["A few million coders", "met AI early."]),
-          CY - pk(40, 90), font("body", pk(46, 52)), INK, a)
+          CY - pk(40, 90), font("body", pk(46, 52)), INK, env(t, t0 + 5.7, t1 - 0.2, FI, FO))
     stack(d, pk(["450 million other workers have barely met it."], ["450 million other workers", "have barely met it."]),
-          CY + pk(40, 90), font("body", pk(46, 52)), RED, env(t, 15.1, 17.3, 0.45, 0.35))
+          CY + pk(40, 90), font("body", pk(46, 52)), RED, env(t, t0 + 6.6, t1 - 0.2, FI, FO))
 
 
 def s_fear(d, t, ctx):
+    t0, t1 = T["fear"]
     tag(d, t, "fear", "II · THE IMPORTED FEAR")
-    a = env(t, 17.7, 21.1, 0.5, 0.35)
     q = pk(["“AI could wipe out half of all", "entry-level white-collar jobs.”"],
            ["“AI could wipe out", "half of all entry-level", "white-collar jobs.”"])
-    stack(d, q, CY - pk(40, 60), font("title_l", pk(58, 58)), INK, a, lead=1.3)
+    stack(d, q, CY - pk(40, 60), font("title_l", 58), INK, env(t, t0 + 0.2, t1 - 0.2, FI, FO), lead=1.3)
     text(d, "DARIO AMODEI  ·  AXIOS  ·  MAY 2025", (CX, CY + pk(90, 110)), mono(20), INK2,
-         env(t, 18.2, 21.1, 0.5, 0.35), track=0.2)
-    a2 = env(t, 21.3, 24.3, 0.4, 0.35)
-    rows = pk(["US OCCUPATIONS.  US TASKS."], ["US OCCUPATIONS.", "US TASKS."])
-    f = font("title", pk(44, 50))
-    for i, r in enumerate(rows):
-        text(d, r, (CX, CY - pk(40, 130) + i * f.size * 1.4), f, INK, a2, track=0.3)
-    stack(d, pk(["Carried to India through a crosswalk that drops content on the way."],
-                ["Carried to India through", "a crosswalk that drops", "content on the way."]),
-          CY + pk(40, 110), font("body", pk(34, 40)), INK2, env(t, 21.8, 24.3, 0.4, 0.35))
+         env(t, t0 + 1.0, t1 - 0.2, FI, FO), track=0.2)
+    stack(d, pk(["It rests on US occupation lists and US task descriptions."],
+                ["It rests on US occupation lists", "and US task descriptions."]),
+          CY + pk(190, 250), font("body", pk(30, 36)), INK2, env(t, t0 + 2.2, t1 - 0.2, FI, FO))
 
 
 def s_build(d, t, ctx):
+    t0, t1 = T["build"]
     tag(d, t, "build", "III · THE BUILD")
-    steps = [("TASK STATEMENTS", "NCO-2015"), ("ONE RUBRIC", "EVERY TASK"),
-             ("OCCUPATION GROUPS", "α · β · ζ"), ("WORKERS", "PLFS 2023-24")]
-    s0, sd = 24.7, 2.95
-    a_all = env(t, s0, T["build"][1] - 0.1, 0.4, 0.4)
-    if a_all <= 0:
-        return
-    span = pk(1200, 810)
-    xs = [CX - span / 2 + i * span / 3 for i in range(4)]
-    ytrack = CY + pk(190, 330)
-    cur = int(clamp((t - s0) // sd, 0, 3))
-    prog = clamp((t - s0) / (4 * sd))
-    rule(d, xs[0], xs[3], ytrack, a_all * 0.8, INK3, 2)
-    rule(d, xs[0], xs[0] + (xs[3] - xs[0]) * ease(prog * 1.1), ytrack, a_all, RED, 2)
-    for i, x in enumerate(xs):
-        on = t >= s0 + i * sd
-        r = 9 if i == cur else 6
-        col = mix(RED if on else INK3, a_all)
-        d.ellipse([x - r, ytrack - r, x + r, ytrack + r], fill=col if on else None, outline=col, width=2)
-        lab = steps[i][0] if not P else ["TASKS", "RUBRIC", "GROUPS", "WORKERS"][i]
-        text(d, lab, (x, ytrack + 42), mono(pk(17, 16)), INK if i == cur else INK2,
-             a_all * (1 if on else 0.5), track=0.14)
-        text(d, steps[i][1], (x, ytrack + 70), mono(pk(15, 14)), INK3, a_all * (1 if on else 0.5),
-             track=0.1)
-    ls = t - (s0 + cur * sd)
-    a = a_all * min(ease(ls / 0.4), 1.0 if cur == 3 else ease((sd - ls) / 0.3))
-    cy = CY - pk(120, 150)
-    if cur == 0:
-        text(d, fmt_int(18622 * ease_out(ls / 1.5)), (CX, cy - 20), font("title_l", pk(130, 140)), INK, a)
-        text(d, VERBS[int(ls * 3.2) % len(VERBS)], (CX, cy + pk(90, 110)), font("body", pk(36, 42)), RED, a)
-        stack(d, pk(["short descriptions of work, parsed from India's occupation volumes"],
-                    ["short descriptions of work, parsed", "from India's occupation volumes"]),
-              cy + pk(150, 200), font("body", pk(24, 28)), INK2, a)
-    elif cur == 1:
+    cy = CY - pk(60, 80)
+    a = env(t, t0 + 0.2, t0 + 5.0, FI, FO)
+    if a > 0:
+        ls = t - t0 - 0.2
+        text(d, fmt_int(18622 * ease_out(ls / 2.0)), (CX, cy - 60), font("title_l", pk(130, 140)), INK, a)
+        text(d, "TASK STATEMENTS", (CX, cy + pk(40, 50)), mono(20), INK2, a, track=0.3)
+        text(d, VERBS[int(ls / 0.6) % len(VERBS)], (CX, cy + pk(110, 130)), font("body", pk(36, 42)), RED, a)
+        stack(d, pk(["parsed from India's official occupation descriptions (NCO-2015)"],
+                    ["parsed from India's official", "occupation descriptions (NCO-2015)"]),
+              cy + pk(180, 230), font("body", pk(26, 30)), INK2, a)
+    a2 = env(t, t0 + 5.3, t1 - 0.2, FI, FO)
+    if a2 > 0:
+        ls = t - t0 - 5.3
         q = pk(["Would access to an LLM cut the time this task takes", "by at least half, at equal quality?"],
                ["Would access to an LLM", "cut the time this task takes", "by at least half,", "at equal quality?"])
-        stack(d, q, cy - pk(40, 80), font("title_l", pk(44, 46)), INK, a)
+        text(d, "ONE QUESTION, EVERY TASK", (CX, cy - pk(150, 230)), mono(20), INK2, a2, track=0.3)
+        stack(d, q, cy - pk(40, 60), font("title_l", pk(44, 46)), INK, a2)
         labels = [("E0", "not exposed"), ("E1", "chat alone"), ("E2", "needs tooling")]
         for j, (k, v) in enumerate(labels):
             x = CX + (j - 1) * pk(380, 300)
-            aj = a * ease((ls - 0.6 - j * 0.3) / 0.35)
-            text(d, k, (x, cy + pk(90, 150)), font("title", 40), RED if j else INK2, aj)
-            text(d, v, (x, cy + pk(135, 195)), font("body", pk(24, 28)), INK2, aj)
-    elif cur == 2:
-        text(d, "122", (CX, cy - 50), font("title_l", pk(130, 140)), INK, a)
-        labels = [("α", "share E1"), ("β", "E1 + ½ E2"), ("ζ", "E1 + E2")]
-        subs = ["", "headline", "upper bound"]
-        for j, (k, v) in enumerate(labels):
-            x = CX + (j - 1) * pk(420, 320)
-            aj = a * ease((ls - 0.4 - j * 0.3) / 0.35)
-            text(d, k, (x, cy + pk(75, 90)), font("body", 56), RED if j == 1 else INK, aj)
-            text(d, v, (x, cy + pk(130, 150)), font("body", pk(24, 28)), INK2, aj)
-            text(d, subs[j], (x, cy + pk(165, 190)), mono(15), INK3, aj, track=0.1)
-    else:
-        text(d, f"{463 * ease_out(ls / 1.3):,.0f} MILLION", (CX, cy - 20), font("title_l", pk(110, 96)), INK, a,
-             track=0.04)
-        stack(d, pk(["principal-status workers, weighted from PLFS 2023-24 worker records"],
-                    ["principal-status workers, weighted", "from PLFS 2023-24 worker records"]),
-              cy + pk(80, 110), font("body", pk(26, 30)), INK2, a)
+            aj = a2 * ease((ls - 1.4 - j * 0.5) / 0.5)
+            text(d, k, (x, cy + pk(100, 160)), font("title", 40), RED if j else INK2, aj)
+            text(d, v, (x, cy + pk(145, 205)), font("body", pk(24, 28)), INK2, aj)
 
 
 def grid_layout(bands):
@@ -240,63 +213,61 @@ def grid_layout(bands):
 def s_atlas(d, t, ctx):
     t0, t1 = T["atlas"]
     lay, heads, (gx0, gx1, gy1) = ctx["grid"]
-    ga = env(t, t0 + 0.3, t1 - 0.3, 0.3, 0.7)
+    ga = env(t, t0 + 0.3, t1 - 0.3, 0.3, 0.8)
     if ga <= 0:
         return
-    hi = "agriculture" if 45.0 <= t < 46.8 else None
-    dim = 1 - 0.78 * env(t, 48.5, t1, 0.7, 0.3)
+    r0, r1 = t0 + 9.2, t0 + 13.8          # sector rows
+    hi = "agriculture" if r0 <= t < r0 + 1.8 else None
+    dim = 1 - 0.78 * env(t, t0 + 13.6, t1, 0.8, 0.3)
     for i, (x, y, s, beta, key) in enumerate(lay):
-        k = ease_out((t - (t0 + 0.6 + 3.0 * i / len(lay) + ctx["jitter"][i])) / 0.45)
+        k = ease_out((t - (t0 + 0.5 + 3.2 * i / len(lay) + ctx["jitter"][i])) / 0.5)
         if k <= 0:
             continue
         a = ga * k * dim * (0.3 if hi and key != hi else 1)
         dy = (1 - k) * -18
         d.rectangle([x, y + dy, x + s, y + dy + s], fill=mix(bin_rgb(beta), a))
     for b, y in heads:
-        ha = ga * env(t, t0 + 1.0, t1, 0.7, 0.7) * dim * (0.3 if hi and b["key"] != hi else 1)
+        ha = ga * env(t, t0 + 1.0, t1, 0.8, 0.8) * dim * (0.3 if hi and b["key"] != hi else 1)
         text(d, b["label"].upper(), (gx0, y + 14), mono(17), INK, ha, "lm", track=0.2)
-        text(d, f"{b['workers_m']:.0f}M  ·  β {b['beta']:.3f}", (gx1, y + 14), mono(17), INK2, ha,
-             "rm", track=0.06)
-    la = ga * env(t, t0 + 3.6, t1, 0.7, 0.7) * dim
+        text(d, f"{b['workers_m']:.0f}M  ·  β {b['beta']:.3f}", (gx1, y + 14), mono(17), INK2, ha, "rm",
+             track=0.06)
+    la = ga * env(t, t0 + 3.0, t1, 0.8, 0.8) * dim
     if P:
-        text(d, "ONE SQUARE = ONE MILLION WORKERS  ·  REDDER = MORE EXPOSED", (CX, gy1 + 6), mono(16),
-             INK2, la, track=0.1)
+        text(d, "ONE SQUARE = ONE MILLION WORKERS  ·  REDDER = MORE EXPOSED", (CX, gy1 + 6), mono(16), INK2, la,
+             track=0.1)
     else:
         lx, ly = 150, H - 120
-        text(d, "ONE SQUARE = ONE MILLION WORKERS  ·  COLOUR = β EXPOSURE", (lx, ly - 34), mono(16),
-             INK2, la, "lm", track=0.14)
+        text(d, "ONE SQUARE = ONE MILLION WORKERS  ·  COLOUR = β EXPOSURE", (lx, ly - 34), mono(16), INK2,
+             la, "lm", track=0.14)
         for j, c in enumerate(BIN_RGB):
             d.rectangle([lx + j * 80, ly, lx + j * 80 + 76, ly + 12], fill=mix(c, la))
-            text(d, ["0", ".05", ".10", ".20", ".35", ".50+"][j], (lx + j * 80, ly + 30), mono(15), INK3,
-                 la, "lm")
+            text(d, ["0", ".05", ".10", ".20", ".35", ".50+"][j], (lx + j * 80, ly + 30), mono(15), INK3, la, "lm")
 
-    # ---- text: right panel (landscape) or the band under the grid (vertical)
-    a1 = env(t, 40.8, 44.8, 0.5, 0.35)
-    g = ease_out((t - 41.3) / 1.0)
+    # ---- "5 in 6": right panel (landscape) or under the grid (vertical)
+    a1 = env(t, t0 + 4.2, t0 + 9.0, FI, FO)
+    g = ease_out((t - t0 - 4.8) / 1.2)
     if P:
         y0 = gy1 + 90
         text(d, "5 in 6", (CX - 60, y0), font("title_l", 96), INK, a1, "rm")
         lines(d, ["tasks came back", "marked no exposure."], CX - 20, y0, font("body", 32), INK2, a1, anchor="l")
         bx, bw, by = (W - 720) / 2, 720, y0 + 95
-        tl = "E0 15,498   E1 1,946   E2 1,150"
-        ty = by + 50
+        tx, ty, tanchor = CX, by + 50, "mm"
     else:
         rx = 1270
         text(d, "5 in 6", (rx, 380), font("title_l", 120), INK, a1, "lm")
         lines(d, ["tasks came back marked", "no exposure."], rx, 505, font("body", 34), INK2, a1, anchor="l")
         bx, bw, by = rx, 520, 600
-        tl, ty = "E0 15,498   E1 1,946   E2 1,150", 655
+        tx, ty, tanchor = rx, 655, "lm"
     x = bx
     for n, c in [(15498, INK3), (1946, RED), (1150, (126, 31, 28))]:
         w = bw * n / 18594 * g
         d.rectangle([x, by, x + w, by + 22], fill=mix(c, a1))
         x += w
-    text(d, tl, (bx if not P else CX, ty), mono(17), INK2, a1, "lm" if not P else "mm", track=0.04)
+    text(d, "E0 15,498   E1 1,946   E2 1,150", (tx, ty), mono(17), INK2, a1, tanchor, track=0.04)
 
-    rows = [("AGRICULTURE", "194M", "0.06", 45.0), ("CONSTRUCTION", "60M", "0.03", 45.7),
-            ("IT & COMMUNICATION", "7M", "0.54", 46.4)]
-    for j, (lab, m, b, ts) in enumerate(rows):
-        a = env(t, ts, 48.4, 0.45, 0.35)
+    rows = [("AGRICULTURE", "194M", "0.06"), ("CONSTRUCTION", "60M", "0.03"), ("IT & COMMUNICATION", "7M", "0.54")]
+    for j, (lab, m, b) in enumerate(rows):
+        a = env(t, r0 + j * 0.6, r1, FI, FO)
         if P:
             y = gy1 + 105 + j * 76
             text(d, lab, (110, y), mono(18), INK2, a, "lm", track=0.16)
@@ -307,7 +278,7 @@ def s_atlas(d, t, ctx):
             text(d, lab, (1270, y - 26), mono(18), INK2, a, "lm", track=0.2)
             text(d, m, (1270, y + 22), font("title_l", 58), INK, a, "lm")
             text(d, b, (1630, y + 22), font("title_l", 58), RED if j == 2 else INK, a, "lm")
-    ah = env(t, 45.0, 48.4, 0.45, 0.35)
+    ah = env(t, r0, r1, FI, FO)
     if P:
         text(d, "WORKERS", (720, gy1 + 55), mono(14), INK3, ah, "rm", track=0.2)
         text(d, "β", (W - 110, gy1 + 55), mono(16), INK3, ah, "rm")
@@ -315,12 +286,12 @@ def s_atlas(d, t, ctx):
         text(d, "WORKERS", (1270, 330), mono(14), INK3, ah, "lm", track=0.2)
         text(d, "β", (1630, 330), mono(16), INK3, ah, "lm")
 
-    a3 = env(t, 48.8, t1 - 0.3, 0.4, 0.5)
+    a3 = env(t, t0 + 14.0, t1 - 0.3, FI, 0.6)
     mx, my = pk((1520, CY - 60), (CX, CY - 80))
     text(d, "0.086", (mx, my), font("title_xl", pk(190, 210)), INK, a3)
     text(d, "ECONOMY-WIDE MEAN EXPOSURE", (mx, my + pk(140, 150)), mono(20), INK2, a3, track=0.24)
     text(d, "For most of India, it is not close.", (mx, my + pk(210, 220)), font("body", pk(36, 40)), RED,
-         env(t, 49.8, t1 - 0.3, 0.45, 0.5))
+         env(t, t0 + 14.8, t1 - 0.3, FI, 0.6))
 
 
 def hbar(d, x, y, h, frac, c, a, maxw):
@@ -329,11 +300,12 @@ def hbar(d, x, y, h, frac, c, a, maxw):
 
 
 def s_money(d, t, ctx):
+    t0, t1 = T["money"]
     tag(d, t, "money", "IV · FOLLOW THE MONEY")
-    a = env(t, 52.8, 56.8, 0.45, 0.35)
-    g = ease_out((t - 53.1) / 1.4)
+    a = env(t, t0 + 0.2, t1 - 0.2, FI, FO)
+    g = ease_out((t - t0 - 0.6) / 1.6)
     x, mw = pk((CX - 380, 760), (130, 640))
-    yt = CY - pk(90, 150)
+    yt = CY - pk(110, 170)
     text(d, "OCCUPATIONS SCORING β ≥ 0.5", (CX, yt - pk(90, 110)), mono(18), INK3, a, track=0.2)
     text(d, "SHARE OF WORKERS", (x, yt - 20), mono(18), INK2, a, "lm", track=0.2)
     hbar(d, x, yt + 5, 30, 0.019 / 0.08 * g, INK, a, mw)
@@ -341,14 +313,9 @@ def s_money(d, t, ctx):
     text(d, "SHARE OF THE WAGE BILL", (x, yt + 100), mono(18), INK2, a, "lm", track=0.2)
     hbar(d, x, yt + 125, 30, 0.071 / 0.08 * g, RED, a, mw)
     text(d, f"{7.1 * g:.1f}%", (x + mw + 24, yt + 140), font("title_l", 46), RED, a, "lm")
-    stack(d, pk(["Weight exposure by pay instead of headcount and it nearly doubles: 0.086 → 0.155."],
-                ["Weight exposure by pay instead", "of headcount and it nearly doubles:", "0.086 → 0.155."]),
-          yt + pk(260, 320), font("body", pk(30, 34)), INK2, env(t, 54.0, 56.8, 0.5, 0.35))
-    a3 = env(t, 57.0, 59.8, 0.4, 0.35)
-    text(d, "AN INCOME STORY", (CX, CY - pk(40, 60)), font("title", 54), INK, a3, track=0.3)
-    rows = pk(["BEFORE IT IS A JOBS-COUNT STORY."], ["BEFORE IT IS A", "JOBS-COUNT STORY."])
-    for i, r in enumerate(rows):
-        text(d, r, (CX, CY + pk(40, 40) + i * 50), font("title", 34), INK2, a3, track=0.3)
+    a2 = env(t, t0 + 2.4, t1 - 0.2, FI, FO)
+    tracked_rows(d, pk(["AN INCOME STORY", "BEFORE A JOBS-COUNT STORY."], ["AN INCOME STORY", "BEFORE A", "JOBS-COUNT STORY."]),
+                 yt + pk(290, 330), font("title", pk(32, 36)), INK, a2, lead=1.5)
 
 
 def pair(d, x, label, w_val, m_val, a, g, red_w, base):
@@ -363,16 +330,18 @@ def pair(d, x, label, w_val, m_val, a, g, red_w, base):
 
 
 def s_who(d, t, ctx):
+    t0, t1 = T["who"]
     tag(d, t, "who", "V · WHO, EXACTLY")
     base = CY + pk(150, 170)
-    a = env(t, 60.3, 65.3, 0.45, 0.35)
+    e0 = t0 + 5.5
+    a = env(t, t0 + 0.2, e0, FI, FO)
     text(d, "MEAN EXPOSURE, WOMEN AND MEN", (CX, CY - pk(270, 330)), mono(18), INK3, a, track=0.2)
-    pair(d, CX - pk(330, 250), "ALL WORKERS", 0.07, 0.09, a, ease_out((t - 60.5) / 1.0), False, base)
-    pair(d, CX + pk(330, 250), pk("ORGANISED SECTOR", "ORGANISED"), 0.26, 0.25, env(t, 61.5, 65.3, 0.45, 0.35),
-         ease_out((t - 61.7) / 1.0), True, base)
+    pair(d, CX - pk(330, 250), "ALL WORKERS", 0.07, 0.09, a, ease_out((t - t0 - 0.4) / 1.2), False, base)
+    pair(d, CX + pk(330, 250), pk("ORGANISED SECTOR", "ORGANISED"), 0.26, 0.25, env(t, t0 + 1.4, e0, FI, FO),
+         ease_out((t - t0 - 1.6) / 1.2), True, base)
     text(d, "THE SIGN REVERSES.", (CX, base + pk(170, 200)), font("title", pk(30, 34)), RED,
-         env(t, 62.8, 65.3, 0.4, 0.35), track=0.34)
-    a2 = env(t, 65.5, 70.3, 0.4, 0.35)
+         env(t, t0 + 2.8, e0, FI, FO), track=0.34)
+    a2 = env(t, e0 + 0.2, t1 - 0.2, FI, FO)
     hdr = pk(["WHITE-COLLAR WORKERS IN HIGH-EXPOSURE OCCUPATIONS"], ["WHITE-COLLAR WORKERS", "IN HIGH-EXPOSURE OCCUPATIONS"])
     for i, r in enumerate(hdr):
         text(d, r, (CX, CY - pk(190, 230) + i * 30), mono(18), INK2, a2, track=0.2)
@@ -383,13 +352,14 @@ def s_who(d, t, ctx):
     text(d, "THEIR SENIORS", (CX + dx, CY + 70), mono(18), INK2, a2, track=0.2)
     stack(d, pk(["About 3.5 million young workers hold those rungs."],
                 ["About 3.5 million young workers", "hold those rungs."]),
-          CY + pk(170, 190), font("body", pk(30, 36)), INK2, env(t, 66.4, 70.3, 0.5, 0.35))
+          CY + pk(170, 190), font("body", pk(30, 36)), INK2, env(t, e0 + 1.0, t1 - 0.2, FI, FO))
 
 
 def s_canary(d, t, ctx):
+    t0, t1 = T["canary"]
     tag(d, t, "canary", "VI · THE CANARY")
     rows = ctx["event"]
-    a = env(t, 70.8, 77.3, 0.5, 0.3)
+    a = env(t, t0 + 0.2, CLOCK_STOP - 0.1, FI, 0.3)
     if a > 0:
         x0, x1 = pk((260, W - 260), (100, W - 100))
         yc, sc, lim = CY + pk(50, 60), pk(110, 150), 2.0
@@ -400,7 +370,7 @@ def s_canary(d, t, ctx):
         xr = (xs[ref] + xs[ref + 1]) / 2
         d.line([(xr, yc - lim * sc - 20), (xr, yc + lim * sc + 20)], fill=mix(RED, a * 0.8), width=1)
         text(d, "CHATGPT  ·  NOV 2022", (xr + 12, yc - lim * sc - 10), mono(16), RED, a, "lm", track=0.14)
-        shown = (t - 71.1) / 3.9 * n
+        shown = (t - t0 - 0.5) / 2.8 * n
         for i, (yr, q, b, se) in enumerate(rows):
             if i > shown:
                 break
@@ -423,26 +393,10 @@ def s_canary(d, t, ctx):
         for i, r in enumerate(cap):
             text(d, r, (CX, yc + lim * sc + 85 + i * 28), mono(pk(16, 15)), INK2, a, track=0.08)
         stack(d, ["The point estimates lean negative.", "None is statistically significant."],
-              yc - lim * sc - pk(85, 120), font("body", pk(32, 36)), INK, env(t, 74.8, 77.3, 0.45, 0.3))
-    a3 = env(t, 78.3, 80.8, 0.8, 0.4)
-    rows3 = pk(["THE CANARY HAS NOT SUNG."], ["THE CANARY", "HAS NOT SUNG."])
-    for i, r in enumerate(rows3):
-        text(d, r, (CX, CY - pk(0, 40) + i * 80), font("title", pk(52, 58)), INK, a3, track=0.32)
-
-
-def s_mirror(d, t, ctx):
-    tag(d, t, "mirror", "VII · THE MIRROR")
-    a = env(t, 81.2, 84.8, 0.4, 0.35)
-    dx = pk(330, 240)
-    text(d, "US O*NET CROSSWALK", (CX - dx, CY - pk(150, 160)), mono(pk(18, 16)), INK2, a, track=0.16)
-    text(d, "0.204", (CX - dx, CY - 40), font("title_l", pk(140, 120)), INK2, a)
-    text(d, "INDIA'S OWN TASKS", (CX + dx, CY - pk(150, 160)), mono(pk(18, 16)), INK2, a, track=0.16)
-    text(d, "0.086", (CX + dx, CY - 40), font("title_l", pk(140, 120)), INK, a)
-    k = env(t, 82.0, 84.8, 0.35, 0.35)
-    text(d, "2.4×", (CX, CY + pk(110, 120)), font("title", 70), RED, k, track=0.06)
-    stack(d, pk(["the exposure that India's own task content supports"],
-                ["the exposure that India's", "own task content supports"]),
-          CY + pk(185, 215), font("body", pk(30, 34)), INK2, k)
+              yc - lim * sc - pk(85, 120), font("body", pk(32, 36)), INK, env(t, t0 + 3.2, CLOCK_STOP - 0.1, FI, 0.3))
+    a3 = env(t, CLOCK_STOP + 0.5, t1 - 0.2, 0.9, 0.5)
+    tracked_rows(d, pk(["THE CANARY HAS NOT SUNG."], ["THE CANARY", "HAS NOT SUNG."]), CY - pk(0, 40),
+                 font("title", pk(52, 58)), INK, a3, lead=1.4, track=0.32)
 
 
 def s_end(d, t, ctx):
@@ -455,7 +409,7 @@ def s_end(d, t, ctx):
              ("THE ESSAY", "suryadipghoshal.substack.com/p/463-million-workers-one-question"),
              ("THE CODE", "github.com/suryaghoshal5/ai-atlas")]
     for j, (k, v) in enumerate(links):
-        aj = env(t, t0 + 0.8 + j * 0.3, t1, 0.6, 0.9)
+        aj = env(t, t0 + 0.8 + j * 0.3, t1, FI, 0.9)
         if P:
             y = CY - 150 + j * 120
             text(d, k, (CX, y), mono(18), RED, aj, track=0.24)
@@ -464,7 +418,7 @@ def s_end(d, t, ctx):
             y = CY - 40 + j * 62
             text(d, k, (CX - 440, y), mono(18), RED, aj, "lm", track=0.24)
             text(d, v, (CX - 250, y), font("body_r", 30), INK, aj, "lm")
-    ap = env(t, t0 + 1.6, t1, 0.7, 0.9)
+    ap = env(t, t0 + 1.6, t1, FI, 0.9)
     pre = pk(["PRELIMINARY  ·  TASK SCORES ARE LLM-ONLY; HUMAN VALIDATION PENDING  ·  PLFS 2023-24 × NCO-2015"],
              ["PRELIMINARY  ·  TASK SCORES ARE LLM-ONLY;", "HUMAN VALIDATION PENDING  ·  PLFS 2023-24 × NCO-2015"])
     for i, r in enumerate(pre):
@@ -474,8 +428,7 @@ def s_end(d, t, ctx):
 
 SCENES = [(T[k], f) for k, f in [
     ("cold", s_cold), ("title", s_title), ("signal", s_signal), ("fear", s_fear), ("build", s_build),
-    ("atlas", s_atlas), ("money", s_money), ("who", s_who), ("canary", s_canary), ("mirror", s_mirror),
-    ("end", s_end)]]
+    ("atlas", s_atlas), ("money", s_money), ("who", s_who), ("canary", s_canary), ("end", s_end)]]
 
 # ------------------------------------------------------------------ render
 _CTX: dict = {}
