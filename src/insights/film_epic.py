@@ -42,6 +42,7 @@ INK = (247, 234, 204)       # ivory
 INK2 = (176, 160, 140)      # parchment (neutral, so gold stays the only accent)
 INK3 = (96, 66, 44)         # dark bronze
 GOLD = (242, 172, 58)       # the accent (replaces the Nolan red)
+FIRE = (236, 84, 26)        # post-ChatGPT estimates in the canary chart, set apart from gold
 BIN_RGB = [(40, 28, 24), (64, 40, 30), (110, 58, 26), (172, 92, 26), (234, 144, 38), (255, 214, 110)]
 METAL = {  # vertical gradient stops for big type
     GOLD: [(255, 242, 196), (248, 196, 86), (220, 134, 34), (150, 74, 18)],
@@ -137,6 +138,7 @@ def apply_theme():
     film.FONT_FILES.update(FONTS)
     film._fonts.clear()
     fs.tag = chapter_tag
+    fs.POST = FIRE
 
 
 apply_theme()

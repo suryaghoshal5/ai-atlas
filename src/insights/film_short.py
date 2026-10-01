@@ -75,6 +75,7 @@ T = {
 }
 DURATION = T["end"][1]
 IMAX = [(38.6, 57.2)]
+POST = None  # canary: colour for post-ChatGPT estimates; None = the accent (themes may override)
 CLOCK_STOP = T["canary"][0] + 6.4
 FI, FO = 0.7, 0.5  # default fade in / out
 
@@ -355,7 +356,7 @@ def s_canary(d, t, ctx):
         for i, (yr, q, b, se) in enumerate(rows):
             if i > shown:
                 break
-            c = RED if (yr, q) > (2022, 4) else INK2
+            c = (POST or RED) if (yr, q) > (2022, 4) else INK2
             lo, hi = b - 1.96 * se, b + 1.96 * se
             ylo, yhi = yc - clamp(hi, -lim, lim) * sc, yc - clamp(lo, -lim, lim) * sc
             d.line([(xs[i], ylo), (xs[i], yhi)], fill=mix(c, a * 0.55), width=2)
