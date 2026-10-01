@@ -48,15 +48,15 @@ METAL = {  # vertical gradient stops for big type
     GOLD: [(255, 242, 196), (248, 196, 86), (220, 134, 34), (150, 74, 18)],
     INK: [(255, 253, 244), (248, 234, 204), (212, 186, 144)],
 }
-LL = "/usr/share/fonts/opentype/linux-libertine/"
+# Linux Libertine (apt install fonts-linuxlibertine; on macOS install the OTFs to ~/Library/Fonts)
 FONTS = {
-    "title": LL + "LinLibertine_RB.otf",
-    "title_l": LL + "LinLibertine_DR.otf",
-    "title_xl": LL + "LinLibertine_DR.otf",
-    "body": LL + "LinLibertine_R.otf",
-    "body_r": LL + "LinLibertine_R.otf",
-    "body_m": LL + "LinLibertine_RZ.otf",
-    "mono": LL + "LinLibertine_RZ.otf",
+    "title": "LinLibertine_RB.otf",
+    "title_l": "LinLibertine_DR.otf",
+    "title_xl": "LinLibertine_DR.otf",
+    "body": "LinLibertine_R.otf",
+    "body_r": "LinLibertine_R.otf",
+    "body_m": "LinLibertine_RZ.otf",
+    "mono": "LinLibertine_RZ.otf",
 }
 
 _orig_text = film.text

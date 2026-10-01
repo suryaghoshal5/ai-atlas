@@ -52,23 +52,40 @@ RED = (227, 6, 19)
 BINS = [0.05, 0.10, 0.20, 0.35, 0.50]
 BIN_RGB = [(40, 40, 39), (66, 44, 41), (126, 31, 28), (176, 24, 27), (227, 6, 19), (255, 92, 72)]
 
-FD = "/usr/share/fonts/opentype/"
+# Fonts are looked up by file name in the usual Linux and macOS font folders.
+# Linux: apt install fonts-montserrat fonts-inter fonts-jetbrains-mono
+# macOS: install Montserrat, Inter and JetBrains Mono (e.g. Google Fonts) to ~/Library/Fonts
+FONT_DIRS = ["/usr/share/fonts", "/usr/local/share/fonts", "~/.local/share/fonts", "~/.fonts",
+             "~/Library/Fonts", "/Library/Fonts"]
 FONT_FILES = {
-    "title": FD + "montserrat/Montserrat-SemiBold.otf",
-    "title_l": FD + "montserrat/Montserrat-Light.otf",
-    "title_xl": FD + "montserrat/Montserrat-ExtraLight.otf",
-    "body": FD + "inter/Inter-Light.otf",
-    "body_r": FD + "inter/Inter-Regular.otf",
-    "body_m": FD + "inter/Inter-Medium.otf",
-    "mono": "/usr/share/fonts/truetype/jetbrains-mono/JetBrainsMono-Regular.ttf",
+    "title": "Montserrat-SemiBold.otf",
+    "title_l": "Montserrat-Light.otf",
+    "title_xl": "Montserrat-ExtraLight.otf",
+    "body": "Inter-Light.otf",
+    "body_r": "Inter-Regular.otf",
+    "body_m": "Inter-Medium.otf",
+    "mono": "JetBrainsMono-Regular.ttf",
 }
+_paths: dict = {}
 _fonts: dict = {}
+
+
+def font_path(name: str) -> str:
+    if name not in _paths:
+        for d in FONT_DIRS:
+            hits = sorted(Path(d).expanduser().rglob(name)) if Path(d).expanduser().is_dir() else []
+            if hits:
+                _paths[name] = str(hits[0])
+                break
+        else:
+            raise SystemExit(f"font {name} not found in {FONT_DIRS}; see the install note above FONT_DIRS")
+    return _paths[name]
 
 
 def font(key: str, size: int) -> ImageFont.FreeTypeFont:
     k = (key, size)
     if k not in _fonts:
-        _fonts[k] = ImageFont.truetype(FONT_FILES[key], size)
+        _fonts[k] = ImageFont.truetype(font_path(FONT_FILES[key]), size)
     return _fonts[k]
 
 
