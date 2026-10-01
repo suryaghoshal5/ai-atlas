@@ -3,7 +3,7 @@
 
 PY := PYTHONPATH=src uv run python
 
-.PHONY: help ingest score index results test harness lint atlas-grid film film-short validation-sheet validation-kappa
+.PHONY: help ingest score index results test harness lint atlas-grid film film-short film-epic validation-sheet validation-kappa
 
 help:
 	@echo "Targets:"
@@ -17,6 +17,7 @@ help:
 	@echo "  atlas-grid - 463-square interactive atlas (outputs/atlas_grid/index.html); presentation layer"
 	@echo "  film       - ~2.5 min cinematic explainer of the LinkedIn essay (outputs/film/atlas_film.mp4)"
 	@echo "  film-short - 90 s cut: 9:16 + 4:5 feed crop + 16:9 (outputs/film/atlas_film_90s_*.mp4)"
+	@echo "  film-epic  - 90 s vertical cut in a Rajamouli grammar: gold/fire, drums + choir (9:16 + 4:5)"
 	@echo "  validation-sheet - blind 3-rater rating sheets + manual (outputs/validation/)"
 	@echo "  validation-kappa - agreement report from the filled rating sheet (kappa gate)"
 
@@ -52,6 +53,9 @@ film: atlas-grid
 film-short: atlas-grid
 	$(PY) -m insights.film_short --orient vertical --crop45
 	$(PY) -m insights.film_short --orient landscape
+
+film-epic: atlas-grid
+	$(PY) -m insights.film_epic
 
 atlas-grid-fixture:
 	$(PY) -m insights.atlas_grid --fixture
